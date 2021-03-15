@@ -1,9 +1,9 @@
 import fetch from './index.js'
-function apiRegiste (params) {
+function apiRegiste (data) {
   return fetch({
-    url: '/route/to/demo',
+    url: '/peoples',
     method: 'get',
-    params
+    data
   })
 }
 export { apiRegiste }

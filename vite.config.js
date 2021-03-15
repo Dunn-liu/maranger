@@ -9,10 +9,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/mock': {
-        target: 'https://getman.cn',
+      '/api': {
+        target: 'http://localhost:8000',
         changeOrigin: true,
-        pathRewrite: { '/mock': '' }
+        pathRewrite: { '/api': '' }
       }
     }
   }

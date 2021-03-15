@@ -28,6 +28,7 @@
 
 <script>
 import MMenu from '../../components/Menu.vue'
+import {getUserRouters} from '@/api/login.js'
 export default {
   name: "Layout",
   components:{
@@ -37,6 +38,9 @@ export default {
     return {
       avatarSrc:'http://thirdqq.qlogo.cn/g?b=oidb&k=czATMziaPGViaicIrrbIyla5g&s=640&t=1613788120'
     }
+  },
+  created() {
+    getUserRouters({uid:1}).then(res=>{console.log(res)})
   }
 }
 </script>

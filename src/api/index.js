@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 const fetch = axios.create({
-  baseURL: '/mock',
+  baseURL: '/api',
   withCredentials: true
 })
 fetch.interceptors.request.use(
