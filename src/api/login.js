@@ -1,11 +1,11 @@
 import fetch from './index.js'
-function getUserRouters(data){
+function apiToLogin(data){
     return fetch({
-        url:'/router',
+        url:'/login',
         method:'post',
         data
     })
 }
 export {
-    getUserRouters
+    apiToLogin
 }

@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "element-plus": "^1.0.1-alpha.19",
+    "js-md5": "^0.7.3",
     "node-sass": "^5.0.0",
     "qs": "^6.9.6",
     "sass": "^1.32.8",

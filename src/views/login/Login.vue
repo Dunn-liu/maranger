@@ -6,24 +6,24 @@
       </div>
       <div class="inner-conent">
         <el-form
-          :model="ruleForm"
+            :model="loginForm"
           status-icon
           :rules="rules"
-          ref="ruleForm"
+          ref="loginForm"
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="用户名" prop="username">
+          <el-form-item label="手机号" prop="phone">
             <el-input
               type="text"
-              v-model="ruleForm.userName"
+              v-model.number="loginForm.phone"
               prefix-icon="el-icon-user-solid"
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="pass">
+          <el-form-item label="密码" prop="passWord">
             <el-input
               type="password"
-              v-model="ruleForm.pass"
+              v-model="loginForm.passWord"
               autocomplete="off"
               prefix-icon="el-icon-lock"
             ></el-input>
@@ -32,7 +32,8 @@
             <div class="forgetPass" @click="lookPass()">忘记密码</div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="toLogin()">登录</el-button>
+            <el-button type="success" @click="toLogin('loginForm')">登录</el-button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button type="primary" @click="toRegiste()">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -41,29 +42,60 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
-import { apiRegiste } from '@/api/regiset.js'
+// import { reactive, ref,toRefs } from 'vue'
+import md5 from 'js-md5'
+import { apiToLogin } from '@/api/login.js'
 export default {
   name: 'Login',
-  created () {
-    console.log(apiRegiste)
-    apiRegiste().then(res => {
-      console.log(res)
-    })
-  },
-  data () {
+  // setup(props){
+  //   return {
+  //   }
+  // },
+  data(){
     return {
-      ruleForm: {
-        userName: '15817294245',
-        pass: ''
+      loginForm:{
+        phone:'15817294245',
+        passWord:''
       },
-      rules: {}
+      rules:{
+        phone:[
+          {required:true,message:'请输入手机号',trigger:'blur'},
+          {validator:(rule,value,callback)=>{
+              const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+              if (reg.test(value)){
+                callback()
+              }else{
+                callback(new Error('请输入正确的手机号码格式!'))
+              }
+            },trigger: ['change','blur']}
+        ],
+        passWord: [
+            {required:true,message:'请输入密码',trigger:'blur'},
+          // {validator:(rule,value,callback)=>{
+          //   const reg = /^\w+$/
+          //     if(reg.test(value)){
+          //       callback()
+          //     }else{
+          //       callback(new Error('密码格式不对,密码只能由字母,数字,_组成'))
+          //     }
+          //   }}
+        ]
+      }
     }
   },
   methods: {
-    toLogin () {
-      console.log(123)
+    toLogin (formName) {
+      this.$refs[formName].validate(valid=>{
+        if (valid){
+          const newForm = JSON.parse(JSON.stringify(this.loginForm))
+          newForm.passWord = md5(newForm.passWord)
+          apiToLogin(newForm).then(res=>{
+            console.log(res)
+          })
+        }
+      })
     },
+    toRegiste(){},
     lookPass () {
       this.$alert('不好意思,暂不支持找回密码,忘了就忘了吧', '提示', {
         confirmButtonText: '确定',
