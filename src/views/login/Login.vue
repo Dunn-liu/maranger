@@ -85,13 +85,25 @@ export default {
   },
   methods: {
     toLogin (formName) {
-      this.$refs[formName].validate(valid=>{
+      this.$refs[formName].validate(async valid=>{
         if (valid){
           const newForm = JSON.parse(JSON.stringify(this.loginForm))
           newForm.passWord = md5(newForm.passWord)
-          apiToLogin(newForm).then(res=>{
-            console.log(res)
-          })
+          const res = await apiToLogin(newForm)
+          console.log(res)
+          if(res.data.code ===200){
+            this.$message.success({
+              showClose: true,
+              message:'登录成功!'
+            })
+            this.$router.push('/home')
+          }else{
+            this.$message.error(
+                {showClose: true,
+                  message:res.data.msg
+                }
+            )
+          }
         }
       })
     },
