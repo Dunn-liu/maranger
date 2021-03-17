@@ -28,7 +28,23 @@
               prefix-icon="el-icon-lock"
             ></el-input>
           </el-form-item>
+          <el-form-item prop="capCode" label="验证码" class="imgCode">
+<!--            <el-row type="flex" justify >-->
+<!--              <el-col :span="16">-->
+                <el-input
+                    type="text"
+                    v-model="loginForm.capCode"
+                    autocomplete="off"
+                    prefix-icon="el-icon-coin"
+                ></el-input>
+<!--              </el-col>-->
+<!--              <el-col :span="7" :offset="1">-->
+                <img style="width: 112px;height: 40px" :src=codeSrc @click="changeCaptcha">
+<!--              </el-col>-->
+<!--            </el-row>-->
+          </el-form-item>
           <el-form-item>
+            <el-checkbox v-model="rememberPassword">记住密码</el-checkbox>
             <div class="forgetPass" @click="lookPass()">忘记密码</div>
           </el-form-item>
           <el-form-item>
@@ -51,12 +67,17 @@ export default {
   //   return {
   //   }
   // },
+  created() {
+
+  },
   data(){
     return {
       loginForm:{
         phone:'15817294245',
-        passWord:''
+        passWord:'',
+        capCode:'',
       },
+      rememberPassword:false,
       rules:{
         phone:[
           {required:true,message:'请输入手机号',trigger:'blur'},
@@ -79,8 +100,12 @@ export default {
           //       callback(new Error('密码格式不对,密码只能由字母,数字,_组成'))
           //     }
           //   }}
+        ],
+        capCode:[
+          {required:true,message:'请输入验证码',trigger:'blur'}
         ]
-      }
+      },
+      codeSrc:"http://localhost:8000/captcha"
     }
   },
   methods: {
@@ -98,6 +123,7 @@ export default {
             })
             this.$router.push('/home')
           }else{
+            this.changeCaptcha()
             this.$message.error(
                 {showClose: true,
                   message:res.data.msg
@@ -114,6 +140,10 @@ export default {
         type: 'warning',
         center: true
       })
+    },
+    setCookie(){},
+    changeCaptcha(){
+    this.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
   }
 }
@@ -151,15 +181,30 @@ export default {
         display: flex;
         justify-content: center;
       }
+
       .forgetPass {
+        display: inline-block;
+        margin-left: 20px;
         color: #999;
         cursor: pointer;
       }
+
       .el-form-item__content {
         margin-left: 0 !important;
       }
+
       .el-input {
         width: 300px;
+      }
+
+      .imgCode {
+        .el-form-item__content{
+          display: flex;
+          align-items: center;
+        }
+        .el-input--prefix {
+          width: 190px;
+        }
       }
     }
   }
