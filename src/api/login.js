@@ -6,6 +6,14 @@ function apiToLogin(data){
         data
     })
 }
+function apiRegister(data){
+    return fetch({
+        url:'/register',
+        method:'post',
+        data
+    })
+}
 export {
-    apiToLogin
+    apiToLogin,
+    apiRegister
 }

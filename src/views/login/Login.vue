@@ -54,7 +54,7 @@
         注册
       </div>
       <el-form label-position="right" label-width="80px" :model="registerForm" :rules="registerRules" ref="registerForm">
-        <el-form-item label="用户名" >
+        <el-form-item label="用户名" prop="user_nickname">
           <el-input type="text" v-model="registerForm.user_nickname"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex" style="justify-content: left;padding-left: 110px">
@@ -63,16 +63,16 @@
           <el-radio label="female">女</el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item label="手机号" prop="phone">
           <el-input type="text" v-model="registerForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
+        <el-form-item label="密码" prop="passWord">
           <el-input type="password" v-model="registerForm.passWord" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
+        <el-form-item label="确认密码" prop="checkPassWord">
           <el-input type="password" v-model="registerForm.checkPassWord" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="邮箱" prop="email" >
           <el-input type="email" v-model="registerForm.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
@@ -84,18 +84,14 @@
 </template>
 
 <script>
-// import { reactive, ref,toRefs } from 'vue'
 import md5 from 'js-md5'
-import { apiToLogin } from '@/api/login.js'
+import { apiToLogin,apiRegister } from '@/api/login.js'
 export default {
   name: 'Login',
   // setup(props){
   //   return {
   //   }
   // },
-  created() {
-
-  },
   data(){
     return {
       loginForm:{
@@ -109,7 +105,7 @@ export default {
         passWord:'',
         checkPassWord:'',
         email:'',
-        sex:''
+        sex:'male'
       },
       rememberPassword:false,
       loginRules:{
@@ -125,21 +121,17 @@ export default {
             },trigger: ['change','blur']}
         ],
         passWord: [
-            {required:true,message:'请输入密码',trigger:'blur'},
-          // {validator:(rule,value,callback)=>{
-          //   const reg = /^\w+$/
-          //     if(reg.test(value)){
-          //       callback()
-          //     }else{
-          //       callback(new Error('密码格式不对,密码只能由字母,数字,_组成'))
-          //     }
-          //   }}
+            {required:true,message:'请输入密码',trigger:'blur'}
         ],
         capCode:[
           {required:true,message:'请输入验证码',trigger:'blur'}
         ]
       },
       registerRules:{
+        user_nickname: [
+            {required:true,message:'请输入用户名',trigger:'blur'},
+          { min: 3, max: 8, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ],
         phone:[
           {required:true,message:'请输入手机号',trigger:'blur'},
           {validator:(rule,value,callback)=>{
@@ -153,15 +145,30 @@ export default {
         ],
         passWord: [
           {required:true,message:'请输入密码',trigger:'blur'},
-          // {validator:(rule,value,callback)=>{
-          //   const reg = /^\w+$/
-          //     if(reg.test(value)){
-          //       callback()
-          //     }else{
-          //       callback(new Error('密码格式不对,密码只能由字母,数字,_组成'))
-          //     }
-          //   }}
+          {validator:(rule,value,callback)=>{
+            const reg = /^\w+$/
+              if(reg.test(value)){
+                callback()
+              }else{
+                callback(new Error('密码格式不对,密码只能由字母,数字,_组成'))
+              }
+            }}
         ],
+        checkPassWord: [
+            {
+          validator:(rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请再次输入密码'));
+            } else if (value !== this.registerForm.passWord) {
+              callback(new Error('两次输入密码不一致!'));
+            } else {
+              callback();
+            }
+        },trigger:'blur'}],
+        email:[
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ]
       },
       codeSrc:"http://localhost:8000/captcha",
       isregister:false
@@ -171,7 +178,7 @@ export default {
     toLogin (formName) {
       this.$refs[formName].validate(async valid=>{
         if (valid){
-          this.loginForm.passWord = md5(this.loginForm.passWord)
+          // this.loginForm.passWord = md5(this.loginForm.passWord)
           // const newForm = JSON.parse(JSON.stringify(this.loginForm))
           // newForm.passWord = md5(newForm.passWord)
           const res = await apiToLogin(this.loginForm)
@@ -197,12 +204,29 @@ export default {
       this.isregister=true
     },
     register(){
-      console.log(this.registerForm)
-      this.$alert('注册成功', '提示', {
-        confirmButtonText: '确定',
-        type: 'warning',
-        center: true
-      })
+      this.$refs['registerForm'].validate(async valid=>{
+        if(valid){
+          const newRegisterForm = JSON.parse(JSON.stringify(this.registerForm))
+          newRegisterForm.checkPassWord=undefined
+          const res = await apiRegister(newRegisterForm)
+          console.log(res)
+          if(res.data.code ===200){
+            this.$message.success(
+                {showClose: true,
+                  message:'注册成功'
+                }
+            )
+            this.$refs['registerForm'].resetFields()
+            this.isregister = false
+            this.loginForm.phone = res.data.userinfo.phone
+            this.loginForm.passWord = res.data.userinfo.passWord
+          } else{
+          this.$message.error(
+              {showClose: true,
+                message:res.data.msg
+              }
+          )}
+      }})
     },
     lookPass () {
       this.$alert('不好意思,暂不支持找回密码,忘了就忘了吧', '提示', {
@@ -244,12 +268,12 @@ export default {
       left: 10px;
     }
     .login-header {
-      height: 100px;
+      height: 80px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       font-weight: 700;
     }
     .el-form-item__content {
@@ -263,7 +287,6 @@ export default {
       display: flex;
       justify-content: center;
     }
-    .inner-conent {
       .forgetPass {
         display: inline-block;
         margin-left: 20px;
@@ -271,15 +294,15 @@ export default {
         cursor: pointer;
       }
       .imgCode {
-        .el-form-item__content{
+        .el-form-item__content {
           display: flex;
           align-items: center;
         }
+
         .el-input--prefix {
           width: 190px;
         }
       }
-    }
   }
 }
 </style>
