@@ -14,7 +14,7 @@
 #   Set larger code cache with -XX:ReservedCodeCacheSize=
 # This output file may be truncated or incomplete.
 #
-#  Out of Memory Error (./src/hotspot/os/windows/os_windows.cpp:3303), pid=5224, tid=20180
+#  Out of Memory Error (./src/hotspot/os/windows/os_windows.cpp:3303), pid=22604, tid=14340
 #
 # JRE version:  (11.0.9+11) (build )
 # Java VM: OpenJDK 64-Bit Server VM (11.0.9+11-b1145.21, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
@@ -26,13 +26,13 @@
 Command Line: org.jetbrains.git4idea.nativessh.GitNativeSshAskPassApp Enter passphrase for key '/c/Users/v_vqqdliu/.ssh/id_rsa': 
 
 Host: Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz, 6 cores, 15G,  Windows 10 , 64 bit Build 19041 (10.0.19041.804)
-Time: Wed Mar 17 18:36:58 2021 中国标准时间 elapsed time: 0.034274 seconds (0d 0h 0m 0s)
+Time: Fri Mar 19 14:57:00 2021 中国标准时间 elapsed time: 0.018114 seconds (0d 0h 0m 0s)
 
 ---------------  T H R E A D  ---------------
 
-Current thread (0x000002451fbba800):  JavaThread "Unknown thread" [_thread_in_vm, id=20180, stack(0x0000004a85400000,0x0000004a85500000)]
+Current thread (0x000001f5a2e4b800):  JavaThread "Unknown thread" [_thread_in_vm, id=14340, stack(0x0000002840a00000,0x0000002840b00000)]
 
-Stack: [0x0000004a85400000,0x0000004a85500000]
+Stack: [0x0000002840a00000,0x0000002840b00000]
 Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
 V  [jvm.dll+0x5ed3ca]
 V  [jvm.dll+0x722725]
@@ -65,22 +65,22 @@ C  [ntdll.dll+0x4d241]
 ---------------  P R O C E S S  ---------------
 
 Threads class SMR info:
-_java_thread_list=0x000002451e2c0700, length=0, elements={
+_java_thread_list=0x000001f5a1511970, length=0, elements={
 }
 
 Java Threads: ( => current thread )
 
 Other Threads:
-  0x000002451fbd2800 GCTaskThread "GC Thread#0" [stack: 0x0000004a85500000,0x0000004a85600000] [id=20384]
-  0x000002451fc2f000 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000004a85600000,0x0000004a85700000] [id=13712]
-  0x000002451fc31800 ConcurrentGCThread "G1 Conc#0" [stack: 0x0000004a85700000,0x0000004a85800000] [id=29540]
+  0x000001f5a2e63800 GCTaskThread "GC Thread#0" [stack: 0x0000002840b00000,0x0000002840c00000] [id=23612]
+  0x000001f5a2ebf800 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000002840c00000,0x0000002840d00000] [id=19400]
+  0x000001f5a2ec1800 ConcurrentGCThread "G1 Conc#0" [stack: 0x0000002840d00000,0x0000002840e00000] [id=27832]
 
 [error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffac6b59397]
 
 VM state:not at safepoint (not fully initialized)
 
 VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
-[0x000002451fbb7790] Heap_lock - owner thread: 0x000002451fbba800
+[0x000001f5a2e487f0] Heap_lock - owner thread: 0x000001f5a2e4b800
 
 Heap address: 0x0000000701c00000, size: 4068 MB, Compressed Oops mode: Non-zero based: 0x0000000701c00000
 Narrow klass base: 0x0000000000000000, Narrow klass shift: 0
@@ -98,17 +98,17 @@ Internal exceptions (0 events):
 No events
 
 Events (1 events):
-Event: 0.028 Loaded shared library D:\Program\WebStorm 2020.3\jbr\bin\zip.dll
+Event: 0.014 Loaded shared library D:\Program\WebStorm 2020.3\jbr\bin\zip.dll
 
 
 Dynamic libraries:
-0x00007ff783ea0000 - 0x00007ff783eaa000 	D:\Program\WebStorm 2020.3\jbr\bin\java.exe
+0x00007ff687850000 - 0x00007ff68785a000 	D:\Program\WebStorm 2020.3\jbr\bin\java.exe
 0x00007ffb119b0000 - 0x00007ffb11ba6000 	C:\Windows\SYSTEM32\ntdll.dll
 0x00007ffb11660000 - 0x00007ffb1171d000 	C:\Windows\System32\KERNEL32.DLL
 0x00007ffb0f200000 - 0x00007ffb0f4c9000 	C:\Windows\System32\KERNELBASE.dll
 0x00007ffb0f740000 - 0x00007ffb0f840000 	C:\Windows\System32\ucrtbase.dll
-0x00007ffaea190000 - 0x00007ffaea1a7000 	D:\Program\WebStorm 2020.3\jbr\bin\VCRUNTIME140.dll
-0x00007ffaea290000 - 0x00007ffaea2a9000 	D:\Program\WebStorm 2020.3\jbr\bin\jli.dll
+0x00007ffae4d30000 - 0x00007ffae4d47000 	D:\Program\WebStorm 2020.3\jbr\bin\VCRUNTIME140.dll
+0x00007ffaea190000 - 0x00007ffaea1a9000 	D:\Program\WebStorm 2020.3\jbr\bin\jli.dll
 0x00007ffb0fa10000 - 0x00007ffb0fbb0000 	C:\Windows\System32\USER32.dll
 0x00007ffb0f840000 - 0x00007ffb0f862000 	C:\Windows\System32\win32u.dll
 0x00007ffb10cb0000 - 0x00007ffb10cda000 	C:\Windows\System32\GDI32.dll
@@ -117,7 +117,7 @@ Dynamic libraries:
 0x00007ffaff0b0000 - 0x00007ffaff34b000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.746_none_ca02b4b61b8320a4\COMCTL32.dll
 0x00007ffb103e0000 - 0x00007ffb1047e000 	C:\Windows\System32\msvcrt.dll
 0x00007ffb10570000 - 0x00007ffb105a0000 	C:\Windows\System32\IMM32.DLL
-0x00007ffade780000 - 0x00007ffade81d000 	D:\Program\WebStorm 2020.3\jbr\bin\msvcp140.dll
+0x00007ffadeae0000 - 0x00007ffadeb7d000 	D:\Program\WebStorm 2020.3\jbr\bin\msvcp140.dll
 0x00007ffac6870000 - 0x00007ffac733e000 	D:\Program\WebStorm 2020.3\jbr\bin\server\jvm.dll
 0x00007ffb11840000 - 0x00007ffb118ec000 	C:\Windows\System32\ADVAPI32.dll
 0x00007ffb0fbb0000 - 0x00007ffb0fc4c000 	C:\Windows\System32\sechost.dll
@@ -182,12 +182,12 @@ PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 ---------------  S Y S T E M  ---------------
 
 OS: Windows 10 , 64 bit Build 19041 (10.0.19041.804)
-OS uptime: 13 days 9:33 hours
+OS uptime: 15 days 5:53 hours
 
 CPU:total 6 (initial active 6) (6 cores per cpu, 1 threads per core) family 6 model 158 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, rtm, 3dnowpref, lzcnt, tsc, tscinvbit, bmi1, bmi2, adx, fma
 
-Memory: 4k page, system-wide physical 16266M (4976M free)
-TotalPageFile size 22410M (AvailPageFile size 59M)
+Memory: 4k page, system-wide physical 16266M (3681M free)
+TotalPageFile size 22410M (AvailPageFile size 171M)
 current process WorkingSet (physical memory assigned to process): 10M, peak: 10M
 current process commit charge ("private bytes"): 56M, peak: 312M
 

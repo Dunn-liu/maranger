@@ -1,9 +1,9 @@
 import fetch from './index.js'
-function apiRegiste (data) {
+function apiRegister (data) {
   return fetch({
     url: '/peoples',
     method: 'get',
     data
   })
 }
-export { apiRegiste }
+export { apiRegister }
