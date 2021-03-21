@@ -3,18 +3,7 @@
     <el-header class="m-header">
       <img class="logo" src="../../assets/img/logo.png">
       <div class="userinfo">
-        <el-avatar :src="avatarSrc" />
-        <el-dropdown class="dropdown">
-          <el-button type="primary">
-            用户1232456<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-avatar :src="avatarSrc" />欢迎您,{{ userinfo.user_nickname }}
       </div>
     </el-header>
     <el-container>
@@ -28,11 +17,15 @@
 
 <script>
 import MMenu from '../../components/Menu.vue'
+import {mapState} from 'vuex'
 // import {getUserRouters} from '@/api/login.js'
 export default {
   name: "Layout",
   components:{
     MMenu
+  },
+  computed:{
+    ...mapState(['userinfo'])
   },
   data(){
     return {
@@ -50,15 +43,18 @@ export default {
     background-color: #409EFF;
     padding-left: 30px;
     .logo{
-      width: 90px;
-      height: 60px;
+      width: 50px;
+      height: 35px;
       border-radius: 50%;
     }
     .userinfo {
       display: flex;
       align-items: center;
-      .dropdown{
-        margin-left: 12px;
+      color: #fff;
+      font-size: 14px;
+      letter-spacing: 3px;
+      .el-avatar {
+        margin-right: 10px;
       }
     }
   }

@@ -92,6 +92,11 @@ export default {
   //   return {
   //   }
   // },
+  watch:{
+    'isregister':(val)=>{
+      document.title = val?'注册':'登录'
+    }
+  },
   data(){
     return {
       loginForm:{
@@ -184,6 +189,9 @@ export default {
           const res = await apiToLogin(this.loginForm)
           this.$store.commit('saveInfo',res.data.info)
           if(res.data.code ===200){
+            if(this.rememberPassword){
+              window.localStorage.setItem('password',this.loginForm.passWord)
+            }
             this.$message.success({
               showClose: true,
               message:'登录成功!'
@@ -200,9 +208,12 @@ export default {
         }
       })
     },
+    // 打开注册页面
     toRegister(){
       this.isregister=true
+      document.title = '注册'
     },
+    // 注册逻辑
     register(){
       this.$refs['registerForm'].validate(async valid=>{
         if(valid){
@@ -213,13 +224,13 @@ export default {
           if(res.data.code ===200){
             this.$message.success(
                 {showClose: true,
-                  message:'注册成功'
+                  message:'注册成功,去登录吧!'
                 }
             )
             this.$refs['registerForm'].resetFields()
             this.isregister = false
-            this.loginForm.phone = res.data.userinfo.phone
-            this.loginForm.passWord = res.data.userinfo.passWord
+            this.loginForm.phone = newRegisterForm.phone
+            this.loginForm.passWord = newRegisterForm.passWord
           } else{
           this.$message.error(
               {showClose: true,
@@ -228,6 +239,7 @@ export default {
           )}
       }})
     },
+    // 忘记密码
     lookPass () {
       this.$alert('不好意思,暂不支持找回密码,忘了就忘了吧', '提示', {
         confirmButtonText: '确定',
@@ -235,7 +247,11 @@ export default {
         center: true
       })
     },
+    // 设置cookies
     setCookie(){},
+    // 清除cookies
+    claerCookies(){},
+    // 点击更换验证码
     changeCaptcha(){
     this.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
