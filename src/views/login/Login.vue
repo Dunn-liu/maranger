@@ -6,7 +6,7 @@
       </div>
       <div class="inner-conent">
         <el-form
-            :model="loginForm"
+            :model="loginForms"
           status-icon
           :rules="loginRules"
           ref="loginForm"
@@ -16,14 +16,14 @@
           <el-form-item label="手机号" prop="phone">
             <el-input
               type="text"
-              v-model.number="loginForm.phone"
+              v-model="loginForms.phone"
               prefix-icon="el-icon-user-solid"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="passWord">
             <el-input
               type="password"
-              v-model="loginForm.passWord"
+              v-model="loginForms.passWord"
               autocomplete="off"
               prefix-icon="el-icon-lock"
             ></el-input>
@@ -31,7 +31,7 @@
           <el-form-item prop="capCode" label="验证码" class="imgCode">
                 <el-input
                     type="text"
-                    v-model="loginForm.capCode"
+                    v-model="loginForms.capCode"
                     autocomplete="off"
                     prefix-icon="el-icon-coin"
                 ></el-input>
@@ -53,27 +53,27 @@
       <div class="login-header">
         注册
       </div>
-      <el-form label-position="right" label-width="80px" :model="registerForm" :rules="registerRules" ref="registerForm">
+      <el-form label-position="right" label-width="80px" :model="registerForms" :rules="registerRules" ref="registerForm">
         <el-form-item label="用户名" prop="user_nickname">
-          <el-input type="text" v-model="registerForm.user_nickname"></el-input>
+          <el-input type="text" v-model="registerForms.user_nickname"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex" style="justify-content: left;padding-left: 110px">
-          <el-radio-group v-model="registerForm.sex">
+          <el-radio-group v-model="registerForms.sex">
           <el-radio label="male">男</el-radio>
           <el-radio label="female">女</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-          <el-input type="text" v-model="registerForm.phone"></el-input>
+          <el-input type="text" v-model="registerForms.phone"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="passWord">
-          <el-input type="password" v-model="registerForm.passWord" autocomplete="off"></el-input>
+          <el-input type="password" v-model="registerForms.passWord" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPassWord">
-          <el-input type="password" v-model="registerForm.checkPassWord" autocomplete="off"></el-input>
+          <el-input type="password" v-model="registerForms.checkPassWord" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email" >
-          <el-input type="email" v-model="registerForm.email" autocomplete="off"></el-input>
+          <el-input type="email" v-model="registerForms.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="success" @click="register">注册</el-button>
@@ -85,26 +85,29 @@
 
 <script>
 import md5 from 'js-md5'
+import {localSet,localGet} from '@/utils/local'
+import { ElMessage, } from 'element-plus'
+import {useRouter} from 'vue-router'
+import {ref,reactive,defineComponent,toRefs,onMounted,watch} from 'vue'
 import { apiToLogin,apiRegister } from '@/api/login.js'
-export default {
-  name: 'Login',
-  // setup(props){
-  //   return {
-  //   }
-  // },
-  watch:{
-    'isregister':(val)=>{
-      document.title = val?'注册':'登录'
-    }
-  },
-  data(){
-    return {
-      loginForm:{
+export default defineComponent({
+    name: 'Login',
+  setup(props,context){
+    onMounted(()=>{
+      if(localGet('token')){
+        router.push('/home')
+      }
+    })
+    const router = useRouter()
+    const loginForm = ref(null)
+    const registerForm = ref(null)
+    const state = reactive({
+       loginForms:{
         phone:'15817294245',
         passWord:'',
         capCode:'',
       },
-      registerForm:{
+      registerForms:{
         user_nickname:'',
         phone:'',
         passWord:'',
@@ -164,7 +167,7 @@ export default {
           validator:(rule, value, callback) => {
             if (value === '') {
               callback(new Error('请再次输入密码'));
-            } else if (value !== this.registerForm.passWord) {
+            } else if (value !== this.registerForms.passWord) {
               callback(new Error('两次输入密码不一致!'));
             } else {
               callback();
@@ -175,88 +178,96 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
-      codeSrc:"http://localhost:8000/captcha",
+      codeSrc:"http://localhost:8000/api/captcha",
       isregister:false
-    }
-  },
-  methods: {
-    toLogin (formName) {
-      this.$refs[formName].validate(async valid=>{
+    })
+    watch(()=>state.isregister,(value => document.title = value?'注册':'登录'))
+    // 去登录
+    const toLogin= ()=> {
+         loginForm.value.validate(async valid=>{
         if (valid){
-          // this.loginForm.passWord = md5(this.loginForm.passWord)
-          // const newForm = JSON.parse(JSON.stringify(this.loginForm))
-          // newForm.passWord = md5(newForm.passWord)
-          const res = await apiToLogin(this.loginForm)
-          this.$store.commit('saveInfo',res.data.info)
+          const newForm = JSON.parse(JSON.stringify(state.loginForms))
+          newForm.passWord = md5(newForm.passWord)
+          const res = await apiToLogin(newForm)
           if(res.data.code ===200){
-            if(this.rememberPassword){
-              window.localStorage.setItem('password',this.loginForm.passWord)
-            }
-            this.$message.success({
+            // if(state.rememberPassword){
+            //   window.localStorage.setItem('password',this.loginForm.passWord)
+            // }
+            localSet('token',res.data.info.token)
+            ElMessage.success({
               showClose: true,
               message:'登录成功!'
             })
-            this.$router.push('/home')
+            router.push('/home')
           }else{
-            this.changeCaptcha()
-            this.$message.error(
-                {showClose: true,
+            changeCaptcha()
+            ElMessage.error(
+                {
+                  showClose: true,
                   message:res.data.msg
                 }
             )
           }
         }
       })
-    },
+    }
     // 打开注册页面
-    toRegister(){
-      this.isregister=true
+    const toRegister = ()=>{
+      state.isregister=true
       document.title = '注册'
-    },
-    // 注册逻辑
-    register(){
-      this.$refs['registerForm'].validate(async valid=>{
+    }
+    // 注册
+     const register=()=>{
+      registerForm.value.validate(async valid=>{
         if(valid){
-          const newRegisterForm = JSON.parse(JSON.stringify(this.registerForm))
+          const newRegisterForm = JSON.parse(JSON.stringify(state.registerForms))
           newRegisterForm.checkPassWord=undefined
           const res = await apiRegister(newRegisterForm)
           console.log(res)
           if(res.data.code ===200){
-            this.$message.success(
+            ElMessage.success(
                 {showClose: true,
                   message:'注册成功,去登录吧!'
                 }
             )
-            this.$refs['registerForm'].resetFields()
-            this.isregister = false
-            this.loginForm.phone = newRegisterForm.phone
-            this.loginForm.passWord = newRegisterForm.passWord
+            registerForm.value.resetFields()
+            state.isregister = false
+            state.loginForm.phone = newRegisterForm.phone
+            state.loginForm.passWord = newRegisterForm.passWord
           } else{
-          this.$message.error(
+          ElMessage.error(
               {showClose: true,
                 message:res.data.msg
               }
           )}
       }})
-    },
-    // 忘记密码
-    lookPass () {
-      this.$alert('不好意思,暂不支持找回密码,忘了就忘了吧', '提示', {
-        confirmButtonText: '确定',
-        type: 'warning',
-        center: true
-      })
-    },
-    // 设置cookies
-    setCookie(){},
-    // 清除cookies
-    claerCookies(){},
-    // 点击更换验证码
-    changeCaptcha(){
-    this.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
-  }
-}
+    // 忘记密码
+    const lookPass= () => {
+      ElMessage('不好意思,暂不支持找回密码,忘了就忘了吧')
+    }
+    // 设置cookies
+    const setCookie=()=>{}
+    // 清除cookies
+    const claerCookies=()=>{}
+    // 点击更换验证码
+    const changeCaptcha=()=>{
+    state.codeSrc = "http://localhost:8000/api/captcha?"+Date.now()
+    }
+    console.log(state)
+    return {
+      loginForm,
+      registerForm,
+      ...toRefs(state),
+      toLogin,
+      toRegister,
+      register,
+      lookPass,
+      changeCaptcha
+    }
+  },
+
+})
 </script>
 
 <style lang="scss">

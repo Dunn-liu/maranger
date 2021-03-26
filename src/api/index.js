@@ -1,4 +1,6 @@
 import axios from 'axios'
+import {localGet,localRemove} from '@/utils/local'
+import router from '@/router/index'
 import { ElMessage } from 'element-plus'
 const fetch = axios.create({
   baseURL: '/api',
@@ -6,7 +8,7 @@ const fetch = axios.create({
 })
 fetch.interceptors.request.use(
   config => {
-    config.headers.token = 'dskjhgdkajs'
+    config.headers.authorization = localGet('token')||''
     return config
   },
   error => {
@@ -15,11 +17,13 @@ fetch.interceptors.request.use(
 )
 fetch.interceptors.response.use(
   response => {
-    if (response.status == 200) {
+    if (response.data&&response.data.code == 200) {
       return response
     }
-    if (response.status == 206) {
-      ElMessage.error('过期')
+    if (response.data&&response.data.code == 206) {
+        ElMessage.error('请先登录!')
+        router.push('/login')
+        localRemove('token')
       return Promise.reject(response.data.message)
     }
   },
