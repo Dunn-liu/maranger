@@ -18,13 +18,15 @@ fetch.interceptors.request.use(
 fetch.interceptors.response.use(
   response => {
     if (response.data&&response.data.code == 200) {
-      return response
+      return response.data
     }
     if (response.data&&response.data.code == 206) {
         ElMessage.error('请先登录!')
         router.push('/login')
         localRemove('token')
-      return Promise.reject(response.data.message)
+      return Promise.reject(response)
+    }else{
+        return response.data
     }
   },
   error => {}

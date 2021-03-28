@@ -1,17 +1,17 @@
 <template>
   <div class="login">
-    <div class="login-conent" v-if="!isregister">
-      <div class="login-header">
-        登录
-      </div>
-      <div class="inner-conent">
+      <div class="login-conent" v-if="!isregister">
+        <div class="login-header">
+          <div>DunnBlog</div>&nbsp;&nbsp;&nbsp;{{ headerText }}
+        </div>
         <el-form
-            :model="loginForms"
+          :model="loginForms"
           status-icon
           :rules="loginRules"
           ref="loginForm"
-          label-width="100px"
+          label-width="80px"
           class="demo-ruleForm"
+          label-position="right"
         >
           <el-form-item label="手机号" prop="phone">
             <el-input
@@ -37,27 +37,27 @@
                 ></el-input>
                 <img style="width: 112px;height: 40px" :src=codeSrc @click="changeCaptcha">
           </el-form-item>
-          <el-form-item>
-            <el-checkbox v-model="rememberPassword">记住密码</el-checkbox>
-            <div class="forgetPass" @click="lookPass()">忘记密码</div>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="toLogin('loginForm')">登录</el-button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button type="primary" @click="toRegister()">注册</el-button>
+          <el-form-item style="margin-left: 80px">
+            <el-checkbox v-model="rememberPassword">在此设备上保持登录</el-checkbox>
           </el-form-item>
         </el-form>
+        <el-button type="success" @click="toLogin('loginForm')" style="width: 250px;margin-left: 10px">登录</el-button>
+        <div class="login-bottom">
+          <el-button type="text" class="forgetPass" @click="lookPass()">忘记密码?</el-button>
+          <el-button type="text" @click="toRegister">去注册</el-button>
+        </div>
       </div>
-    </div>
-    <div class="login-conent" v-if="isregister">
+<!--    </div>-->
+    <div class="register-conent" v-if="isregister">
       <el-button  icon="el-icon-arrow-left" size="mini" @click="isregister=false" class="return-login">返回</el-button>
       <div class="login-header">
-        注册
+        <div>DunnBlog</div>&nbsp;&nbsp;&nbsp;{{ headerText }}
       </div>
       <el-form label-position="right" label-width="80px" :model="registerForms" :rules="registerRules" ref="registerForm">
         <el-form-item label="用户名" prop="user_nickname">
           <el-input type="text" v-model="registerForms.user_nickname"></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="sex" style="justify-content: left;padding-left: 110px">
+        <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="registerForms.sex">
           <el-radio label="male">男</el-radio>
           <el-radio label="female">女</el-radio>
@@ -75,10 +75,8 @@
         <el-form-item label="邮箱" prop="email" >
           <el-input type="email" v-model="registerForms.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="success" @click="register">注册</el-button>
-        </el-form-item>
       </el-form>
+      <el-button type="success" @click="register" style="width: 250px">注册</el-button>
     </div>
   </div>
 </template>
@@ -167,7 +165,7 @@ export default defineComponent({
           validator:(rule, value, callback) => {
             if (value === '') {
               callback(new Error('请再次输入密码'));
-            } else if (value !== this.registerForms.passWord) {
+            } else if (value !== state.registerForms.passWord) {
               callback(new Error('两次输入密码不一致!'));
             } else {
               callback();
@@ -179,9 +177,13 @@ export default defineComponent({
         ]
       },
       codeSrc:"http://localhost:8000/api/captcha",
-      isregister:false
+      isregister:false,
+      headerText:'登录'
     })
-    watch(()=>state.isregister,(value => document.title = value?'注册':'登录'))
+    watch(()=>state.isregister,(value => {
+      document.title = value?'注册':'登录'
+      state.headerText=value?'注册':'登录'
+    }))
     // 去登录
     const toLogin= ()=> {
          loginForm.value.validate(async valid=>{
@@ -189,11 +191,11 @@ export default defineComponent({
           const newForm = JSON.parse(JSON.stringify(state.loginForms))
           newForm.passWord = md5(newForm.passWord)
           const res = await apiToLogin(newForm)
-          if(res.data.code ===200){
+          if(res.code ===200){
             // if(state.rememberPassword){
             //   window.localStorage.setItem('password',this.loginForm.passWord)
             // }
-            localSet('token',res.data.info.token)
+            localSet('token',res.info.token)
             ElMessage.success({
               showClose: true,
               message:'登录成功!'
@@ -204,7 +206,7 @@ export default defineComponent({
             ElMessage.error(
                 {
                   showClose: true,
-                  message:res.data.msg
+                  message:res.msg
                 }
             )
           }
@@ -212,19 +214,18 @@ export default defineComponent({
       })
     }
     // 打开注册页面
-    const toRegister = ()=>{
+    const toRegister = ()=> {
       state.isregister=true
       document.title = '注册'
     }
     // 注册
-     const register=()=>{
+     const register= ()=> {
       registerForm.value.validate(async valid=>{
         if(valid){
           const newRegisterForm = JSON.parse(JSON.stringify(state.registerForms))
           newRegisterForm.checkPassWord=undefined
           const res = await apiRegister(newRegisterForm)
-          console.log(res)
-          if(res.data.code ===200){
+          if(res.code ===200){
             ElMessage.success(
                 {showClose: true,
                   message:'注册成功,去登录吧!'
@@ -232,15 +233,15 @@ export default defineComponent({
             )
             registerForm.value.resetFields()
             state.isregister = false
-            state.loginForm.phone = newRegisterForm.phone
-            state.loginForm.passWord = newRegisterForm.passWord
+            state.loginForms.phone = newRegisterForm.phone
           } else{
           ElMessage.error(
               {showClose: true,
-                message:res.data.msg
+                message:res.msg
               }
           )}
-      }})
+      }
+      })
     }
     // 忘记密码
     const lookPass= () => {
@@ -274,49 +275,63 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url('../../assets/img/bg.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  .login-conent {
+  //background-image: url('../../assets/img/bg.jpg');
+  //background-repeat: no-repeat;
+  //background-size: cover;
+  background-color: #409EFF;
+  .login-conent,.register-conent {
     min-height: 500px;
-    width: 600px;
+    width: 500px;
     position: absolute;
     left: 50%;
     top: 50%;
     margin-left: -300px;
-    margin-top: -250px;
+    margin-top: -280px;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    .return-login{
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     .login-header {
-      height: 80px;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 24px;
       margin-bottom: 10px;
-      font-weight: 700;
+      color: #3c8dbc;
+    }
+    .return-login{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .login-bottom {
+      margin-top: 20px;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .el-form {
+      width: 400px;
     }
     .el-form-item__content {
       margin-left: 0 !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
     .el-input {
       width: 300px;
     }
     .el-form-item {
       display: flex;
-      justify-content: center;
+      justify-content: left;
+      width: 400px;
     }
       .forgetPass {
-        display: inline-block;
-        margin-left: 20px;
         color: #999;
         cursor: pointer;
       }
