@@ -5,3 +5,10 @@ export function apiGetUserInfo(){
         url:'/profile'
     })
 }
+export function apiGetUserAuth(phone){
+    return fetch({
+        method:"get",
+        url:'/router',
+        params: {phone}
+    })
+}

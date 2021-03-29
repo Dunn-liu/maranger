@@ -29,9 +29,10 @@
 <script>
 import MMenu from '../../components/Menu.vue'
 import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
-import {apiGetUserInfo} from '@/api/userInfo.js'
+import {apiGetUserInfo,apiGetUserAuth} from '@/api/userInfo.js'
 import {useRouter} from 'vue-router'
 import {localRemove} from '@/utils/local'
+import {generateRouter } from '@/utils/routerFormat'
 export default defineComponent({
   components:{
     MMenu
@@ -47,6 +48,9 @@ export default defineComponent({
     onMounted(async ()=>{
       const res = await apiGetUserInfo()
       state.userinfo = res.info
+      const auth = await apiGetUserAuth(res.info.phone)
+      const newAuth= generateRouter(auth.auth)
+      console.log(newAuth)
     })
     const logOut = ()=>{
       localRemove('token')
