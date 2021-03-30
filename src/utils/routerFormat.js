@@ -25,7 +25,12 @@ function generateRouter (userRouter) {
         let router = {
             path:item.path,
             name:item.name,
-            component:()=>import(`@/views/${item.name}`)
+            meta:{
+                link:item.link,
+                icon:item.icon,
+                title:item.title,
+            },
+            component:()=>import(/* @vite-ignore */ `../views/layout/${item.name}.vue`)
         }
         if (item.children) {
             router.children = generateRouter(item.children)

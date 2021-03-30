@@ -29,6 +29,8 @@ fetch.interceptors.response.use(
         return response.data
     }
   },
-  error => {}
+  error => {
+      console.log(error)
+  }
 )
 export default fetch

@@ -19,45 +19,60 @@
     </el-header>
     <el-container>
       <el-aside width="201px">
-        <MMenu :isCollapse =isCollapse  />
+        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :default-active="router.path">
+          <el-menu-item index="/home">
+              <i class="el-icon-s-home"></i>
+              <span slot="title">主页</span>
+          </el-menu-item>
+          <template v-for="(item,index) in newAuth">
+            <MMenuItem :isCollapse =isCollapse :item="item" :index="index" />
+          </template>
+        </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import MMenu from '../../components/Menu.vue'
-import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
-import {apiGetUserInfo,apiGetUserAuth} from '@/api/userInfo.js'
+import {defineComponent, onMounted, reactive, ref, toRefs,} from 'vue'
 import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import {apiGetUserInfo,apiGetUserAuth} from '@/api/userInfo.js'
+import {generateRouter,formatRouterTree } from '@/utils/routerFormat'
 import {localRemove} from '@/utils/local'
-import {generateRouter } from '@/utils/routerFormat'
+import MMenuItem from '../../components/MenuItem.vue'
 export default defineComponent({
   components:{
-    MMenu
+    MMenuItem
   },
   name:'Layout',
   setup(){
     const router = useRouter()
+    const store = useStore()
     const isCollapse = ref(false)
     const state = reactive({
-      userinfo:{}
+      userinfo:{},
+      newAuth:[],
     })
-    // const avatarSrc = ref('http://thirdqq.qlogo.cn/g?b=oidb&k=czATMziaPGViaicIrrbIyla5g&s=640&t=1613788120')
     onMounted(async ()=>{
       const res = await apiGetUserInfo()
+      store.commit('saveUserPhone',res.info.phone)
       state.userinfo = res.info
       const auth = await apiGetUserAuth(res.info.phone)
-      const newAuth= generateRouter(auth.auth)
-      console.log(newAuth)
+      state.newAuth= generateRouter(formatRouterTree(auth.auth))
+      router.addRoute('home',state.newAuth)
+      console.log(router.getRoutes())
+      store.commit('saveAuth',true)
     })
     const logOut = ()=>{
       localRemove('token')
       router.push('/login')
     }
-    console.log(state)
     return {
+      router,
       ...toRefs(state),
       logOut,
       isCollapse
@@ -88,6 +103,13 @@ export default defineComponent({
         margin-right: 10px;
       }
     }
+  }
+  .el-menu-vertical-demo{
+    height: calc(100vh - 60px);
+  }
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
   }
 
 </style>

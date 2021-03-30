@@ -1,3 +1,4 @@
 export default {
-    userinfo:''
+    phone:'',
+    hasAuth:false,
 }

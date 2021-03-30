@@ -1,5 +1,4 @@
 import {createRouter,createWebHashHistory} from "vue-router";
-import state from '../store/state'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 const routes = [
@@ -12,7 +11,7 @@ const routes = [
         path: '/home',
         name:'Home',
         meta:{title:'首页'},
-        component:()=>import('../views/layout/Layout.vue')
+        component:()=>import('../views/layout/Layout.vue'),
     },
     {
         path:'/login',
@@ -27,17 +26,9 @@ const router = createRouter({
      history:createWebHashHistory(),
      routes
  })
-router.beforeEach((to,from,next) => {
+router.beforeEach(async (to,from,next) => {
     NProgress.start()
-    // if(to.path==='/login'||to.path==='/register'){
-    //     next()
-    // }else{
-    //     if(!state.userinfo.token){
-    //
-    //     }
-    // }
     next()
-
 })
 router.afterEach(to => {
     document.title = to.meta.title

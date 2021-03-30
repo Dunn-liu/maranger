@@ -1,6 +1,9 @@
 export default {
-    saveInfo(state,playload){
-        state.userinfo = playload
-        console.log('state',state)
+    saveAuth(state,playload){
+        state.hasAuth = playload
+        console.log(state)
+    },
+    saveUserPhone(state,playload){
+        state.phone = playload
     }
 }
