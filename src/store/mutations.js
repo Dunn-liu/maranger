@@ -5,5 +5,8 @@ export default {
     },
     saveUserPhone(state,playload){
         state.phone = playload
+    },
+    saveUserRouters(state,playload){
+        state.userRouters = playload
     }
 }

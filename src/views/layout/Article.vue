@@ -1,10 +1,10 @@
 <template>
-<h1>hsid</h1>
+  <router-view></router-view>
 </template>
 
 <script>
 export default {
-  name: "WebSetting"
+  name: "Article"
 }
 </script>
 

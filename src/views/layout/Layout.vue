@@ -24,7 +24,7 @@
               <i class="el-icon-s-home"></i>
               <span slot="title">主页</span>
           </el-menu-item>
-          <template v-for="(item,index) in newAuth">
+          <template v-for="(item,index) in store.state.userRouters">
             <MMenuItem :isCollapse =isCollapse :item="item" :index="index" />
           </template>
         </el-menu>
@@ -39,11 +39,10 @@
 <script>
 import {defineComponent, onMounted, reactive, ref, toRefs,} from 'vue'
 import {useRouter} from 'vue-router'
-import {useStore} from 'vuex'
-import {apiGetUserInfo,apiGetUserAuth} from '@/api/userInfo.js'
-import {generateRouter,formatRouterTree } from '@/utils/routerFormat'
+import {apiGetUserInfo} from '@/api/userInfo.js'
 import {localRemove} from '@/utils/local'
 import MMenuItem from '../../components/MenuItem.vue'
+import {useStore} from "vuex";
 export default defineComponent({
   components:{
     MMenuItem
@@ -59,13 +58,16 @@ export default defineComponent({
     })
     onMounted(async ()=>{
       const res = await apiGetUserInfo()
-      store.commit('saveUserPhone',res.info.phone)
       state.userinfo = res.info
-      const auth = await apiGetUserAuth(res.info.phone)
-      state.newAuth= generateRouter(formatRouterTree(auth.auth))
-      router.addRoute('home',state.newAuth)
+      // const auth = await apiGetUserAuth(res.info.phone)
+      // const addAuth = generateRouter(formatRouterTree(auth.auth))
+      // state.newAuth= addAuth
+      // console.log(addAuth)
+      // addAuth.forEach(item=>{
+      //   router.addRoute('Home',item)
+      // })
       console.log(router.getRoutes())
-      store.commit('saveAuth',true)
+      // store.commit('saveAuth',true)
     })
     const logOut = ()=>{
       localRemove('token')
@@ -73,6 +75,7 @@ export default defineComponent({
     }
     return {
       router,
+      store,
       ...toRefs(state),
       logOut,
       isCollapse

@@ -25,6 +25,7 @@ function generateRouter (userRouter) {
         let router = {
             path:item.path,
             name:item.name,
+            parentName:item.parentName,
             meta:{
                 link:item.link,
                 icon:item.icon,

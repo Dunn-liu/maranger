@@ -82,20 +82,17 @@
 </template>
 
 <script>
-import md5 from 'js-md5'
-import {localSet,localGet} from '@/utils/local'
-import { ElMessage, } from 'element-plus'
+import {ref,reactive,defineComponent,toRefs,watch} from 'vue'
 import {useRouter} from 'vue-router'
-import {ref,reactive,defineComponent,toRefs,onMounted,watch} from 'vue'
+import {useStore} from "vuex";
+import { ElMessage, } from 'element-plus'
+import md5 from 'js-md5'
 import { apiToLogin,apiRegister } from '@/api/login.js'
+import {localSet} from '@/utils/local'
 export default defineComponent({
     name: 'Login',
   setup(props,context){
-    onMounted(()=>{
-      if(localGet('token')){
-        router.push('/home')
-      }
-    })
+    const store = useStore()
     const router = useRouter()
     const loginForm = ref(null)
     const registerForm = ref(null)
@@ -135,9 +132,9 @@ export default defineComponent({
       },
       registerRules:{
         user_nickname: [
-            {required:true,message:'请输入用户名',trigger:'blur'},
+          {required:true,message:'请输入用户名',trigger:'blur'},
           { min: 3, max: 8, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-            ],
+        ],
         phone:[
           {required:true,message:'请输入手机号',trigger:'blur'},
           {validator:(rule,value,callback)=>{
@@ -195,6 +192,7 @@ export default defineComponent({
             // if(state.rememberPassword){
             //   window.localStorage.setItem('password',this.loginForm.passWord)
             // }
+            store.commit('saveUserPhone',newForm.phone)
             localSet('token',res.info.token)
             ElMessage.success({
               showClose: true,

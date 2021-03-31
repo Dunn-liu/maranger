@@ -2,8 +2,8 @@
    <template v-if="item.children&&item.children.length>0">
     <el-submenu>
       <template #title>
-        <i :class="item.meta.icon"></i>
-        <span>{{item.meta.title}}</span>
+        <i :class="item.icon"></i>
+        <span>{{item.title}}</span>
       </template>
       <el-menu-item-group v-for="(c,i) in item.children" >
         <MenuItem :item="c" :key="i"></MenuItem>
@@ -11,9 +11,9 @@
     </el-submenu>
   </template>
   <template v-else>
-    <el-menu-item :index="item.meta.link||item.path">
-        <i :class="item.meta.icon"></i>
-        <span slot="title">{{item.meta.title}}</span>
+    <el-menu-item :index="item.link||item.path">
+        <i :class="item.icon"></i>
+        <span slot="title">{{item.title}}</span>
     </el-menu-item>
   </template>
 </template>
