@@ -1,11 +1,11 @@
 <template :key="index">
    <template v-if="item.children&&item.children.length>0">
-    <el-submenu>
+    <el-submenu index="1">
       <template #title>
         <i :class="item.icon"></i>
         <span>{{item.title}}</span>
       </template>
-      <el-menu-item-group v-for="(c,i) in item.children" >
+      <el-menu-item-group v-for="(c,i) in item.children">
         <MenuItem :item="c" :key="i"></MenuItem>
       </el-menu-item-group>
     </el-submenu>

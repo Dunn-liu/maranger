@@ -19,12 +19,12 @@
     </el-header>
     <el-container>
       <el-aside width="201px">
-        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :default-active="router.path">
+        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :default-active="$route.path">
           <el-menu-item index="/home">
               <i class="el-icon-s-home"></i>
               <span slot="title">主页</span>
           </el-menu-item>
-          <template v-for="(item,index) in store.state.userRouters">
+          <template v-for="(item,index) in store.state.userRouters" :key="item.id">
             <MMenuItem :isCollapse =isCollapse :item="item" :index="index" />
           </template>
         </el-menu>

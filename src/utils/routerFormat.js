@@ -1,4 +1,12 @@
 function formatRouterTree (data) {
+    const handle = (property) => {
+        return function(a,b){
+            const val1 = a[property];
+            const val2 = b[property];
+            return val1 - val2;
+        }
+    }
+    data.sort(handle('id'))
     let parentsRouter = data.filter(p=>p.pid == 0),
         childrenRouter = data.filter(c=>c.pid !=0)
     dataToTree(parentsRouter,childrenRouter);
