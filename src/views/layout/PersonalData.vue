@@ -1,5 +1,5 @@
 <template>
-  <h1>你好</h1>
+  <div class="my_card">个人中心</div>
 </template>
 
 <script>

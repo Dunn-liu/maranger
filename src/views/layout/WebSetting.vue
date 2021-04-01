@@ -1,5 +1,5 @@
 <template>
-<h1>hsid</h1>
+  <div class="my_card">网站设置</div>
 </template>
 
 <script>

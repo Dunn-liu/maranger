@@ -5,26 +5,26 @@
       <div class="userinfo">
         <el-dropdown>
           <span class="el-dropdown-link">
-            <el-avatar :src="userinfo.avatar" />
+            <el-avatar :src="$store.state.userinfo.avatar" />
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>个人中心</el-dropdown-item>
+              <el-dropdown-item @click="$router.push('/home/personalData')">个人中心</el-dropdown-item>
               <el-dropdown-item @click="logOut">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        &nbsp;欢迎您,&nbsp;{{ userinfo.user_nickname }}
+        &nbsp;欢迎您,&nbsp;{{ $store.state.userinfo.user_nickname }}
       </div>
     </el-header>
     <el-container>
       <el-aside width="201px">
         <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :default-active="$route.path">
-          <el-menu-item index="/home">
+          <el-menu-item index="/home/calendar">
               <i class="el-icon-s-home"></i>
-              <span slot="title">主页</span>
+              <span slot="title">日历</span>
           </el-menu-item>
-          <template v-for="(item,index) in store.state.userRouters" :key="item.id">
+          <template v-for="(item,index) in $store.state.userRouters" :key="item.id">
             <MMenuItem :isCollapse =isCollapse :item="item" :index="index" />
           </template>
         </el-menu>
@@ -39,10 +39,10 @@
 <script>
 import {defineComponent, onMounted, reactive, ref, toRefs,} from 'vue'
 import {useRouter} from 'vue-router'
-import {apiGetUserInfo} from '@/api/userInfo.js'
 import {localRemove} from '@/utils/local'
 import MMenuItem from '../../components/MenuItem.vue'
 import {useStore} from "vuex";
+import {apiGetUserInfo} from "../../api/userInfo";
 export default defineComponent({
   components:{
     MMenuItem
@@ -52,31 +52,18 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
     const isCollapse = ref(false)
-    const state = reactive({
-      userinfo:{},
-      newAuth:[],
-    })
-    onMounted(async ()=>{
-      const res = await apiGetUserInfo()
-      state.userinfo = res.info
-      // const auth = await apiGetUserAuth(res.info.phone)
-      // const addAuth = generateRouter(formatRouterTree(auth.auth))
-      // state.newAuth= addAuth
-      // console.log(addAuth)
-      // addAuth.forEach(item=>{
-      //   router.addRoute('Home',item)
-      // })
-      console.log(router.getRoutes())
-      // store.commit('saveAuth',true)
-    })
     const logOut = ()=>{
       localRemove('token')
       router.push('/login')
     }
+    onMounted(async ()=>{
+      if(JSON.stringify(store.state.userinfo)==='{}'){
+        const resUser = await apiGetUserInfo()
+        store.commit('saveUserinfo',resUser.info)
+      }
+    })
     return {
       router,
-      store,
-      ...toRefs(state),
       logOut,
       isCollapse
     }

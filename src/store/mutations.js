@@ -1,10 +1,9 @@
 export default {
     saveAuth(state,playload){
         state.hasAuth = playload
-        console.log(state)
     },
-    saveUserPhone(state,playload){
-        state.phone = playload
+    saveUserinfo(state,playload){
+        state.userinfo = playload
     },
     saveUserRouters(state,playload){
         state.userRouters = playload

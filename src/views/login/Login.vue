@@ -88,7 +88,8 @@ import {useStore} from "vuex";
 import { ElMessage, } from 'element-plus'
 import md5 from 'js-md5'
 import { apiToLogin,apiRegister } from '@/api/login.js'
-import {localSet} from '@/utils/local'
+import {apiGetUserInfo} from '@/api/userInfo.js'
+import {localSet,localGet} from '@/utils/local'
 export default defineComponent({
     name: 'Login',
   setup(props,context){
@@ -98,7 +99,7 @@ export default defineComponent({
     const registerForm = ref(null)
     const state = reactive({
        loginForms:{
-        phone:'15817294245',
+        phone:localGet('phone')||'',
         passWord:'',
         capCode:'',
       },
@@ -189,11 +190,11 @@ export default defineComponent({
           newForm.passWord = md5(newForm.passWord)
           const res = await apiToLogin(newForm)
           if(res.code ===200){
-            // if(state.rememberPassword){
-            //   window.localStorage.setItem('password',this.loginForm.passWord)
-            // }
-            store.commit('saveUserPhone',newForm.phone)
             localSet('token',res.info.token)
+            localSet('phone',newForm.phone)
+            // 登录成功,获取用户信息
+            const resUser = await apiGetUserInfo()
+            store.commit('saveUserinfo',resUser.info)
             ElMessage.success({
               showClose: true,
               message:'登录成功!'

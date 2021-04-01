@@ -6,9 +6,10 @@ import mutations from './mutations'
 const store = createStore({
     plugins:[createPersistedState(
         {
+            storage: window.sessionStorage,
             reducer(val){
                 return {
-                   phone: val.phone
+                   userinfo: val.userinfo
                 }
             }
         }

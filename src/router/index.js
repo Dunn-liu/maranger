@@ -15,13 +15,19 @@ const routes = [
     // 路由重定向
     {
         path:'/',
-        redirect:'/home'
+        redirect:'/login'
     },
     {
         path: '/home',
         name:'Home',
         meta:{title:'首页'},
-        component:()=>import('../views/layout/Layout.vue'),
+        redirect: '/home/calendar',
+        component:()=>import('../views/layout/layout.vue'),
+        children:[{
+            path:'/home/calendar',
+            name:'Calendar',
+            component:()=>import('../views/layout/Calender.vue')
+        }]
     },
     {
         path:'/login',
@@ -50,7 +56,7 @@ router.beforeEach(async (to,from,next) => {
     }
     if(isLogin){ // 已登录
         if(to.path.includes('/login')){ // 已登录不可访问登录页
-            next({path:'/'}) // 跳转到首页
+            next({path:'/home'}) // 跳转到首页
             NProgress.done()
         }else{ // 异步获取路由
             if(store.state.hasAuth){ // 已有路由
@@ -60,10 +66,9 @@ router.beforeEach(async (to,from,next) => {
                     await store.dispatch('getAuthRouter')
                     const accessRouters = generateRouter(store.state.userRouters)
                     addRouters(accessRouters)
-                    console.log(router.getRoutes())
                     next({path:to.path,replace:true})
                 }catch (e) {
-                    console.log(e)
+                    localRemove('token')
                     next({
                         path:'/login',
                         params:{

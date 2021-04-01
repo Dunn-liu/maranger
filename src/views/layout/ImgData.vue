@@ -1,5 +1,5 @@
 <template>
-<h1>时候</h1>
+<div class="my_card">图库</div>
 </template>
 
 <script>

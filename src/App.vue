@@ -16,5 +16,13 @@ import {defineComponent} from 'vue'
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
 </script>
 
-<style>
+<style lang="scss">
+.my_card{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #EBEEF5;
+  background-color: #FFF;
+}
 </style>

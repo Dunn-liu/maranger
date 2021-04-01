@@ -1,5 +1,5 @@
 export default {
-    phone:'',
+    userinfo: {},
     hasAuth:false,
     userRouters:[]
 }

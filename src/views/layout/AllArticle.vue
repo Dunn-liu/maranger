@@ -1,5 +1,5 @@
 <template>
-  <h1>all</h1>
+  <div class="my_card">所以文章</div>
 </template>
 
 <script>
