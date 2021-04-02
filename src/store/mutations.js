@@ -7,5 +7,8 @@ export default {
     },
     saveUserRouters(state,playload){
         state.userRouters = playload
+    },
+    saveHeaderTitle(state,playload){
+        state.headerTitle = playload
     }
 }

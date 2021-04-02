@@ -31,6 +31,7 @@
         <el-date-picker
             v-model="articleForm.post_date"
             type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择发布时间"
             :shortcuts="shortcuts"
         >
@@ -129,6 +130,8 @@ name: "AddArticle",
       state.classify = res.data
     })
     const publishArticle=()=>{ // 发布按钮
+      state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
+      console.log(state)
       articleFormRef.value.validate(async valid=>{
         if(!valid){
           ElNotification({
@@ -137,11 +140,11 @@ name: "AddArticle",
             duration:'2000'
           })
         }else{
-          const newForm = JSON.parse(JSON.stringify(state.articleForm))
-          newForm.post_date=dayjs(newForm.post_date).valueOf()
-          newForm.classifyId  = newForm.classifyId.join(',')
-          newForm.article_content=newForm.article_content.replace(/\"/g,"'")
-          const res =await apiPublishArticle(newForm)
+          // const newForm = JSON.parse(JSON.stringify(state.articleForm))
+          state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
+          state.articleForm.classifyId  = state.articleForm.classifyId.join(',')
+          state.articleForm.article_content=state.articleForm.article_content.replace(/\"/g,"'")
+          const res =await apiPublishArticle(state.articleForm)
           if(res.code===200){
             ElNotification({
               type:'success',

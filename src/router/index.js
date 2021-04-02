@@ -94,6 +94,7 @@ router.beforeEach(async (to,from,next) => {
     }
 })
 router.afterEach(to => {
+    store.commit('saveHeaderTitle',to.meta.title)
     document.title = to.meta.title
     NProgress.done()
 })

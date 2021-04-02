@@ -1,5 +1,6 @@
 export default {
     userinfo: {},
     hasAuth:false,
-    userRouters:[]
+    userRouters:[],
+    headerTitle:''
 }

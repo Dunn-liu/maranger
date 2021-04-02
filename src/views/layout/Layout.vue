@@ -30,6 +30,7 @@
         </el-menu>
       </el-aside>
       <el-main>
+        <h1>{{$store.state.headerTitle}}</h1>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, toRefs,} from 'vue'
+import {defineComponent, onMounted, ref,watch} from 'vue'
 import {useRouter} from 'vue-router'
 import {localRemove} from '@/utils/local'
 import MMenuItem from '../../components/MenuItem.vue'
