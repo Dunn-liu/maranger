@@ -1,5 +1,7 @@
 <template>
-<h1>分类</h1>
+<el-table>
+
+</el-table>
 </template>
 
 <script>
