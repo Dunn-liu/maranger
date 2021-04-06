@@ -19,3 +19,17 @@ export function apiGetArticle(params){
         params:params
     })
 }
+export  function apiUpdateArticle(data){
+    return fetch({
+        url:'/updateArticle',
+        method:'post',
+        data
+    })
+}
+export  function apiDelArticle(params){
+    return fetch({
+        url:'delArticle',
+        method:'get',
+        params:params
+    })
+}

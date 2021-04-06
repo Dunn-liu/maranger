@@ -43,9 +43,7 @@ name: "AddArticle",
       formValid = e
     }
     const publishArticle=async ()=>{ // 发布按钮
-      state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
       articleFormRef.value.validateForm()
-      console.log(formValid)
         if(!formValid){
           ElNotification({
             type:'error',
@@ -55,13 +53,12 @@ name: "AddArticle",
         }else{
           state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
           state.articleForm.classifyId  = state.articleForm.classifyId.join(',')
-          state.articleForm.article_content=state.articleForm.article_content.replace(/\"/g,"'")
           const res =await apiPublishArticle(state.articleForm)
           if(res.code===200){
             ElNotification({
               type:'success',
               message:'发布成功!',
-              duration:'2000'
+              duration:2000
             })
             router.push('/home/article/allArticle')
           }

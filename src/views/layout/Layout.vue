@@ -95,12 +95,17 @@ export default defineComponent({
       }
     }
   }
-  .el-menu-vertical-demo{
-    height: calc(100vh - 60px);
+  .el-aside{
+    border-right: solid 1px #e6e6e6;
+    .el-menu-vertical-demo{
+      height: calc(100vh - 60px);
+      border: none;
+    }
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+      width: 200px;
+      min-height: 400px;
+    }
   }
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
+
 
 </style>

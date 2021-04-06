@@ -21,6 +21,8 @@ import {defineComponent} from 'vue'
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid #EBEEF5;
   background-color: #FFF;

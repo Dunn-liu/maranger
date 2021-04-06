@@ -1,9 +1,39 @@
 <template>
   <div class="my_card all_article">
+    <el-form class="search_bar" label-width="70px" label-position="left">
+      <el-form-item label="关键词">
+        <el-input v-model="queryData.keyword"></el-input>
+      </el-form-item>
+      <el-form-item label="分类">
+        <el-select v-model="queryData.classifyId" placeholder="请选择" collapse-tags clearable>
+          <el-option
+              v-for="item in classify"
+              :key="item.id"
+              :label="item.classifyName"
+              :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="文章状态">
+        <el-select placeholder="请选择" collapse-tags v-model="queryData.articleStatus" clearable>
+          <el-option label="已发布" :value="1" :key="1">
+          </el-option>
+          <el-option label="未发布" :value="0" :key="0">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label-width="0">
+        <el-button type="primary" @click="getArticle">查询</el-button>
+        <el-button @click="clearQuery">清除</el-button>
+        <el-button type="danger" @click="delArticle">删除文章</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
         :data="articleData"
         style="width: 100%"
         v-loading.fullscreen.lock="loading"
+        @selection-change="handleSelectionChange"
+        ref="tableRef"
         border>
       <el-table-column
           type="selection"
@@ -27,9 +57,9 @@
           label="分类"
       >
         <template v-slot="scope">
-          <template v-for="item in scope.row.classifyId">
+          <template v-for="(item,index) in scope.row.classifyId">
             {{ filterClassify(item).classifyName }}
-            {{scope.row.classifyId.length>1?',':''}}
+            {{scope.row.classifyId.length===index+1?'':','}}
           </template>
         </template>
       </el-table-column>
@@ -90,46 +120,52 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, toRefs} from 'vue'
-import {ElNotification} from 'element-plus'
-import {apiGetArticle, apiGetClassify} from "../../api/article";
+import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
+import {ElAlert, ElMessage, ElMessageBox, ElNotification} from 'element-plus'
+import {apiDelArticle, apiGetArticle, apiGetClassify, apiUpdateArticle} from "../../api/article";
 import ArticleForm from "@/components/ArticleForm.vue";
+import dayjs from "dayjs";
 export default defineComponent({
   name: "AllArticle",
   components:{ArticleForm},
   setup(){
     let formValid =null
+    const articleFormRef = ref(null)
+    const tableRef = ref(null)
     const state = reactive({
       articleData:[], // 页面文章数据
       queryData:{
         keyword:'',
-        classifyId:''
+        classifyId:'',
+        articleStatus:''
       },
       loading:false,
       showDrawer:false,
       editData: {}, //当前编辑文章数据
       classify:[], // 所有分类信息
+      multipleSelection:[], // 选中的文章id
+      delSelect:'',
     })
     onMounted(async ()=>{
-      await getAllArticle()
+      await getArticle()
        // 获取分类数据
       const classifyData = await apiGetClassify()
       state.classify = classifyData.data
     })
     // 获取文章信息
-    const getAllArticle =async ()=>{
+    const getArticle =async ()=>{
       state.loading=true
       // 获取所有文章信息
       const res = await apiGetArticle(state.queryData)
       if(res.code===200){
         state.loading=false
         res.data.forEach(item=>{
+          item.edit_date = dayjs( item.edit_date).format('YYYY-MM-DD HH:mm:ss')
           item.classifyId = item.classifyId.split(",").map(c=>{
             c = Number(c)
             return c
           })
         })
-        console.log(res.data)
         state.articleData = JSON.parse(JSON.stringify(res.data))
       }else {
         state.loading=false
@@ -153,8 +189,28 @@ export default defineComponent({
       state.showDrawer=true
     }
     // 保存编辑
-    const saveEdit = ()=>{
-      console.log(state.editData)
+    const saveEdit = async ()=>{
+      articleFormRef.value.validateForm()
+      if(!formValid){
+        ElNotification({
+          type:'error',
+          message:'请检查表单内容!',
+          duration:2000
+        })
+      }else {
+        state.editData.post_date = dayjs(state.editData.post_date).format('YYYY-MM-DD HH:mm:ss')
+        state.editData.classifyId  = state.editData.classifyId.join(',')
+        const res = await apiUpdateArticle(state.editData)
+        if (res.code === 200) {
+          ElNotification({
+            type:'success',
+            message:'文章更新成功!',
+            duration:2000
+          })
+          await getArticle()
+          state.showDrawer=false
+        }
+      }
     }
     // 取消编辑
     const cancelEdit = ()=>{
@@ -170,14 +226,70 @@ export default defineComponent({
         })[0]
       }
     }
+    // 清空搜索表单
+    const clearQuery = ()=>{
+      state.queryData={
+        keyword:'',
+        classifyId:'',
+        articleStatus:''
+      }
+    }
+    // 选择文章
+    const handleSelectionChange = (val)=>{
+      state.multipleSelection = val
+      state.delSelect = state.multipleSelection.map(item=>{
+        return item.id
+      }).join(',')
+    }
+    const delArticle = async () =>{
+      if (!state.delSelect) {
+        ElMessage.warning({
+          showClose: true,
+          duration:1500,
+          message: '请先选中需要操作的文章!',
+          type: 'warning'
+        });
+      }else{
+        ElMessageBox.confirm(
+          '此操作不可恢复, 是否继续删除文章?', '提示', {
+          confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+        }).then(async () => {
+          const res =await  apiDelArticle({id:state.delSelect})
+          if(res.code===200){
+            ElMessage.warning({
+              showClose: true,
+              duration:1500,
+              message: '删除成功!',
+              type: 'success'
+            });
+            await getArticle()
+          }
+        }).catch(() => {
+          tableRef.value.clearSelection();
+          ElNotification({
+            type:'info',
+            message:'取消操作!',
+            duration:1500
+          })
+        });
+      }
+    }
     return {
+      articleFormRef,
+      tableRef,
       ...toRefs(state),
       editArticle,
       getEditor,
       getFormValid,
       saveEdit,
       cancelEdit,
-      filterClassify
+      filterClassify,
+      getArticle,
+      clearQuery,
+      handleSelectionChange,
+      delArticle
     }
   }
 })
@@ -185,9 +297,16 @@ export default defineComponent({
 
 <style lang="scss">
 .all_article{
-}
-.el-table--border, .el-table--group {
-  border: none;
+  flex-direction: column;
+  .search_bar {
+    display: flex;
+    .el-form-item {
+      margin-right: 40px;
+    }
+    .el-input {
+      width: 160px;
+    }
+  }
 }
 .el-table_body tr, .el-table_body td{
   height: 36px;
