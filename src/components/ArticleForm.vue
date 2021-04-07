@@ -99,7 +99,6 @@ name: "ArticleForm",
         placeholder:'',
         onchange(){
           context.emit("getEditor", editor.txt.html())
-          console.log(editor.txt.html())
         }
       })
       editor.create()

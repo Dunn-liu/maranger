@@ -1,7 +1,9 @@
 import axios from 'axios'
 import {localGet} from '@/utils/local'
+const {VITE_BASE_URL} = import.meta.env
+console.log('VITE_BASE_URL',VITE_BASE_URL)
 const fetch = axios.create({
-  baseURL: '/api',
+  baseURL: VITE_BASE_URL,
   withCredentials: true
 })
 fetch.interceptors.request.use(
@@ -15,12 +17,7 @@ fetch.interceptors.request.use(
 )
 fetch.interceptors.response.use(
   response => {
-    if (response.data&&response.data.code == 200) {
       return response.data
-    }
-    else{
-        return response.data
-    }
   },
   error => {
       console.log(error)

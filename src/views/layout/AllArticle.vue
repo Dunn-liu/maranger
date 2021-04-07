@@ -103,6 +103,19 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page_nation">
+      <el-pagination
+          background
+          layout="prev, pager, next ,sizes "
+          :page-sizes="[10, 20]"
+          :page-size="queryData.limit"
+          :current-page="queryData.page"
+          :total="totalNum"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+      >
+      </el-pagination>
+    </div>
   </div>
   <el-drawer
       title="编辑文章"
@@ -137,7 +150,9 @@ export default defineComponent({
       queryData:{
         keyword:'',
         classifyId:'',
-        articleStatus:''
+        articleStatus:'',
+        page:1,
+        limit:10
       },
       loading:false,
       showDrawer:false,
@@ -145,6 +160,7 @@ export default defineComponent({
       classify:[], // 所有分类信息
       multipleSelection:[], // 选中的文章id
       delSelect:'',
+      totalNum:50
     })
     onMounted(async ()=>{
       await getArticle()
@@ -166,6 +182,7 @@ export default defineComponent({
             return c
           })
         })
+        state.totalNum = res.pageNation.total
         state.articleData = JSON.parse(JSON.stringify(res.data))
       }else {
         state.loading=false
@@ -276,6 +293,16 @@ export default defineComponent({
         });
       }
     }
+    // 分页功能方法
+    const handleCurrentChange = async (val)=>{
+      state.queryData.page = val
+      await getArticle()
+    }
+    const handleSizeChange = async (val) =>{
+      state.queryData.page = 1
+      state.queryData.limit = val
+      await getArticle()
+    }
     return {
       articleFormRef,
       tableRef,
@@ -289,7 +316,9 @@ export default defineComponent({
       getArticle,
       clearQuery,
       handleSelectionChange,
-      delArticle
+      delArticle,
+      handleCurrentChange,
+      handleSizeChange
     }
   }
 })
@@ -306,6 +335,9 @@ export default defineComponent({
     .el-input {
       width: 160px;
     }
+  }
+  .page_nation {
+    margin: 20px auto 10px;
   }
 }
 .el-table_body tr, .el-table_body td{
