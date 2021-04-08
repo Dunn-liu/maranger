@@ -344,7 +344,7 @@ export default defineComponent({
   height: 36px;
 }
 .el-drawer{
-  width: 40% !important;
+  width: 60% !important;
   overflow: auto;
   padding-bottom: 20px;
 }
