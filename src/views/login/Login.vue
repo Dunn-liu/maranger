@@ -174,7 +174,7 @@ export default defineComponent({
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
-      codeSrc:"http://localhost:8000/api/captcha",
+      codeSrc:"http://localhost:8000/captcha",
       isregister:false,
       headerText:'登录'
     })
@@ -252,9 +252,8 @@ export default defineComponent({
     const claerCookies=()=>{}
     // 点击更换验证码
     const changeCaptcha=()=>{
-    state.codeSrc = "http://localhost:8000/api/captcha?"+Date.now()
+    state.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
-    console.log(state)
     return {
       loginForm,
       registerForm,
