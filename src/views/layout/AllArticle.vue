@@ -177,6 +177,7 @@ export default defineComponent({
         state.loading=false
         res.data.forEach(item=>{
           item.edit_date = dayjs( item.edit_date).format('YYYY-MM-DD HH:mm:ss')
+          item.post_date = dayjs( item.post_date).format('YYYY-MM-DD HH:mm:ss')
           item.classifyId = item.classifyId.split(",").map(c=>{
             c = Number(c)
             return c
