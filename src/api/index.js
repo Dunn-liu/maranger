@@ -1,9 +1,7 @@
 import axios from 'axios'
 import {localGet} from '@/utils/local'
-const {VITE_BASE_URL} = import.meta.env
-console.log('VITE_BASE_URL',VITE_BASE_URL)
 const fetch = axios.create({
-  baseURL: VITE_BASE_URL,
+  baseURL: '/api',
   withCredentials: true
 })
 fetch.interceptors.request.use(

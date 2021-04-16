@@ -273,10 +273,10 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  //background-image: url('../../assets/img/bg.jpg');
-  //background-repeat: no-repeat;
-  //background-size: cover;
-  background-color: #409EFF;
+  background-image: url('../../assets/img/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  /*background-color: #409EFF;*/
   .login-conent,.register-conent {
     min-height: 500px;
     width: 500px;
