@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
+import {defineComponent, onMounted,onBeforeUnmount, reactive, ref, toRefs} from 'vue'
 import E from "wangeditor";
 import hljs from "highlight.js";
 import {apiGetClassify} from "../api/article";
@@ -50,6 +50,7 @@ name: "ArticleForm",
   emits:['getEditor','getValid'],
   setup(props,context){
     const articleFormRef = ref(null)
+    let editor = ref(null)
   const state = reactive({
     shortcuts: [{  // 时间选择器额外配置
       text: '今天',
@@ -89,7 +90,7 @@ name: "ArticleForm",
     }
    })
     const creatEditor = (domId)=>{ // 创建富文本编辑器
-      const editor = new E(domId)
+      editor = new E(domId)
       editor.highlight = hljs
       Object.assign(editor.config,{
         height:300,
@@ -112,6 +113,10 @@ name: "ArticleForm",
       // 获取文章分类
       const res = await apiGetClassify()
       state.classify = res.data
+    });
+    onBeforeUnmount(()=>{
+      editor.destroy()
+      editor=null
     })
     const validateForm=()=>{
       articleFormRef.value.validate(valid=>{

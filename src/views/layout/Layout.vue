@@ -18,7 +18,7 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="201px">
+      <el-aside >
         <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :default-active="$route.path">
           <el-menu-item index="/home/calendar">
               <i class="el-icon-s-home"></i>
@@ -77,7 +77,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #00B7FF;
+    background-color: #7d5e85;
     padding-left: 30px;
     .logo{
       width: 50px;
@@ -96,6 +96,7 @@ export default defineComponent({
     }
   }
   .el-aside{
+    width: auto !important;
     border-right: solid 1px #e6e6e6;
     .el-menu-vertical-demo{
       height: calc(100vh - 60px);

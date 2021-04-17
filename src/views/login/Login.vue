@@ -174,7 +174,8 @@ export default defineComponent({
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
-      codeSrc:"http://api.codespring.top/captcha",
+      codeSrc:"https://api.codespring.top/captcha",
+      // codeSrc:"http://localhost:8000/captcha",
       isregister:false,
       headerText:'登录'
     })
@@ -253,6 +254,7 @@ export default defineComponent({
     // 点击更换验证码
     const changeCaptcha=()=>{
     state.codeSrc = "http://api.codespring.top/captcha?"+Date.now()
+      // state.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
     return {
       loginForm,
