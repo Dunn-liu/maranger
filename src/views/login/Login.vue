@@ -174,7 +174,8 @@ export default defineComponent({
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
-      codeSrc:"http://api.codespring.top/captcha",
+      // codeSrc:"https://api.codespring.top/captcha",
+      codeSrc:"http://localhost:8000/captcha",
       isregister:false,
       headerText:'登录'
     })
@@ -252,7 +253,8 @@ export default defineComponent({
     const claerCookies=()=>{}
     // 点击更换验证码
     const changeCaptcha=()=>{
-    state.codeSrc = "http://api.codespring.top/captcha?"+Date.now()
+    // state.codeSrc = "http://api.codespring.top/captcha?"+Date.now()
+      state.codeSrc = "http://localhost:8000/captcha?"+Date.now()
     }
     return {
       loginForm,
@@ -273,10 +275,10 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  //background-image: url('../../assets/img/bg.jpg');
-  //background-repeat: no-repeat;
-  //background-size: cover;
-  background-color: #409EFF;
+  background-image: url('../../assets/img/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  /*background-color: #409EFF;*/
   .login-conent,.register-conent {
     min-height: 500px;
     width: 500px;

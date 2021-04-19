@@ -31,7 +31,8 @@
     <el-table
         :data="articleData"
         style="width: 100%"
-        v-loading.fullscreen.lock="loading"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
         @selection-change="handleSelectionChange"
         ref="tableRef"
         border>
@@ -124,7 +125,7 @@
       destroy-on-close
       append-to-body
   >
-    <ArticleForm :articleData="editData" @get-editor="getEditor" @get-valid="getFormValid" ref="articleFormRef"/>
+    <ArticleForm v-if="showDrawer" :articleData="editData" @get-editor="getEditor" @get-valid="getFormValid" ref="articleFormRef"/>
     <div class="sub_bths">
       <el-button type="success" @click="saveEdit">保存</el-button>
       <el-button type="success" @click="cancelEdit">取消</el-button>
