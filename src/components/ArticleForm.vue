@@ -15,7 +15,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
-      <div id="editor"></div>
+      <div id="editor" v-loading="isLoadImg" element-loading-text="图片上传中" element-loading-spinner="el-icon-loading"></div>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
       <el-input v-model="articleData.author_nickname"></el-input>
@@ -87,7 +87,8 @@ name: "ArticleForm",
       ],
       'post_date': [{type:'date',required: true, message: '请输入作者', trigger: 'blur'},
       ],
-    }
+    },
+    isLoadImg:false,
    })
     const creatEditor = (domId)=>{ // 创建富文本编辑器
       editor = new E(domId)
@@ -97,6 +98,8 @@ name: "ArticleForm",
         zIndex:500,
         pasteFilterStyle:false,
         uploadImgServer:'/api/upload/image',
+        uploadImgTimeout:20*1000,
+        uploadImgMaxSize : 2 * 1024 * 1024,
         uploadFileName:'file',
         placeholder:'',
         onchange(){
@@ -104,8 +107,10 @@ name: "ArticleForm",
         },
         uploadImgHooks :{
           // 上传图片之前
-          before: function(xhr) {
-            console.log(xhr)
+          before: function(xhr,editor) {
+            state.isLoadImg=true
+            console.log('xhr',xhr)
+            console.log('editor',editor)
 
             // 可阻止图片上传
             // return {
@@ -115,18 +120,22 @@ name: "ArticleForm",
           },
           // 图片上传并返回了结果，图片插入已成功
           success: function(xhr) {
+            state.isLoadImg=false
             console.log('success', xhr)
           },
           // 图片上传并返回了结果，但图片插入时出错了
           fail: function(xhr, editor, resData) {
+            state.isLoadImg=false
             console.log('fail', resData)
           },
           // 上传图片出错，一般为 http 请求的错误
           error: function(xhr, editor, resData) {
+            state.isLoadImg=false
             console.log('error', xhr, resData)
           },
           // 上传图片超时
           timeout: function(xhr) {
+            state.isLoadImg=false
             console.log('timeout')
           },
           // 图片上传并返回了结果，想要自己把图片插入到编辑器中
@@ -136,6 +145,7 @@ name: "ArticleForm",
             // console.log('customInsert', result)
             // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
             insertImgFn(result.src)
+            state.isLoadImg=false
           }
         }
       })
