@@ -22,21 +22,21 @@ const routes = [
         name:'Home',
         meta:{title:'首页'},
         redirect: '/home/calendar',
-        component:()=>import('@/views/layout/layout.vue'),
+        component:()=>import('../views/layout/layout.vue'),
         children:[{
             path:'/home/calendar',
             name:'Calendar',
-            component:()=>import('@/views/layout/Calender.vue')
+            component:()=>import('../views/layout/Calender.vue')
         }]
     },
     {
         path:'/login',
         name:'Login',
         meta:{title:'登录'},
-        component:()=>import('@/views/login/Login.vue')
+        component:()=>import('../views/login/Login.vue')
     },
     // 404页面
-    { path: '/:pathMatch(.*)*', name: 'NotFound',meta:{title:'404 NotFound'}, component: ()=>import('@/views/NotFound.vue')}
+    { path: '/:pathMatch(.*)*', name: 'NotFound',meta:{title:'404 NotFound'}, component: ()=>import('../views/NotFound.vue')}
 ]
 const router = createRouter({
      history:createWebHashHistory(),

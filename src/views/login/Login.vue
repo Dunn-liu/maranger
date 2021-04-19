@@ -90,6 +90,7 @@ import md5 from 'js-md5'
 import { apiToLogin,apiRegister } from '@/api/login.js'
 import {apiGetUserInfo} from '@/api/userInfo.js'
 import {localSet,localGet} from '@/utils/local'
+const {VITE_BASE_URL} = import.meta.env
 export default defineComponent({
     name: 'Login',
   setup(props,context){
@@ -174,8 +175,7 @@ export default defineComponent({
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
-      // codeSrc:"https://api.codespring.top/captcha",
-      codeSrc:"http://localhost:8000/captcha",
+      codeSrc:VITE_BASE_URL+"/captcha",
       isregister:false,
       headerText:'登录'
     })
@@ -253,8 +253,7 @@ export default defineComponent({
     const claerCookies=()=>{}
     // 点击更换验证码
     const changeCaptcha=()=>{
-    // state.codeSrc = "http://api.codespring.top/captcha?"+Date.now()
-      state.codeSrc = "http://localhost:8000/captcha?"+Date.now()
+      state.codeSrc = VITE_BASE_URL+"/captcha?"+Date.now()
     }
     return {
       loginForm,
