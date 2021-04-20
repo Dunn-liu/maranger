@@ -50,6 +50,7 @@ import {apiGetClassify} from "../api/article";
 import Upload from './Upload.vue'
 import Compressor from "compressorjs";
 import {ElMessage} from "element-plus";
+import {apiUploadImg} from "../api/image";
 export default defineComponent({
 name: "ArticleForm",
   props:['articleData'],
@@ -106,7 +107,6 @@ name: "ArticleForm",
         height:300,
         zIndex:500,
         pasteFilterStyle:false,
-        uploadImgServer:'/api/upload/image',
         uploadImgTimeout:20*1000,
         uploadImgMaxSize : 2 * 1024 * 1024,
         uploadFileName:'file',
@@ -114,49 +114,26 @@ name: "ArticleForm",
         onchange(){
           context.emit("getEditor", editor.txt.html())
         },
-        uploadImgHooks :{
-          // 上传图片之前
-          before: function(xhr,editor,files) {
-            console.log(xhr)
-            new Compressor(files[0],{
-              quality: 0.6,
-              success(result) {
-                return result
-              },
-              error(err) {
-                console.log(file)
-                console.log(err.message);
-              },
-            })
-            state.isLoadImg=true
-          },
-          // 图片上传并返回了结果，图片插入已成功
-          success: function(xhr) {
-            state.isLoadImg=false
-            console.log('success', xhr)
-          },
-          // 图片上传并返回了结果，但图片插入时出错了
-          fail: function(xhr, editor, resData) {
-            state.isLoadImg=false
-            console.log('fail', resData)
-          },
-          // 上传图片出错，一般为 http 请求的错误
-          error: function(xhr, editor, resData) {
-            state.isLoadImg=false
-            console.log('error', xhr, resData)
-          },
-          // 上传图片超时
-          timeout: function(xhr) {
-            state.isLoadImg=false
-            console.log('timeout')
-          },
-          // 图片上传并返回了结果，想要自己把图片插入到编辑器中
-          customInsert: function(insertImgFn, result) {
-            // result 即服务端返回的接口
-            // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
-            insertImgFn(result.src)
-            state.isLoadImg=false
-          }
+        customAlert:function (info){
+          ElMessage.error({
+            message:info,
+            type:'error',
+            showClose:true
+          })
+        },
+        customUploadImg :function (files, insert) {
+          new Compressor(files[0],{
+            quality: 0.6,
+            async success(result) {
+              const formData = new FormData();
+              formData.append('file', result, result.name);
+              const res = await apiUploadImg(formData)
+              insert(res.src)
+            },
+            error(err) {
+              console.log('err',err.message);
+            },
+          })
         }
       })
       editor.create()
