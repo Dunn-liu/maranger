@@ -14,6 +14,9 @@
         </el-option>
       </el-select>
     </el-form-item>
+    <el-form-item label="文章封面" prop="article_cover">
+      <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>
+    </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
       <div id="editor" v-loading="isLoadImg" element-loading-text="图片上传中" element-loading-spinner="el-icon-loading"></div>
     </el-form-item>
@@ -44,32 +47,38 @@ import {defineComponent, onMounted,onBeforeUnmount, reactive, ref, toRefs} from 
 import E from "wangeditor";
 import hljs from "highlight.js";
 import {apiGetClassify} from "../api/article";
+import Upload from './Upload.vue'
+import Compressor from "compressorjs";
+import {ElMessage} from "element-plus";
 export default defineComponent({
 name: "ArticleForm",
   props:['articleData'],
   emits:['getEditor','getValid'],
+  components: {Upload},
   setup(props,context){
     const articleFormRef = ref(null)
     let editor = ref(null)
   const state = reactive({
-    shortcuts: [{  // 时间选择器额外配置
-      text: '今天',
-      value: new Date(),
-      }, {
-      text: '昨天',
-      value: (() => {
-        const date = new Date();
-        date.setTime(date.getTime() - 3600 * 1000 * 24);
-        return date
-      })(),
-      }, {
-      text: '一周前',
-      value: (() => {
-        const date = new Date();
-        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-        return date
-      })(),
-     }],
+    shortcuts: [ // 时间选择器额外配置
+                {
+                text: '今天',
+                value: new Date(),
+                }, {
+                text: '昨天',
+                value: (() => {
+                  const date = new Date();
+                  date.setTime(date.getTime() - 3600 * 1000 * 24);
+                  return date
+                })(),
+                }, {
+                text: '一周前',
+                value: (() => {
+                  const date = new Date();
+                  date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                  return date
+                })(),
+               }
+              ],
      classify:'', // 文章分类数据
      rules: {
       'article_title': [{required: true, message: '请输入文章标题!', trigger: 'blur'},
@@ -88,7 +97,7 @@ name: "ArticleForm",
       'post_date': [{type:'date',required: true, message: '请输入作者', trigger: 'blur'},
       ],
     },
-    isLoadImg:false,
+     isLoadImg:false,
    })
     const creatEditor = (domId)=>{ // 创建富文本编辑器
       editor = new E(domId)
@@ -107,16 +116,19 @@ name: "ArticleForm",
         },
         uploadImgHooks :{
           // 上传图片之前
-          before: function(xhr,editor) {
+          before: function(xhr,editor,files) {
+            console.log(xhr)
+            new Compressor(files[0],{
+              quality: 0.6,
+              success(result) {
+                return result
+              },
+              error(err) {
+                console.log(file)
+                console.log(err.message);
+              },
+            })
             state.isLoadImg=true
-            console.log('xhr',xhr)
-            console.log('editor',editor)
-
-            // 可阻止图片上传
-            // return {
-            //   prevent: true,
-            //   msg: '需要提示给用户的错误信息'
-            // }
           },
           // 图片上传并返回了结果，图片插入已成功
           success: function(xhr) {
@@ -139,10 +151,8 @@ name: "ArticleForm",
             console.log('timeout')
           },
           // 图片上传并返回了结果，想要自己把图片插入到编辑器中
-          // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
           customInsert: function(insertImgFn, result) {
             // result 即服务端返回的接口
-            // console.log('customInsert', result)
             // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
             insertImgFn(result.src)
             state.isLoadImg=false
@@ -161,20 +171,23 @@ name: "ArticleForm",
       const res = await apiGetClassify()
       state.classify = res.data
     });
-    onBeforeUnmount(()=>{
+    onBeforeUnmount(()=>{ // 销毁富文本编辑器
       editor.destroy()
       editor=null
     })
-    const validateForm=()=>{
+    const validateForm=()=>{ // 表单验证
       articleFormRef.value.validate(valid=>{
         context.emit('getValid',valid)
       })
     }
+    const getSrc = (e) =>{ // 获取图片上传src
+      props.articleData.article_cover = e
+    }
     return {
-    props,
       articleFormRef,
       ...toRefs(state),
-      validateForm
+      validateForm,
+      getSrc
    }
   }
 })

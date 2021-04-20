@@ -19,7 +19,7 @@ import ArticleForm from "@/components/ArticleForm.vue";
 export default defineComponent({
 name: "AddArticle",
   components:{ArticleForm},
-  setup(props){
+  setup(){
   const store = useStore()
   const router = useRouter()
   const articleFormRef = ref(null)
@@ -28,6 +28,7 @@ name: "AddArticle",
         articleForm:{ // 文章表单数据
           article_title:'',
           article_content:'',
+          article_cover:'',
           author:store.state.userinfo.phone,
           author_nickname:store.state.userinfo.user_nickname||'',
           post_date:new Date(),
@@ -36,14 +37,14 @@ name: "AddArticle",
           classifyId:[]
         },
       })
-    const getEditor=(e)=>{
+    const getEditor=(e)=>{ // 获取富文本编辑器内容
       state.articleForm.article_content = e
     }
-    const getFormValid= (e)=>{
+    const getFormValid= (e)=>{ // 获取表单验证结果
       formValid = e
     }
-    const publishArticle=async ()=>{ // 发布按钮
-      articleFormRef.value.validateForm()
+    const publishArticle=async ()=>{// 发布按钮
+      articleFormRef.value.validateForm() // 调用子组件方法
         if(!formValid){
           ElNotification({
             type:'error',
