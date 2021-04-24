@@ -10,5 +10,5 @@ export default {
     },
     saveHeaderTitle(state,playload){
         state.headerTitle = playload
-    }
+    },
 }

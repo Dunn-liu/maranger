@@ -18,7 +18,14 @@
       <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>
     </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
-      <div id="editor" v-loading="isLoadImg" element-loading-text="图片上传中" element-loading-spinner="el-icon-loading"></div>
+        <div class="changeEditor">
+          <span>切换编辑器</span><el-select v-model="editorType" @change="editorChange">
+          <el-option :value="0" label="WangEditor"></el-option>
+          <el-option :value="1" label="VMdEditor"></el-option>
+        </el-select>
+        </div>
+      <WEditor v-show="isWangEditor" :article-data="articleData" @get-editor="getEditor" />
+      <v-md-editor v-show="!isWangEditor" v-model="articleData.article_content" height="400px"></v-md-editor>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
       <el-input v-model="articleData.author_nickname"></el-input>
@@ -43,22 +50,18 @@
 </template>
 
 <script>
-import {defineComponent, onMounted,onBeforeUnmount, reactive, ref, toRefs} from 'vue'
-import E from "wangeditor";
-import hljs from "highlight.js";
+import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
 import {apiGetClassify} from "../api/article";
 import Upload from './Upload.vue'
-import Compressor from "compressorjs";
-import {ElMessage} from "element-plus";
-import {apiUploadImg} from "../api/image";
+import WEditor from './WEditor.vue'
+import {ElMessageBox} from 'element-plus'
 export default defineComponent({
 name: "ArticleForm",
   props:['articleData'],
-  emits:['getEditor','getValid'],
-  components: {Upload},
+  emits:['getValid','getEditorType','getUrl','getContent'],
+  components: {Upload,WEditor},
   setup(props,context){
     const articleFormRef = ref(null)
-    let editor = ref(null)
   const state = reactive({
     shortcuts: [ // 时间选择器额外配置
                 {
@@ -98,73 +101,48 @@ name: "ArticleForm",
       'post_date': [{type:'date',required: true, message: '请输入作者', trigger: 'blur'},
       ],
     },
-     isLoadImg:false,
+    editorType:props.articleData.editorType,
+    isWangEditor:Number(props.articleData.editorType)===0?true:false
    })
-    const creatEditor = (domId)=>{ // 创建富文本编辑器
-      editor = new E(domId)
-      editor.highlight = hljs
-      Object.assign(editor.config,{
-        height:300,
-        zIndex:500,
-        pasteFilterStyle:false,
-        uploadImgTimeout:20*1000,
-        uploadImgMaxSize : 2 * 1024 * 1024,
-        uploadFileName:'file',
-        placeholder:'',
-        onchange(){
-          context.emit("getEditor", editor.txt.html())
-        },
-        customAlert:function (info){
-          ElMessage.error({
-            message:info,
-            type:'error',
-            showClose:true
-          })
-        },
-        customUploadImg :function (files, insert) {
-          new Compressor(files[0],{
-            quality: 0.6,
-            async success(result) {
-              const formData = new FormData();
-              formData.append('file', result, result.name);
-              const res = await apiUploadImg(formData)
-              insert(res.src)
-            },
-            error(err) {
-              console.log('err',err.message);
-            },
-          })
-        }
-      })
-      editor.create()
-      if(props.articleData.article_content){
-        editor.txt.html(props.articleData.article_content)
-      }
-    }
     onMounted(async ()=>{
-      // 初始化富文本编辑器
-      creatEditor('#editor')
       // 获取文章分类
       const res = await apiGetClassify()
       state.classify = res.data
     });
-    onBeforeUnmount(()=>{ // 销毁富文本编辑器
-      editor.destroy()
-      editor=null
-    })
-    const validateForm=()=>{ // 表单验证
+    const editorChange = (val)=>{
+      ElMessageBox.confirm(`切换编辑器后，保留内容可能会出现不兼容现象，确定要切换吗?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        state.isWangEditor=!state.isWangEditor
+      }).catch(()=>{
+        if (val===0){
+          state.editorType=1
+        }else{
+          state.editorType=0
+        }
+      })
+      context.emit('getEditorType',state.editorType)
+    }
+     const validateForm=()=>{ // 表单验证
       articleFormRef.value.validate(valid=>{
         context.emit('getValid',valid)
       })
     }
     const getSrc = (e) =>{ // 获取图片上传src
-      props.articleData.article_cover = e
+      context.emit('getUrl',e)
+    }
+    const getEditor = (e)=>{
+      context.emit('getContent',e)
     }
     return {
       articleFormRef,
       ...toRefs(state),
       validateForm,
-      getSrc
+      getSrc,
+      getEditor,
+      editorChange
    }
   }
 })
@@ -176,6 +154,12 @@ name: "ArticleForm",
   margin: 0 auto;
   .el-date-picker{
     z-index: 10000;
+  }
+  .changeEditor{
+    margin-bottom: 10px;
+    .el-select {
+      margin:0 10px;
+    }
   }
   /* table 样式 */
   table {

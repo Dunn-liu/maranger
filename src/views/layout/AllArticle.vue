@@ -125,7 +125,7 @@
       destroy-on-close
       append-to-body
   >
-    <ArticleForm v-if="showDrawer" :articleData="editData" @get-editor="getEditor" @get-valid="getFormValid" ref="articleFormRef"/>
+    <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent" @getEditorType="getEditorType"  @get-valid="getFormValid" ref="articleFormRef"/>
     <div class="sub_bths">
       <el-button type="success" @click="saveEdit">保存</el-button>
       <el-button type="success" @click="cancelEdit">取消</el-button>
@@ -139,6 +139,7 @@ import {ElAlert, ElMessage, ElMessageBox, ElNotification} from 'element-plus'
 import {apiDelArticle, apiGetArticle, apiGetClassify, apiUpdateArticle} from "../../api/article";
 import ArticleForm from "@/components/ArticleForm.vue";
 import dayjs from "dayjs";
+import {useStore} from 'vuex'
 export default defineComponent({
   name: "AllArticle",
   components:{ArticleForm},
@@ -146,6 +147,7 @@ export default defineComponent({
     let formValid =null
     const articleFormRef = ref(null)
     const tableRef = ref(null)
+    const store = useStore()
     const state = reactive({
       articleData:[], // 页面文章数据
       queryData:{
@@ -194,13 +196,18 @@ export default defineComponent({
         })
       }
     }
-    // 获取表单富文本编辑器内容
-    const getEditor=(e)=>{
-      state.editData.article_content = e
-    }
     // 获取表单验证结果
     const getFormValid= (e)=>{
       formValid = e
+    }
+    const getEditorType = (e)=>{
+      state.editData.editorType=e
+    }
+    const getUrl = (e)=>{
+      state.articleForm.article_cover = e
+    }
+    const getContent=(e)=>{
+      state.editData.article_content = e
     }
     // 打开编辑抽屉弹窗
     const editArticle = (row)=>{
@@ -310,8 +317,10 @@ export default defineComponent({
       tableRef,
       ...toRefs(state),
       editArticle,
-      getEditor,
       getFormValid,
+      getEditorType,
+      getUrl,
+      getContent,
       saveEdit,
       cancelEdit,
       filterClassify,

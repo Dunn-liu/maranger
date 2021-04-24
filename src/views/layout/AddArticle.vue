@@ -1,6 +1,6 @@
 <template>
   <div class="add_article my_card">
-    <ArticleForm :articleData="articleForm" @get-editor="getEditor" @get-valid="getFormValid" ref="articleFormRef"/>
+    <ArticleForm :articleData="articleForm" @get-url = getUrl @get-content="getContent"  @get-valid="getFormValid" @getEditorType="getEditorType" ref="articleFormRef"/>
     <div class="sub_bths">
       <el-button type="success" @click="publishArticle">发布</el-button>
       <el-button type="info">存为草稿</el-button>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {defineComponent,ref,reactive,toRefs,onMounted} from 'vue'
+import {defineComponent,ref,reactive,toRefs} from 'vue'
 import {useStore} from "vuex";
 import {ElNotification} from 'element-plus'
 import dayjs from 'dayjs'
@@ -34,14 +34,22 @@ name: "AddArticle",
           post_date:new Date(),
           article_abstract:'',
           article_keywords:'',
-          classifyId:[]
+          classifyId:[],
+          editorType:0
         },
+    text:''
       })
-    const getEditor=(e)=>{ // 获取富文本编辑器内容
-      state.articleForm.article_content = e
-    }
     const getFormValid= (e)=>{ // 获取表单验证结果
       formValid = e
+    }
+    const getEditorType = (e)=>{
+    state.articleForm.editorType=e
+    }
+    const getUrl = (e)=>{
+      state.articleForm.article_cover = e
+    }
+    const getContent=(e)=>{
+      state.articleForm.article_content = e
     }
     const publishArticle=async ()=>{// 发布按钮
       articleFormRef.value.validateForm() // 调用子组件方法
@@ -56,12 +64,12 @@ name: "AddArticle",
           state.articleForm.classifyId  = state.articleForm.classifyId.join(',')
           const res =await apiPublishArticle(state.articleForm)
           if(res.code===200){
+            router.push('/home/article/allArticle')
             ElNotification({
               type:'success',
               message:'发布成功!',
               duration:2000
             })
-            router.push('/home/article/allArticle')
           }
         }
     }
@@ -69,8 +77,10 @@ name: "AddArticle",
       articleFormRef,
         ...toRefs(state),
       publishArticle,
-      getEditor,
-      getFormValid
+      getFormValid,
+      getEditorType,
+      getUrl,
+      getContent
     }
   }
 })
