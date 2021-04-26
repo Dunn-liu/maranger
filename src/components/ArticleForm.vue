@@ -24,8 +24,8 @@
           <el-option :value="1" label="VMdEditor"></el-option>
         </el-select>
         </div>
-      <WEditor v-show="isWangEditor" :article-data="articleData" @get-editor="getEditor" />
-      <v-md-editor v-show="!isWangEditor" v-model="articleData.article_content" height="400px"></v-md-editor>
+      <WEditor v-if="isWangEditor" :article-data="articleData" @get-editor="getEditor" ref="WEditor" />
+      <v-md-editor v-if="!isWangEditor" v-model="articleData.article_content" height="400px" ref="MdEditor"></v-md-editor>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
       <el-input v-model="articleData.author_nickname"></el-input>
@@ -61,7 +61,9 @@ name: "ArticleForm",
   emits:['getValid','getEditorType','getUrl','getContent'],
   components: {Upload,WEditor},
   setup(props,context){
-    const articleFormRef = ref(null)
+  const articleFormRef = ref(null)
+    const WEditor = ref(null)
+    const MdEditor = ref(null)
   const state = reactive({
     shortcuts: [ // 时间选择器额外配置
                 {
@@ -110,12 +112,13 @@ name: "ArticleForm",
       state.classify = res.data
     });
     const editorChange = (val)=>{
-      ElMessageBox.confirm(`切换编辑器后，保留内容可能会出现不兼容现象，确定要切换吗?`, '提示', {
+      ElMessageBox.confirm(`切换编辑器后，保存内容将被清空，确定要切换吗?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(()=>{
         state.isWangEditor=!state.isWangEditor
+        context.emit('getContent','')
       }).catch(()=>{
         if (val===0){
           state.editorType=1
@@ -138,6 +141,8 @@ name: "ArticleForm",
     }
     return {
       articleFormRef,
+      WEditor,
+      MdEditor,
       ...toRefs(state),
       validateForm,
       getSrc,
