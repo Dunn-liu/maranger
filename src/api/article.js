@@ -5,6 +5,13 @@ export function apiGetClassify() {
         url:'/articleClassify'
     })
 }
+export function apiAddClassify(data) {
+    return fetch({
+        method:'post',
+        url:'/addClassify',
+        data
+    })
+}
 export function apiPublishArticle(data){
     return fetch({
         method:'post',

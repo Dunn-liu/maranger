@@ -35,6 +35,7 @@
         element-loading-text="拼命加载中"
         @selection-change="handleSelectionChange"
         ref="tableRef"
+        :default-sort = "{prop: 'id', order: 'descending'}"
         border>
       <el-table-column
           type="selection"
@@ -45,6 +46,7 @@
           prop="id"
           label="ID"
           width="100"
+          sortable
           >
       </el-table-column>
       <el-table-column
@@ -73,11 +75,13 @@
       <el-table-column
           prop="post_date"
           label="发布时间"
+          sortable
           >
       </el-table-column>
       <el-table-column
           prop="edit_date"
           label="更新时间"
+          sortable
           >
       </el-table-column>
       <el-table-column

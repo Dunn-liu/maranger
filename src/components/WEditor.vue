@@ -8,8 +8,7 @@
     import {ElMessage} from "element-plus";
     import Compressor from "compressorjs";
     import {apiUploadImg} from "../api/image";
-    import {onBeforeUnmount, onMounted, ref,reactive} from "vue";
-    import {useStore} from 'vuex'
+    import {onBeforeUnmount, onMounted, ref} from "vue";
     export default {
         name: "WEditor",
         props:['articleData'],

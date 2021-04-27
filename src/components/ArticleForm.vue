@@ -25,7 +25,8 @@
         </el-select>
         </div>
       <WEditor v-if="isWangEditor" :article-data="articleData" @get-editor="getEditor" ref="WEditor" />
-      <v-md-editor v-if="!isWangEditor" v-model="articleData.article_content" height="400px" ref="MdEditor"></v-md-editor>
+      <v-md-editor v-if="!isWangEditor" v-model="articleData.article_content" height="400px" ref="MdEditor"
+                   left-toolbar="undo redo | image | emoji" :disabled-menus="[]" @upload-image="handleUploadImage"></v-md-editor>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
       <el-input v-model="articleData.author_nickname"></el-input>
@@ -54,7 +55,9 @@ import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
 import {apiGetClassify} from "../api/article";
 import Upload from './Upload.vue'
 import WEditor from './WEditor.vue'
-import {ElMessageBox} from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
+import Compressor from "compressorjs";
+import {apiUploadImg} from "../api/image";
 export default defineComponent({
 name: "ArticleForm",
   props:['articleData'],
@@ -62,8 +65,8 @@ name: "ArticleForm",
   components: {Upload,WEditor},
   setup(props,context){
   const articleFormRef = ref(null)
-    const WEditor = ref(null)
-    const MdEditor = ref(null)
+  const WEditor = ref(null)
+  const MdEditor = ref(null)
   const state = reactive({
     shortcuts: [ // 时间选择器额外配置
                 {
@@ -139,6 +142,28 @@ name: "ArticleForm",
     const getEditor = (e)=>{
       context.emit('getContent',e)
     }
+    const handleUploadImage = (event, insertImage, files)=>{
+      new Compressor(files[0],{
+        quality: 0.6,
+        async success(result) {
+          const formData = new FormData();
+          formData.append('file', result, result.name);
+          try{
+            const res = await apiUploadImg(formData)
+            insertImage({url:res.src})
+          }catch (e) {
+            ElMessage.error({
+              message:e,
+              type:'error',
+              showClose:true
+            })
+          }
+        },
+        error(err) {
+          console.log('err',err.message);
+        },
+      })
+    }
     return {
       articleFormRef,
       WEditor,
@@ -147,7 +172,8 @@ name: "ArticleForm",
       validateForm,
       getSrc,
       getEditor,
-      editorChange
+      editorChange,
+      handleUploadImage,
    }
   }
 })
