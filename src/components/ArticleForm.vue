@@ -26,7 +26,7 @@
         </div>
       <WEditor v-if="isWangEditor" :article-data="articleData" @get-editor="getEditor" ref="WEditor" />
       <v-md-editor v-if="!isWangEditor" v-model="articleData.article_content" height="400px" ref="MdEditor"
-                   left-toolbar="undo redo | image | emoji" :disabled-menus="[]" @upload-image="handleUploadImage"></v-md-editor>
+                   left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save" :disabled-menus="[]" @upload-image="handleUploadImage"></v-md-editor>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
       <el-input v-model="articleData.author_nickname"></el-input>
