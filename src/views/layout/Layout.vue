@@ -80,9 +80,8 @@ export default defineComponent({
     background-color: #7d5e85;
     padding-left: 30px;
     .logo{
-      width: 50px;
-      height: 35px;
-      border-radius: 50%;
+      width: 115px;
+      height: 50px;
     }
     .userinfo {
       display: flex;

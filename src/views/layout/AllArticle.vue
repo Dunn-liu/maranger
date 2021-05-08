@@ -108,7 +108,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="page_nation">
+    <div class="page_nation" v-if="totalNum>0">
       <el-pagination
           background
           layout="prev, pager, next ,sizes "
@@ -151,7 +151,6 @@ export default defineComponent({
     let formValid =null
     const articleFormRef = ref(null)
     const tableRef = ref(null)
-    const store = useStore()
     const state = reactive({
       articleData:[], // 页面文章数据
       queryData:{
@@ -181,7 +180,6 @@ export default defineComponent({
       // 获取所有文章信息
       const res = await apiGetArticle(state.queryData)
       if(res.code===200){
-        state.loading=false
         res.data.forEach(item=>{
           item.edit_date = dayjs( item.edit_date).format('YYYY-MM-DD HH:mm:ss')
           item.post_date = dayjs( item.post_date).format('YYYY-MM-DD HH:mm:ss')
@@ -192,6 +190,7 @@ export default defineComponent({
         })
         state.totalNum = res.pageNation.total
         state.articleData = JSON.parse(JSON.stringify(res.data))
+        state.loading=false
       }else {
         state.loading=false
         ElNotification({
