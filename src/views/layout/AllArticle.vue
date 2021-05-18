@@ -31,6 +31,7 @@
     <el-table
         :data="articleData"
         style="width: 100%"
+        max-height="600"
         v-loading="loading"
         element-loading-text="拼命加载中"
         @selection-change="handleSelectionChange"
@@ -138,13 +139,16 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
-import {ElAlert, ElMessage, ElMessageBox, ElNotification} from 'element-plus'
+import {defineAsyncComponent, onMounted, reactive, ref, toRefs} from 'vue'
+import {ElMessage, ElMessageBox, ElNotification} from 'element-plus'
 import {apiDelArticle, apiGetArticle, apiGetClassify, apiUpdateArticle} from "../../api/article";
-import ArticleForm from "@/components/ArticleForm.vue";
 import dayjs from "dayjs";
-import {useStore} from 'vuex'
-export default defineComponent({
+import Loading from "@/components/Loading.vue"
+const ArticleForm = defineAsyncComponent({
+  loader: ()=>import("@/components/ArticleForm.vue"),
+  loadingComponent: Loading
+})
+export default {
   name: "AllArticle",
   components:{ArticleForm},
   setup(){
@@ -166,7 +170,7 @@ export default defineComponent({
       classify:[], // 所有分类信息
       multipleSelection:[], // 选中的文章id
       delSelect:'',
-      totalNum:50
+      totalNum:0
     })
     onMounted(async ()=>{
       await getArticle()
@@ -335,7 +339,7 @@ export default defineComponent({
       handleSizeChange
     }
   }
-})
+}
 </script>
 
 <style lang="scss">

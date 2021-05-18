@@ -9,14 +9,18 @@
 </template>
 
 <script>
-import {defineComponent,ref,reactive,toRefs} from 'vue'
+import { ref, reactive, toRefs, defineAsyncComponent} from 'vue'
 import {useStore} from "vuex";
 import {ElNotification} from 'element-plus'
 import dayjs from 'dayjs'
 import {apiPublishArticle} from "../../api/article";
 import {useRouter} from "vue-router";
-import ArticleForm from "@/components/ArticleForm.vue";
-export default defineComponent({
+import Loading from '@/components/Loading.vue'
+const ArticleForm = defineAsyncComponent({
+  loader: ()=>import("@/components/ArticleForm.vue"),
+  loadingComponent: Loading
+})
+export default {
 name: "AddArticle",
   components:{ArticleForm},
   setup(){
@@ -83,7 +87,7 @@ name: "AddArticle",
       getContent
     }
   }
-})
+}
 </script>
 
 <style scoped lang="scss">
