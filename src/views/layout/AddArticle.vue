@@ -3,7 +3,7 @@
     <ArticleForm :articleData="articleForm" @get-url = getUrl @get-content="getContent"  @get-valid="getFormValid" @getEditorType="getEditorType" ref="articleFormRef"/>
     <div class="sub_bths">
       <el-button type="success" @click="publishArticle">发布</el-button>
-      <el-button type="info">存为草稿</el-button>
+      <el-button type="info" @click="saveDraft">存为草稿</el-button>
     </div>
   </div>
 </template>
@@ -29,17 +29,18 @@ name: "AddArticle",
   const articleFormRef = ref(null)
   let formValid = null
   const state = reactive({
-        articleForm:{ // 文章表单数据
-          article_title:'',
-          article_content:'',
-          article_cover:'',
-          author:store.state.userinfo.phone,
-          author_nickname:store.state.userinfo.user_nickname||'',
-          post_date:new Date(),
-          article_abstract:'',
-          article_keywords:'',
-          classifyId:[],
-          editorType:0
+        articleForm: { // 文章表单数据
+          article_title: '',
+          article_content: '',
+          article_cover: '',
+          author: store.state.userinfo.phone,
+          author_nickname: store.state.userinfo.user_nickname||'',
+          post_date: new Date(),
+          article_abstract: '',
+          article_keywords: '',
+          article_status: 1,
+          classifyId: [],
+          editorType: 0
         },
     text:''
       })
@@ -55,32 +56,41 @@ name: "AddArticle",
     const getContent=(e)=>{
       state.articleForm.article_content = e
     }
-    const publishArticle=async ()=>{// 发布按钮
+    const postArticle = async () =>{
       articleFormRef.value.validateForm() // 调用子组件方法
-        if(!formValid){
+      if(!formValid){
+        ElNotification({
+          type:'error',
+          message:'请检查表单内容!',
+          duration:'2000'
+        })
+      }else{
+        state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
+        state.articleForm.classifyId  = state.articleForm.classifyId.join(',')
+        const res =await apiPublishArticle(state.articleForm)
+        if(res.code===200){
+          router.push('/home/article/allArticle')
           ElNotification({
-            type:'error',
-            message:'请检查表单内容!',
-            duration:'2000'
+            type:'success',
+            message:'发布成功!',
+            duration:2000
           })
-        }else{
-          state.articleForm.post_date = dayjs(state.articleForm.post_date).format('YYYY-MM-DD HH:mm:ss')
-          state.articleForm.classifyId  = state.articleForm.classifyId.join(',')
-          const res =await apiPublishArticle(state.articleForm)
-          if(res.code===200){
-            router.push('/home/article/allArticle')
-            ElNotification({
-              type:'success',
-              message:'发布成功!',
-              duration:2000
-            })
-          }
         }
+      }
+    }
+    const publishArticle=async ()=>{// 发布按钮
+      state.articleForm.article_status = 1;
+      await postArticle()
+    }
+    const saveDraft =async () => {
+      state.articleForm.article_status = 0
+      await postArticle()
     }
     return {
       articleFormRef,
         ...toRefs(state),
       publishArticle,
+      saveDraft,
       getFormValid,
       getEditorType,
       getUrl,

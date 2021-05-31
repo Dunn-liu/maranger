@@ -3,6 +3,7 @@
   <el-table
       :data="classifyData"
       v-loading="loading"
+      ref="classifyTableRef"
       border
       style="width: 100%"
       :default-sort = "{prop: 'id', order: 'descending'}"
@@ -10,17 +11,26 @@
     <el-table-column
         prop="id"
         label="ID"
-        width="180"
+        width="100"
         sortable>
     </el-table-column>
     <el-table-column
         prop="classifyName"
         label="分类名"
-        width="180">
+        width="220">
     </el-table-column>
     <el-table-column
         prop="description"
-        label="分类描述">
+        label="分类描述"
+        width="600px"
+    >
+    </el-table-column>
+    <el-table-column
+            label="操作">
+      <template v-slot="scope">
+        <el-button type="primary" size="mini" icon="el-icon-edit"></el-button>
+        <el-button type="danger" size="mini" icon="el-icon-delete"></el-button>
+      </template>
     </el-table-column>
   </el-table>
   <el-dialog title="添加文章分类" v-model="dialogFormVisible">
@@ -50,6 +60,7 @@ export default {
 name: "ArticleClassify",
   setup(){
   const classifyRef = ref(null)
+    const classifyTableRef = ref(null)
   const state = reactive({
     classifyData:[],
     loading:false,
@@ -74,6 +85,7 @@ name: "ArticleClassify",
     }
     onMounted( async ()=>{
       await getClassifyData()
+      classifyTableRef.value.doLayout() // 解决表格有时表头错位问题
     })
     const addClassify = ()=>{
       classifyRef.value.validate(async (valid)=>{
@@ -103,6 +115,7 @@ name: "ArticleClassify",
     return {
     ...toRefs(state),
       classifyRef,
+      classifyTableRef,
       addClassify
     }
   }

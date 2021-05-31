@@ -37,6 +37,7 @@
         @selection-change="handleSelectionChange"
         ref="tableRef"
         :default-sort = "{prop: 'id', order: 'descending'}"
+        @sort-change="handlerSort"
         border>
       <el-table-column
           type="selection"
@@ -47,7 +48,7 @@
           prop="id"
           label="ID"
           width="100"
-          sortable
+          sortable="custom"
           >
       </el-table-column>
       <el-table-column
@@ -76,13 +77,13 @@
       <el-table-column
           prop="post_date"
           label="发布时间"
-          sortable
+          sortable="custom"
           >
       </el-table-column>
       <el-table-column
           prop="edit_date"
           label="更新时间"
-          sortable
+          sortable="custom"
           >
       </el-table-column>
       <el-table-column
@@ -97,15 +98,18 @@
       width="100"
       >
         <template v-slot="scope">
-          {{scope.row.article_status===1?'已发布':'草稿'}}
+          <el-tag
+                  :type="scope.row.article_status===1 ? 'success' : 'primary'"
+                  disable-transitions>{{scope.row.article_status===1?'已发布':'草稿'}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
           label="操作"
       >
         <template v-slot="scope">
-          <el-button type="text" @click="editArticle(scope.row)">编辑</el-button>
-          <el-button type="text">发布</el-button>
+          <el-button type="primary" size="mini" @click="editArticle(scope.row)">编辑</el-button>
+          <el-button v-if="scope.row.article_status!==1" @click="changeStatus(scope.row,'1')" type="success" size="mini">发布</el-button>
+          <el-button v-else type="warning" size="mini" @click="changeStatus(scope.row,'0')">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -162,7 +166,9 @@ export default {
         classifyId:'',
         articleStatus:'',
         page:1,
-        limit:10
+        limit:10,
+        orderSort: {
+        }
       },
       loading:false,
       showDrawer:false,
@@ -177,6 +183,7 @@ export default {
        // 获取分类数据
       const classifyData = await apiGetClassify()
       state.classify = classifyData.data
+      tableRef.value.doLayout() // 解决表格有时表头错位问题
     })
     // 获取文章信息
     const getArticle =async ()=>{
@@ -319,6 +326,38 @@ export default {
       state.queryData.limit = val
       await getArticle()
     }
+    const handlerSort = async ({prop, order} ) => {
+      if (prop) {
+        state.queryData.orderSort = {}
+        state.queryData.orderSort[prop] = order==='ascending'?'asc':'desc'
+        await getArticle()
+      }
+    }
+    const changeStatus =async (row,type) => {
+      console.log('state.articleData===============>',state.articleData)
+      const data = {
+        id: row.id,
+        article_status: +type
+      }
+     const res = await apiUpdateArticle(data)
+      if (res.code === 200){
+        ElMessage.warning({
+          showClose: true,
+          duration:1500,
+          message: type==='0'?'文章下架成功!':'文章发布成功!',
+          type: 'success'
+        });
+        state.articleData.forEach(item=> {
+          if (item.id === row.id) {
+            if (item.article_status===0) {
+              item.article_status = 1
+            }else {
+              item.article_status = 0
+            }
+          }
+        })
+      }
+    }
     return {
       articleFormRef,
       tableRef,
@@ -336,7 +375,9 @@ export default {
       handleSelectionChange,
       delArticle,
       handleCurrentChange,
-      handleSizeChange
+      handleSizeChange,
+      handlerSort,
+      changeStatus
     }
   }
 }

@@ -17,6 +17,9 @@ import {defineComponent} from 'vue'
 </script>
 
 <style lang="scss">
+    .el-table--border th.gutter:last-of-type {
+        display: block!important;
+    }
 .my_card{
   display: flex;
   justify-content: center;
