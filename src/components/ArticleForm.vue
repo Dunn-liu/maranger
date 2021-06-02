@@ -37,12 +37,12 @@
     <el-form-item label="关键词">
       <el-input v-model="articleData.article_keywords"></el-input>
     </el-form-item>
-    <el-form-item label="发布时间" prop="post_date">
+    <el-form-item label="更新时间" prop="post_date">
       <el-date-picker
-          v-model="articleData.post_date"
+          v-model="articleData.edit_date"
           type="datetime"
           format="YYYY-MM-DD HH:mm:ss"
-          placeholder="选择发布时间"
+          placeholder="选择更新时间"
           :shortcuts="shortcuts"
       >
       </el-date-picker>
