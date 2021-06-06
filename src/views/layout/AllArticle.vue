@@ -334,18 +334,17 @@ export default {
       }
     }
     const changeStatus =async (row,type) => {
-      console.log('state.articleData===============>',state.articleData)
       const data = {
         id: row.id,
         article_status: +type
       }
-     const res = await apiUpdateArticle(data)
+      const res = await apiUpdateArticle(data)
       if (res.code === 200){
-        ElMessage.warning({
+        ElMessage({
+          type: type==='0'?'warning':'success',
           showClose: true,
           duration:1500,
           message: type==='0'?'文章下架成功!':'文章发布成功!',
-          type: 'success'
         });
         state.articleData.forEach(item=> {
           if (item.id === row.id) {
