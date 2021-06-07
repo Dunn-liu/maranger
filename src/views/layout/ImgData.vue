@@ -4,7 +4,7 @@
         <el-button type="success" size="medium" @click="dialogVisible = true">上传</el-button>
     </div>
     <el-table
-            :data="articleData"
+            :data="imgData"
             style="width: 100%"
             max-height="600"
             v-loading="loading"
@@ -27,33 +27,35 @@
         >
         </el-table-column>
         <el-table-column
-                prop="article_title"
+                prop="name"
                 label="图片名"
                 show-overflow-tooltip
         >
         </el-table-column>
         <el-table-column
-                prop="classifyId"
+                prop="src"
                 label="图片路径"
         >
-<!--            <template v-slot="scope">-->
-<!--                <template v-for="(item,index) in scope.row.classifyId">-->
-<!--                    {{ filterClassify(item).classifyName }}-->
-<!--                    {{scope.row.classifyId.length===index+1?'':','}}-->
-<!--                </template>-->
-<!--            </template>-->
+            <template v-slot="scope">
+                <el-link :href="scope.row.src" :download="scope.row.src" :underline="false" type="primary">{{scope.row.src}}</el-link>
+            </template>
         </el-table-column>
         <el-table-column
-                prop="author_nickname"
+                prop="update_time"
                 label="上传时间"
-                width="100"
         >
         </el-table-column>
         <el-table-column
-                prop="article_content"
                 label="内容"
                 show-overflow-tooltip
         >
+            <template v-slot="scope">
+                <el-image
+                        style="width: 200px; height: 100px"
+                        :src="scope.row.src"
+                        :preview-src-list="[scope.row.src]">
+                </el-image>
+            </template>
         </el-table-column>
         <el-table-column
                 label="操作"
@@ -94,8 +96,9 @@
 </template>
 
 <script>
-import {defineComponent,reactive,toRefs} from 'vue'
+import {defineComponent,reactive,toRefs,onMounted} from 'vue'
 import Upload from "@/components/Upload.vue";
+import {apiGetImages} from "@/api/image";
 export default defineComponent({
   name: "ImgData",
     components:{
@@ -103,7 +106,24 @@ export default defineComponent({
     },
   setup(){
       const state = reactive({
+          imgData:[],
+          query: {
+              id: '',
+              update_time: '',
+              page: 1,
+              limit: 10,
+              orderSort:{},
+          },
           dialogVisible: false
+      })
+      const fetchImages = async () => {
+          const { query } = state
+          const res = await apiGetImages(query)
+          state.imgData = [...res.data]
+          console.log(res)
+      }
+      onMounted(async () => {
+          await fetchImages()
       })
       return {
           ...toRefs(state)

@@ -6,3 +6,10 @@ export function apiUploadImg(data){
         data
     })
 }
+export function apiGetImages(params) {
+    return fetch({
+        url: '/image/all',
+        method: 'get',
+        params
+    })
+}
