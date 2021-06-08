@@ -13,3 +13,10 @@ export function apiGetImages(params) {
         params
     })
 }
+export function apiDelImage(id) {
+    return fetch({
+        url: '/image/del',
+        method: 'get',
+        params:{id}
+    })
+}

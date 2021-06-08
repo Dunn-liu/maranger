@@ -42,8 +42,17 @@ export default defineComponent({
         async success(result) {
           const formData = new FormData();
           formData.append('file', result, result.name);
-          const res = await apiUploadImg(formData)
-          context.emit('getSrc',res.src)
+          try {
+            const res = await apiUploadImg(formData)
+            context.emit('getSrc',res.src)
+            ElMessage({
+              type:'success',
+              message:'上传成功!',
+              showClose: true
+            })
+          }catch (e){
+            console.log(e)
+          }
         },
         error(err) {
           console.log('err',err.message);

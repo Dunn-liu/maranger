@@ -37,12 +37,13 @@
                 label="图片路径"
         >
             <template v-slot="scope">
-                <el-link :href="scope.row.src" :download="scope.row.src" :underline="false" type="primary">{{scope.row.src}}</el-link>
+                <el-link :href="scope.row.src" target="_blank" :underline="false" type="primary">{{scope.row.src}}</el-link>
             </template>
         </el-table-column>
         <el-table-column
                 prop="update_time"
                 label="上传时间"
+                sortable="custom"
         >
         </el-table-column>
         <el-table-column
@@ -61,7 +62,7 @@
                 label="操作"
         >
             <template v-slot="scope">
-                <el-button type="primary"  size="mini" @click="editArticle(scope.row)">删除</el-button>
+                <el-button type="danger"  size="mini" @click="delImage(scope.row.id)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -69,9 +70,9 @@
         <el-pagination
                 background
                 layout="prev, pager, next ,sizes "
-                :page-sizes="[10, 20]"
-                :page-size="queryData.limit"
-                :current-page="queryData.page"
+                :page-sizes="[5,10, 20]"
+                :page-size="query.limit"
+                :current-page="query.currentPage"
                 :total="totalNum"
                 @current-change="handleCurrentChange"
                 @size-change="handleSizeChange"
@@ -84,7 +85,7 @@
             width="30%">
 <!--        <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>-->
         <div class="dialog_content">
-            <Upload></Upload>
+            <Upload @getSrc="getSrc" :src="currentSrc"></Upload>
         </div>
         <template #footer>
     <span class="dialog-footer">
@@ -98,7 +99,8 @@
 <script>
 import {defineComponent,reactive,toRefs,onMounted} from 'vue'
 import Upload from "@/components/Upload.vue";
-import {apiGetImages} from "@/api/image";
+import {apiGetImages,apiDelImage} from "@/api/image";
+import {ElMessage} from "element-plus";
 export default defineComponent({
   name: "ImgData",
     components:{
@@ -110,10 +112,12 @@ export default defineComponent({
           query: {
               id: '',
               update_time: '',
-              page: 1,
-              limit: 10,
+              currentPage: 1,
+              limit: 5,
               orderSort:{},
           },
+          totalNum: 0,
+          currentSrc:'',
           dialogVisible: false
       })
       const fetchImages = async () => {
@@ -121,12 +125,51 @@ export default defineComponent({
           const res = await apiGetImages(query)
           state.imgData = [...res.data]
           console.log(res)
+        state.totalNum = res?.pageNation?.total
       }
       onMounted(async () => {
           await fetchImages()
       })
+    const handlerSort = async ({prop, order} ) => {
+      if (prop) {
+        state.query.orderSort = {}
+        state.query.orderSort[prop] = order==='ascending'?'asc':'desc'
+        await fetchImages()
+      }
+    }
+    // 分页功能方法
+    const handleCurrentChange = async (val)=>{
+      state.query.currentPage = val
+      await fetchImages()
+    }
+    const handleSizeChange = async (val) =>{
+      state.query.currentPage = 1
+      state.query.limit = val
+      await fetchImages()
+    }
+    const getSrc =async (src) => {
+        state.currentSrc = src
+       state.dialogVisible=false
+       await fetchImages()
+    }
+    const delImage =async (id) => {
+      const res = await apiDelImage(id)
+      if (res&&res.code===200){
+        ElMessage({
+          type: 'success',
+          message: '删除成功!',
+          showClose: true
+        })
+        await fetchImages()
+      }
+    }
       return {
-          ...toRefs(state)
+          ...toRefs(state),
+        handlerSort,
+        handleCurrentChange,
+        handleSizeChange,
+        getSrc,
+        delImage
       }
   }
 })
@@ -142,6 +185,9 @@ export default defineComponent({
             display: flex;
             justify-content: center;
         }
+      .page_nation {
+        margin: 20px auto 10px;
+      }
     }
 
 </style>
