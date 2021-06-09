@@ -37,9 +37,9 @@
     <el-form-item label="关键词">
       <el-input v-model="articleData.article_keywords"></el-input>
     </el-form-item>
-    <el-form-item label="更新时间" prop="post_date">
+    <el-form-item label="发布时间" prop="post_date">
       <el-date-picker
-          v-model="articleData.edit_date"
+          v-model="articleData.post_date"
           type="datetime"
           format="YYYY-MM-DD HH:mm:ss"
           placeholder="选择更新时间"
@@ -103,7 +103,7 @@ name: "ArticleForm",
       'article_abstract' :[{required:true,message: '请输入内容摘要', trigger: 'blur'},
         {min: 10,  message: '内容摘要至少为10个字符', trigger: 'blur'}
       ],
-      'post_date': [{type:'date',required: true, message: '请输入作者', trigger: 'blur'},
+      'post_date': [{type:'date',required: true, message: '请输入日期', trigger: 'blur'},
       ],
     },
     editorType:props.articleData.editorType,
