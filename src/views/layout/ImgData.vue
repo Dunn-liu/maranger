@@ -3,21 +3,35 @@
     <div class="upload">
         <el-button type="success" size="medium" @click="dialogVisible = true">上传</el-button>
     </div>
+    <el-form class="search_bar" label-width="70px" label-position="left">
+        <el-form-item label="ID" label-width="40px">
+            <el-input v-model="query.id" type="number"></el-input>
+        </el-form-item>
+        <el-form-item label="图片名">
+            <el-input v-model="query.name"></el-input>
+        </el-form-item>
+        <el-form-item label="上传时间">
+            <el-date-picker
+                    v-model="query.update_time"
+                    type="date"
+                    placeholder="选择日期">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label-width="0">
+            <el-button type="primary" @click="fetchImages">查询</el-button>
+            <el-button @click="clearQuery">清除</el-button>
+        </el-form-item>
+    </el-form>
     <el-table
             :data="imgData"
             style="width: 100%"
             max-height="600"
             v-loading="loading"
             element-loading-text="拼命加载中"
-            @selection-change="handleSelectionChange"
             ref="tableRef"
             :default-sort = "{prop: 'id', order: 'descending'}"
             @sort-change="handlerSort"
             border>
-        <el-table-column
-                type="selection"
-                width="55">
-        </el-table-column>
         <el-table-column
                 fixed
                 prop="id"
@@ -62,14 +76,21 @@
                 label="操作"
         >
             <template v-slot="scope">
-                <el-button type="danger"  size="mini" @click="delImage(scope.row.id)">删除</el-button>
+                <el-popconfirm
+                        title="确认删除? 删除后不可恢复!"
+                        @confirm=delImage(scope.row.id)
+                >
+                    <template #reference>
+                        <el-button type="danger"  size="mini" >删除</el-button>
+                    </template>
+                </el-popconfirm>
             </template>
         </el-table-column>
     </el-table>
     <div class="page_nation" v-if="totalNum>0">
         <el-pagination
                 background
-                layout="prev, pager, next ,sizes "
+                layout="prev, pager, next ,sizes,total "
                 :page-sizes="[5,10, 20]"
                 :page-size="query.limit"
                 :current-page="query.currentPage"
@@ -83,7 +104,6 @@
             title="提示"
             v-model="dialogVisible"
             width="30%">
-<!--        <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>-->
         <div class="dialog_content">
             <Upload @getSrc="getSrc" :src="currentSrc"></Upload>
         </div>
@@ -101,6 +121,7 @@ import {defineComponent,reactive,toRefs,onMounted} from 'vue'
 import Upload from "@/components/Upload.vue";
 import {apiGetImages,apiDelImage} from "@/api/image";
 import {ElMessage} from "element-plus";
+import dayjs from "dayjs";
 export default defineComponent({
   name: "ImgData",
     components:{
@@ -111,6 +132,7 @@ export default defineComponent({
           imgData:[],
           query: {
               id: '',
+              name: '',
               update_time: '',
               currentPage: 1,
               limit: 5,
@@ -118,13 +140,21 @@ export default defineComponent({
           },
           totalNum: 0,
           currentSrc:'',
-          dialogVisible: false
+          dialogVisible: false,
+          loading: false
       })
       const fetchImages = async () => {
+          state.loading = true
           const { query } = state
+          if (query.update_time) {
+              query.update_time = dayjs( query.update_time).format('YYYY-MM-DD')
+          }
           const res = await apiGetImages(query)
+          res.data.forEach(item=>{
+              item.update_time = dayjs( item.update_time).format('YYYY-MM-DD HH:mm:ss')
+          })
           state.imgData = [...res.data]
-          console.log(res)
+          state.loading = false
         state.totalNum = res?.pageNation?.total
       }
       onMounted(async () => {
@@ -153,6 +183,7 @@ export default defineComponent({
        await fetchImages()
     }
     const delImage =async (id) => {
+
       const res = await apiDelImage(id)
       if (res&&res.code===200){
         ElMessage({
@@ -163,13 +194,22 @@ export default defineComponent({
         await fetchImages()
       }
     }
+    const clearQuery = () => {
+          state.query = {
+              id: '',
+              name: '',
+              update_time: '',
+          }
+    }
       return {
           ...toRefs(state),
+          fetchImages,
         handlerSort,
         handleCurrentChange,
         handleSizeChange,
         getSrc,
-        delImage
+        delImage,
+          clearQuery
       }
   }
 })
@@ -180,6 +220,15 @@ export default defineComponent({
         flex-direction: column;
         .upload{
             padding-bottom: 10px;
+        }
+        .search_bar {
+            display: flex;
+            .el-form-item {
+                margin-right: 40px;
+            }
+            .el-input {
+                width: 160px;
+            }
         }
         .dialog_content{
             display: flex;

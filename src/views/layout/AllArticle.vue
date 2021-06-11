@@ -116,7 +116,7 @@
     <div class="page_nation" v-if="totalNum>0">
       <el-pagination
           background
-          layout="prev, pager, next ,sizes "
+          layout="prev, pager, next ,sizes,total "
           :page-sizes="[10, 20]"
           :page-size="queryData.limit"
           :current-page="queryData.page"
