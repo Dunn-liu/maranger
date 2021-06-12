@@ -122,7 +122,7 @@ import {apiUpdateAvatar,apiUpdateInfo} from "../../api/userInfo";
     const updateInfo = async () => {
       const {userForm} = state
       const newForm = Object.assign({},userForm)
-      newForm.birthday = dayjs().format('YYYY-MM-DD')
+      newForm.birthday = dayjs(newForm.birthday).format('YYYY-MM-DD')
       newForm.area = Array.isArray(newForm.area) ? newForm.area.join(' / ') : newForm.area
       delete newForm.avatar
       const res = await apiUpdateInfo(newForm)
