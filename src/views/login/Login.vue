@@ -194,13 +194,12 @@ export default defineComponent({
             localSet('token',res.info.token)
             localSet('phone',newForm.phone)
             // 登录成功,获取用户信息
-            const resUser = await apiGetUserInfo()
-            store.commit('saveUserinfo',resUser.info)
+            await store.dispatch('getUserInfo')
             ElMessage.success({
               showClose: true,
               message:'登录成功!'
             })
-            router.push('/home')
+            await router.push('/home')
           }else{
             changeCaptcha()
             ElMessage.error(

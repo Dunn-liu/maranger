@@ -59,8 +59,7 @@ export default defineComponent({
     }
     onMounted(async ()=>{
       if(JSON.stringify(store.state.userinfo)==='{}'){
-        const resUser = await apiGetUserInfo()
-        store.commit('saveUserinfo',resUser.info)
+        store.dispatch('getUserInfo')
       }
     })
     return {

@@ -1,14 +1,14 @@
 export default {
-    saveAuth(state,playload){
-        state.hasAuth = playload
+    saveAuth(state,payload){
+        state.hasAuth = payload
     },
-    saveUserinfo(state,playload){
-        state.userinfo = playload
+    saveUserinfo(state,payload){
+        state.userinfo = payload
     },
-    saveUserRouters(state,playload){
-        state.userRouters = playload
+    saveUserRouters(state,payload){
+        state.userRouters = payload
     },
-    saveHeaderTitle(state,playload){
-        state.headerTitle = playload
+    saveHeaderTitle(state,payload){
+        state.headerTitle = payload
     },
 }
