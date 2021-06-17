@@ -13,12 +13,6 @@ export function apiGetUserAuth(phone){
         params: {phone}
     })
 }
-export function apiVerifyToken() {
-    return fetch({
-        method:"get",
-        url:'/verifyToken'
-    })
-}
 export function apiUpdateInfo(data) {
     return fetch({
         method:"post",

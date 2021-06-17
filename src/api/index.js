@@ -8,7 +8,7 @@ const fetch = axios.create({
 })
 fetch.interceptors.request.use(
   config => {
-    config.headers.authorization = localGet('token')||''
+    config.headers.authorization = 'Bearer '+localGet('token')||''
     return config
   },
   error => {
@@ -17,10 +17,11 @@ fetch.interceptors.request.use(
 )
 fetch.interceptors.response.use(
   response => {
-      if (response.data.code === 206){
+      if (response.data.code === 401){
           ElMessage({
-              message:response.data.msg,
-              type:'error'
+              message:'登录已过期,请重新登录!',
+              type:'error',
+			  showClose: true
           })
           localRemove('token')
           router.push('/login')
@@ -29,6 +30,7 @@ fetch.interceptors.response.use(
   },
   error => {
       console.log(error)
+      return error
   }
 )
 export default fetch

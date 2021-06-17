@@ -2,7 +2,6 @@ import {createRouter,createWebHashHistory} from "vue-router";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {ElMessage} from 'element-plus'
-import {apiVerifyToken} from '@/api/userInfo.js'
 import store from '@/store/index'
 import {localGet,localRemove} from '@/utils/local'
 import {generateRouter} from '@/utils/routerFormat'
@@ -44,17 +43,7 @@ const router = createRouter({
  })
 router.beforeEach(async (to,from,next) => {
     NProgress.start()
-    // 获取token判断是否登录
-    let isLogin = false
-    if(localGet('token')){
-        const res = await apiVerifyToken()
-        if(res.code == 200){
-            isLogin = true
-        }else {
-            localRemove('token')
-        }
-    }
-    if(isLogin){ // 已登录
+    if(localGet('token')){ // 已登录
         if(to.path.includes('/login')){ // 已登录不可访问登录页
             next({path:'/home'}) // 跳转到首页
             NProgress.done()
