@@ -191,7 +191,7 @@ export default defineComponent({
           newForm.passWord = md5(newForm.passWord)
           const res = await apiToLogin(newForm)
           if(res.code ===200){
-            localSet('token',res.info.token)
+            localSet('token',res.data.token)
             localSet('phone',newForm.phone)
             // 登录成功,获取用户信息
             await store.dispatch('getUserInfo')
@@ -202,12 +202,6 @@ export default defineComponent({
             await router.push('/home')
           }else{
             changeCaptcha()
-            ElMessage.error(
-                {
-                  showClose: true,
-                  message:res.msg
-                }
-            )
           }
         }
       })
@@ -224,7 +218,7 @@ export default defineComponent({
           const newRegisterForm = JSON.parse(JSON.stringify(state.registerForms))
           newRegisterForm.checkPassWord=undefined
           const res = await apiRegister(newRegisterForm)
-          if(res.code ===200){
+          if(res.code === 200){
             ElMessage.success(
                 {showClose: true,
                   message:'注册成功,去登录吧!'
@@ -233,12 +227,7 @@ export default defineComponent({
             registerForm.value.resetFields()
             state.isregister = false
             state.loginForms.phone = newRegisterForm.phone
-          } else{
-          ElMessage.error(
-              {showClose: true,
-                message:res.msg
-              }
-          )}
+          }
       }
       })
     }

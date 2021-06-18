@@ -10,6 +10,6 @@ export default {
     },
     async getUserInfo({commit}) {
         const resUser = await apiGetUserInfo(localGet('phone'))
-        commit('saveUserinfo',resUser.info)
+        commit('saveUserinfo',resUser.data)
     }
 }

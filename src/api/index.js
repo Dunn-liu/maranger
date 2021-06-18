@@ -17,19 +17,31 @@ fetch.interceptors.request.use(
 )
 fetch.interceptors.response.use(
   response => {
-      if (response.data.code === 401){
+      if(response.data && response.data.code !== 200) {
           ElMessage({
-              message:'登录已过期,请重新登录!',
+              message:response.data.msg || 'error',
               type:'error',
-			  showClose: true
+              showClose: true
           })
-          localRemove('token')
-          router.push('/login')
       }
       return response.data
   },
   error => {
-      console.log(error)
+      if (error.response && error.response.status === 401){
+          ElMessage({
+              message:'token已过期,请重新登录!',
+              type:'error',
+              showClose: true
+          })
+          localRemove('token')
+          router.push('/login')
+      }else {
+          ElMessage({
+              message:error.response.data.msg,
+              type:'error',
+              showClose: true
+          })
+      }
       return error
   }
 )
