@@ -38,7 +38,7 @@
                 <img style="width: 112px;height: 40px" :src=codeSrc @click="changeCaptcha">
           </el-form-item>
           <el-form-item style="margin-left: 80px">
-            <el-checkbox v-model="rememberPassword">在此设备上保持登录</el-checkbox>
+            <el-checkbox v-model="loginForms.isKeepLogin">7天内保持登录</el-checkbox>
           </el-form-item>
         </el-form>
         <el-button type="success" @click="toLogin('loginForm')" style="width: 250px;margin-left: 10px">登录</el-button>
@@ -103,7 +103,8 @@ export default defineComponent({
         phone:localGet('phone')||'',
         passWord:'',
         capCode:'',
-      },
+         isKeepLogin: false
+       },
       registerForms:{
         user_nickname:'',
         phone:'',
@@ -112,7 +113,6 @@ export default defineComponent({
         email:'',
         sex:'male'
       },
-      rememberPassword:false,
       loginRules:{
         phone:[
           {required:true,message:'请输入手机号',trigger:'blur'},
