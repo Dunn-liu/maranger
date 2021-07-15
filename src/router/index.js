@@ -21,7 +21,7 @@ const routes = [
         name:'Home',
         meta:{title:'首页'},
         redirect: '/home/calendar',
-        component:()=>import('../views/layout/layout.vue'),
+        component:()=>import('../views/layout/Layout.vue'),
         children:[{
             path:'/home/calendar',
             name:'Calendar',
