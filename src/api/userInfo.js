@@ -1,29 +1,36 @@
 import fetch from './index'
-export function apiGetUserInfo(phone){
+export function apiGetUserInfo(phone) {
     return fetch({
-        method:'get',
-        url:'/profile',
-        params: {phone}
+        method: 'get',
+        url: '/profile',
+        params: { phone }
     })
 }
-export function apiGetUserAuth(phone){
+export function apiGetUserAuth(phone) {
     return fetch({
-        method:"get",
-        url:'/router',
-        params: {phone}
+        method: "get",
+        url: '/router',
+        params: { phone }
     })
 }
 export function apiUpdateInfo(data) {
     return fetch({
-        method:"post",
-        url:'/userinfo/update',
+        method: "post",
+        url: '/userinfo/update',
         data
     })
 }
 export function apiUpdateAvatar(data) {
     return fetch({
-        method:"post",
-        url:'/userinfo/updateAvatar',
+        method: "post",
+        url: '/userinfo/updateAvatar',
+        data
+    })
+}
+export function apiResetPass(data) {
+    return fetch({
+        method: "post",
+        url: '/userinfo/resetPass',
         data
     })
 }
