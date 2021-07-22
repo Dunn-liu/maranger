@@ -31,6 +31,25 @@
     </el-form-item>
     <el-form-item label="文章封面" prop="article_cover">
       <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>
+      <el-button type="primary" @click="dialogGalleryVisible = true"
+        >从图库选择</el-button
+      >
+      <el-dialog title="图库" v-model="dialogGalleryVisible">
+        <div class="dia_content"></div>
+        <el-card :body-style="{ padding: '0px' }">
+          <img
+            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+            class="image"
+          />
+          <div style="padding: 14px">
+            <span>好吃的汉堡</span>
+            <div class="bottom">
+              <time class="time">{{ new Date() }}</time>
+              <el-button type="text" class="button">操作按钮</el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-dialog>
     </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
       <div class="changeEditor">
@@ -83,12 +102,12 @@
 
 <script>
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
-import { apiGetClassify } from "../api/article";
-import Upload from "./Upload.vue";
-import WEditor from "./WEditor.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import Compressor from "compressorjs";
+import Upload from "./Upload.vue";
+import WEditor from "./WEditor.vue";
 import { apiUploadImg } from "../api/image";
+import { apiGetClassify } from "../api/article";
 export default defineComponent({
   name: "ArticleForm",
   props: ["articleData"],
@@ -98,6 +117,7 @@ export default defineComponent({
     const articleFormRef = ref(null);
     const WEditor = ref(null);
     const MdEditor = ref(null);
+    const dialogGalleryVisible = ref(false);
     const state = reactive({
       shortcuts: [
         // 时间选择器额外配置
@@ -232,6 +252,7 @@ export default defineComponent({
       getEditor,
       editorChange,
       handleUploadImage,
+      dialogGalleryVisible,
     };
   },
 });

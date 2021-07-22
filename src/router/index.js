@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { ElMessage } from 'element-plus'
@@ -38,7 +38,7 @@ const routes = [
     { path: '/:pathMatch(.*)*', name: 'NotFound', meta: { title: '404 NotFound' }, component: () => import('../views/NotFound.vue') }
 ]
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes
 })
 router.beforeEach(async (to, from, next) => {
