@@ -20,7 +20,7 @@ import { ref, reactive, toRefs, defineAsyncComponent } from "vue";
 import { useStore } from "vuex";
 import { ElNotification } from "element-plus";
 import dayjs from "dayjs";
-import { apiPublishArticle } from "../../api/article";
+import { apiPublishArticle } from "../api/article";
 import { useRouter } from "vue-router";
 import Loading from "@/components/Loading.vue";
 const ArticleForm = defineAsyncComponent({

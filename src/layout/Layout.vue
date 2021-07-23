@@ -3,7 +3,7 @@
     <el-header class="m-header">
       <img
         class="logo"
-        src="../../assets/img/logo.png"
+        src="../assets/img/logo.png"
         @click="isCollapse = !isCollapse"
       />
       <div class="userinfo">
@@ -31,7 +31,7 @@
           :router="true"
           :default-active="$route.path"
         >
-          <el-menu-item index="/home/calendar">
+          <el-menu-item index="/home">
             <i class="el-icon-s-home"></i>
             <span slot="title">日历</span>
           </el-menu-item>
@@ -52,9 +52,9 @@
 import { defineComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { localRemove } from "@/utils/local";
-import MMenuItem from "../../components/MenuItem.vue";
+import MMenuItem from "../components/MenuItem.vue";
 import { useStore } from "vuex";
-import { apiGetUserInfo } from "../../api/userInfo";
+import { apiGetUserInfo } from "../api/userInfo";
 export default defineComponent({
   components: {
     MMenuItem,

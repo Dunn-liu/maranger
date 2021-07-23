@@ -150,7 +150,7 @@ import {
   apiGetArticle,
   apiGetClassify,
   apiUpdateArticle,
-} from "../../api/article";
+} from "../api/article";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading.vue";
 const ArticleForm = defineAsyncComponent({

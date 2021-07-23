@@ -1,45 +1,45 @@
-function formatRouterTree (data) {
+function formatRouterTree(data) {
     const handle = (property) => {
-        return function(a,b){
+        return function (a, b) {
             const val1 = a[property];
             const val2 = b[property];
             return val1 - val2;
         }
     }
     data.sort(handle('id'))
-    let parentsRouter = data.filter(p=>p.pid == 0),
-        childrenRouter = data.filter(c=>c.pid !=0)
-    dataToTree(parentsRouter,childrenRouter);
-    function dataToTree(parent,children){
-        parent.map(p=>{
-            children.map((c,i)=>{
-              if(c.pid === p.id) {
-                  let _c = JSON.parse(JSON.stringify(children))
-                  _c.splice(i,1);
-                  dataToTree([c],_c)
-                  if (p.children){
-                      p.children.push(c)
-                  }else{
-                      p.children = [c]
-                  }
-              }
+    let parentsRouter = data.filter(p => p.pid == 0),
+        childrenRouter = data.filter(c => c.pid != 0)
+    dataToTree(parentsRouter, childrenRouter);
+    function dataToTree(parent, children) {
+        parent.map(p => {
+            children.map((c, i) => {
+                if (c.pid === p.id) {
+                    let _c = JSON.parse(JSON.stringify(children))
+                    _c.splice(i, 1);
+                    dataToTree([c], _c)
+                    if (p.children) {
+                        p.children.push(c)
+                    } else {
+                        p.children = [c]
+                    }
+                }
             })
         })
     }
     return parentsRouter
 }
-function generateRouter (userRouter) {
-    let newRouters = userRouter.map(item=>{
+function generateRouter(userRouter) {
+    let newRouters = userRouter.map(item => {
         let router = {
-            path:item.path,
-            name:item.name,
-            parentName:item.parentName,
-            meta:{
-                link:item.link,
-                icon:item.icon,
-                title:item.title,
+            path: item.path,
+            name: item.name,
+            parentName: item.parentName,
+            meta: {
+                link: item.link,
+                icon: item.icon,
+                title: item.title,
             },
-            component:()=>import(/* @vite-ignore */ `../views/layout/${item.name}.vue`)
+            component: () => import(/* @vite-ignore */ `../views/${item.name}.vue`)
         }
         if (item.children) {
             router.children = generateRouter(item.children)

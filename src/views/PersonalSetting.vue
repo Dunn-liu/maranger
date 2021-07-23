@@ -131,15 +131,11 @@ import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 import dayjs from "dayjs";
 import md5 from "js-md5";
-import { AUTH_MAP } from "../../config/config";
-import useImgRequest from "../../utils/imgHttpRequest";
-import { apiGetArea } from "../../api/area";
+import { AUTH_MAP } from "../config/config";
+import useImgRequest from "../utils/imgHttpRequest";
+import { apiGetArea } from "../api/area";
 import loginOut from "@/utils/loginOut";
-import {
-  apiUpdateAvatar,
-  apiUpdateInfo,
-  apiResetPass,
-} from "../../api/userInfo";
+import { apiUpdateAvatar, apiUpdateInfo, apiResetPass } from "../api/userInfo";
 import { ElMessage } from "element-plus";
 import PasswordStrength from "@/components/PasswordStrength.vue";
 

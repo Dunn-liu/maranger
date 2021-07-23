@@ -12,20 +12,20 @@ const addRouters = (_route) => {
 }
 const routes = [
     // 路由重定向
+    // {
+    //     path: '/',
+    //     redirect: '/login'
+    // },
     {
         path: '/',
-        redirect: '/login'
-    },
-    {
-        path: '/home',
         name: 'Home',
         meta: { title: '首页' },
-        redirect: '/home/calendar',
-        component: () => import('../views/layout/Layout.vue'),
+        redirect: '/home',
+        component: () => import('../layout/Layout.vue'),
         children: [{
-            path: '/home/calendar',
+            path: '/home',
             name: 'Calendar',
-            component: () => import('../views/layout/Calender.vue')
+            component: () => import('../views/Calender.vue')
         }]
     },
     {
