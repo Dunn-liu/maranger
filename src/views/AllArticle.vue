@@ -40,7 +40,6 @@
     <el-table
       :data="articleData"
       style="width: 100%"
-      max-height="600"
       v-loading="loading"
       element-loading-text="拼命加载中"
       @selection-change="handleSelectionChange"

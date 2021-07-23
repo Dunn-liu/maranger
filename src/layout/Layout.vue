@@ -33,16 +33,29 @@
         >
           <el-menu-item index="/home">
             <i class="el-icon-s-home"></i>
-            <span slot="title">日历</span>
+            <template #title>日历</template>
           </el-menu-item>
-          <div v-for="(item, index) in $store.state.userRouters" :key="item.id">
+          <template
+            v-for="(item, index) in $store.state.userRouters"
+            :key="item.id"
+          >
             <MMenuItem :isCollapse="isCollapse" :item="item" :index="index" />
-          </div>
+          </template>
         </el-menu>
       </el-aside>
       <el-main>
-        <h1>{{ $store.state.headerTitle }}</h1>
-        <router-view></router-view>
+        <h1
+          style="
+            border-bottom: 1px solid #ebeef5;
+            padding-bottom: 10px;
+            margin-bottom: 0;
+          "
+        >
+          {{ $store.state.headerTitle }}
+        </h1>
+        <el-scrollbar>
+          <router-view></router-view>
+        </el-scrollbar>
       </el-main>
     </el-container>
   </el-container>
@@ -82,7 +95,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .m-header {
   display: flex;
   align-items: center;
@@ -104,16 +117,19 @@ export default defineComponent({
     }
   }
 }
-.el-aside {
+:deep(.el-scrollbar) {
+  height: calc(100vh - 160px);
+}
+:deep(.el-aside) {
   width: auto !important;
   border-right: solid 1px #e6e6e6;
-  .el-menu-vertical-demo {
-    height: calc(100vh - 60px);
-    border: none;
-  }
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
+}
+:deep(.el-menu-vertical-demo) {
+  height: calc(100vh - 60px);
+  border: none;
+}
+:deep(.el-menu-vertical-demo:not(.el-menu--collapse)) {
+  width: 200px;
+  min-height: 400px;
 }
 </style>

@@ -13,7 +13,7 @@
   <template v-else>
     <el-menu-item :index="item.link || item.path">
       <i :class="item.icon"></i>
-      <span slot="title">{{ item.title }}</span>
+      <template #title>{{ item.title }}</template>
     </el-menu-item>
   </template>
 </template>
