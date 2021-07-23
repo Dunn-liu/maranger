@@ -80,7 +80,7 @@ export default {
         state.articleForm.classifyId = state.articleForm.classifyId.join(",");
         const res = await apiPublishArticle(state.articleForm);
         if (res.code === 200) {
-          router.push("/home/article/allArticle");
+          router.push("/article/allArticle");
           ElNotification({
             type: "success",
             message: "发布成功!",
