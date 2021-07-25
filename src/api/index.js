@@ -30,7 +30,7 @@ fetch.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 401) {
       ElMessage({
-        message: 'token已过期,请重新登录!',
+        message: '登录已过期,请重新登录!',
         type: 'error',
         showClose: true
       })

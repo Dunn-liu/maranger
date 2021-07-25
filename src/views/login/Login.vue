@@ -136,7 +136,6 @@ import { apiToLogin, apiRegister } from "@/api/login.js";
 import { apiGetUserInfo } from "@/api/userInfo.js";
 import { localSet, localGet } from "@/utils/local";
 import PasswordStrength from "@/components/PasswordStrength.vue";
-const { VITE_BASE_URL } = import.meta.env;
 
 export default defineComponent({
   name: "Login",
@@ -238,7 +237,7 @@ export default defineComponent({
           },
         ],
       },
-      codeSrc: VITE_BASE_URL + "/captcha",
+      codeSrc: "https://admin.codespring.top" + "/api/captcha",
       isregister: false,
       headerText: "登录",
     });
@@ -308,7 +307,8 @@ export default defineComponent({
     const claerCookies = () => {};
     // 点击更换验证码
     const changeCaptcha = () => {
-      state.codeSrc = VITE_BASE_URL + "/captcha?" + Date.now();
+      state.codeSrc =
+        "https://admin.codespring.top" + "/api/captcha?" + Date.now();
     };
     return {
       loginForm,
