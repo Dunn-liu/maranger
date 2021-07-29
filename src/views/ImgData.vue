@@ -1,9 +1,7 @@
 <template>
   <div class="my_card img_data">
     <div class="upload">
-      <el-button type="success" size="medium" @click="dialogVisible = true"
-        >上传</el-button
-      >
+      <Upload @uploadSuc="uploadSuc" />
     </div>
     <el-form class="search_bar" label-width="70px" label-position="left">
       <el-form-item label="ID" label-width="40px">
@@ -92,18 +90,6 @@
       >
       </el-pagination>
     </div>
-    <el-dialog title="提示" v-model="dialogVisible" width="30%">
-      <div class="dialog_content">
-        <Upload @getSrc="getSrc" :src="currentSrc"></Upload>
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false"
-            >关 闭</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -131,8 +117,6 @@ export default defineComponent({
         orderSort: {},
       },
       totalNum: 0,
-      currentSrc: "",
-      dialogVisible: false,
       loading: false,
     });
     const fetchImages = async () => {
@@ -171,9 +155,7 @@ export default defineComponent({
       state.query.limit = val;
       await fetchImages();
     };
-    const getSrc = async (src) => {
-      state.currentSrc = src;
-      state.dialogVisible = false;
+    const uploadSuc = async () => {
       await fetchImages();
     };
     const delImage = async (id) => {
@@ -200,7 +182,7 @@ export default defineComponent({
       handlerSort,
       handleCurrentChange,
       handleSizeChange,
-      getSrc,
+      uploadSuc,
       delImage,
       clearQuery,
       copyUrl,

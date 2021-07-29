@@ -1,31 +1,110 @@
 <template>
-  <div class="upload_com">
-    <el-upload
-      class="avatar-uploader"
-      action="/api/upload/image"
-      :drag="true"
-      :show-file-list="false"
-      :http-request="httpRequest"
-    >
-      <img v-if="src" :src="src" class="avatar" />
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
-    <el-input v-model="input" placeholder="请输入图片描述"></el-input>
-  </div>
+  <el-button type="primary" @click="dialogVisible = true">上传</el-button>
+  <el-dialog title="上传图片" v-model="dialogVisible" width="30%">
+    <div class="dialog_content">
+      <div class="upload_com">
+        <el-upload
+          ref="uploadRef"
+          class="avatar-uploader"
+          action=""
+          :on-change="fileChange"
+          :drag="true"
+          :multiple="false"
+          :show-file-list="false"
+          :auto-upload="false"
+          :http-request="httpRequest"
+          :data="imgDesc"
+        >
+          <img v-if="localSrc" :src="localSrc" class="avatar" />
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+        <el-input
+          style="width: 240px; margin-top: 15px"
+          v-model.trim="imgDesc.desc"
+          placeholder="请输入图片描述"
+        ></el-input>
+      </div>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="submitUpload">上传</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script>
-import { defineComponent, watch } from "vue";
+import { defineComponent, watch, ref, reactive } from "vue";
+import { ElMessage } from "element-plus";
 import useImgRequest from "../utils/imgHttpRequest";
 export default defineComponent({
-  emits: ["getSrc"],
-  props: ["src"],
+  emits: ["uploadSuc"],
   setup(props, context) {
     const { httpRequest, resSrc } = useImgRequest();
+    const dialogVisible = ref(false);
+    const uploadRef = ref(null);
+    const localSrc = ref("");
+    const imgDesc = reactive({ desc: "" });
     watch(resSrc, (newVal) => {
-      context.emit("getSrc", newVal);
+      context.emit("uploadSuc", newVal);
     });
+    watch(dialogVisible, (newVal) => {
+      if (!newVal) {
+        localSrc.value = "";
+        imgDesc.desc = "";
+      }
+    });
+    const fileChange = (file) => {
+      const isJPG =
+        file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+      const isLt4M = file.raw.size / 1024 / 1024 < 4;
+
+      if (!isJPG) {
+        ElMessage.warning({
+          message: "上传图片只能是 JPG 或 png 格式!",
+          type: "warning",
+        });
+        return;
+      }
+      if (!isLt4M) {
+        ElMessage.warning({
+          message: "上传图片大小不能超过 4MB!",
+          type: "warning",
+        });
+        return;
+      }
+      if (isJPG && isLt4M) {
+        localSrc.value = URL.createObjectURL(file.raw);
+      }
+    };
+    const submitUpload = () => {
+      if (!localSrc.value) {
+        ElMessage.warning({
+          message: "请先选择上传图片！",
+          type: "warning",
+        });
+        return;
+      }
+      if (!imgDesc.desc) {
+        ElMessage.warning({
+          message: "请输入图片描述！",
+          type: "warning",
+        });
+        return;
+      }
+      uploadRef.value.submit();
+      dialogVisible.value = false;
+    };
     return {
       httpRequest,
+      dialogVisible,
+      uploadRef,
+      resSrc,
+      localSrc,
+      imgDesc,
+      fileChange,
+      submitUpload,
     };
   },
 });
@@ -36,19 +115,23 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
 }
-:deep .avatar-uploader .el-upload:hover {
+:deep(.avatar-uploader .el-upload:hover) {
   border-color: #409eff;
 }
-:deep .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
+:deep(.el-upload-dragger) {
+  width: 240px;
   height: 178px;
-  line-height: 178px;
-  text-align: center;
 }
-:deep .avatar {
-  width: 178px;
+// :deep(.avatar-uploader-icon) {
+//   font-size: 28px;
+//   color: #8c939d;
+//   width: 178px;
+//   height: 178px;
+//   line-height: 178px;
+//   text-align: center;
+// }
+.avatar {
+  width: 240px;
   height: 178px;
   display: block;
 }

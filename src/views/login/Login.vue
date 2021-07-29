@@ -133,7 +133,6 @@ import { useStore } from "vuex";
 import { ElMessage } from "element-plus";
 import md5 from "js-md5";
 import { apiToLogin, apiRegister } from "@/api/login.js";
-import { apiGetUserInfo } from "@/api/userInfo.js";
 import { localSet, localGet } from "@/utils/local";
 import PasswordStrength from "@/components/PasswordStrength.vue";
 
@@ -147,6 +146,7 @@ export default defineComponent({
     const router = useRouter();
     const loginForm = ref(null);
     const registerForm = ref(null);
+    const __DEV__ = import.meta.env.MODE === "development";
     const state = reactive({
       loginForms: {
         phone: localGet("phone") || "",
@@ -237,7 +237,9 @@ export default defineComponent({
           },
         ],
       },
-      codeSrc: "https://admin.codespring.top" + "/api/captcha",
+      codeSrc: __DEV__
+        ? "http://localhost:8000/captcha"
+        : "https://admin.codespring.top/api/captcha",
       isregister: false,
       headerText: "登录",
     });
@@ -307,8 +309,7 @@ export default defineComponent({
     const claerCookies = () => {};
     // 点击更换验证码
     const changeCaptcha = () => {
-      state.codeSrc =
-        "https://admin.codespring.top" + "/api/captcha?" + Date.now();
+      state.codeSrc = state.codeSrc + Date.now();
     };
     return {
       loginForm,

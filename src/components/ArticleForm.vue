@@ -30,8 +30,19 @@
       </el-select>
     </el-form-item>
     <el-form-item label="文章封面" prop="article_cover">
-      <Upload @getSrc="getSrc" :src="articleData.article_cover"></Upload>
-      <el-button type="primary" @click="dialogGalleryVisible = true"
+      <div class="cover_placeholder">
+        <img
+          v-if="articleData.article_cover"
+          :src="articleData.article_cover"
+          class="avatar"
+        />
+      </div>
+
+      <Upload @uploadSuc="uploadSuc" />
+      <el-button
+        type="primary"
+        @click="dialogGalleryVisible = true"
+        style="margin-left: 12px"
         >从图库选择</el-button
       >
       <el-dialog title="图库" v-model="dialogGalleryVisible">
@@ -213,7 +224,7 @@ export default defineComponent({
         context.emit("getValid", valid);
       });
     };
-    const getSrc = (e) => {
+    const uploadSuc = (e) => {
       // 获取图片上传src
       context.emit("getUrl", e);
     };
@@ -248,7 +259,7 @@ export default defineComponent({
       MdEditor,
       ...toRefs(state),
       validateForm,
-      getSrc,
+      uploadSuc,
       getEditor,
       editorChange,
       handleUploadImage,
@@ -258,17 +269,32 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .article_form {
   width: 80%;
   margin: 0 auto;
-  .el-date-picker {
+  :deep(.el-date-picker) {
     z-index: 10000;
   }
   .changeEditor {
     margin-bottom: 10px;
-    .el-select {
+    :deep(.el-select) {
       margin: 0 10px;
+    }
+  }
+  .cover_placeholder {
+    background-color: #fff;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 180px;
+    height: 120px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    .avatar {
+      width: 180px;
+      height: 120px;
+      display: block;
     }
   }
   /* table 样式 */
