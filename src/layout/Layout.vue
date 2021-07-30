@@ -44,15 +44,16 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <h1
+        <el-page-header
           style="
             border-bottom: 1px solid #ebeef5;
             padding-bottom: 10px;
             margin-bottom: 0;
           "
-        >
-          {{ $store.state.headerTitle }}
-        </h1>
+          icon="el-icon-arrow-left"
+          @back="goBack"
+          :content="$store.state.headerTitle"
+        ></el-page-header>
         <el-scrollbar>
           <router-view></router-view>
         </el-scrollbar>
@@ -62,12 +63,11 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { localRemove } from "@/utils/local";
 import MMenuItem from "../components/MenuItem.vue";
 import { useStore } from "vuex";
-import { apiGetUserInfo } from "../api/userInfo";
 export default defineComponent({
   components: {
     MMenuItem,
@@ -86,10 +86,14 @@ export default defineComponent({
         store.dispatch("getUserInfo");
       }
     });
+    const goBack = () => {
+      router.go(-1);
+    };
     return {
       router,
       logOut,
       isCollapse,
+      goBack,
     };
   },
 });

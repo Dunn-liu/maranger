@@ -41,11 +41,19 @@
       <Upload @uploadSuc="uploadSuc" />
       <el-button
         type="primary"
+        plain
         @click="dialogGalleryVisible = true"
         style="margin-left: 12px"
         >从图库选择</el-button
       >
-      <el-dialog title="图库" v-model="dialogGalleryVisible">
+      <!-- <el-button
+        type="primary"
+        plain
+        @click="dialogGalleryVisible = true"
+        style="margin-left: 12px"
+        >网络图片</el-button
+      > -->
+      <!-- <el-dialog title="图库" v-model="dialogGalleryVisible">
         <div class="dia_content"></div>
         <el-card :body-style="{ padding: '0px' }">
           <img
@@ -60,7 +68,21 @@
             </div>
           </div>
         </el-card>
-      </el-dialog>
+      </el-dialog> -->
+      <el-drawer
+        title="图库"
+        v-model="dialogGalleryVisible"
+        direction="ltr"
+        custom-class="demo-drawer"
+        ref="drawer"
+      >
+        <div class="demo-drawer__content">
+          <span>123</span>
+          <div class="demo-drawer__footer">
+            <el-button @click="cancelForm">取 消</el-button>
+          </div>
+        </div>
+      </el-drawer>
     </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
       <div class="changeEditor">

@@ -1,5 +1,5 @@
 <template>
-  <el-button type="primary" @click="dialogVisible = true">上传</el-button>
+  <el-button type="primary" plain @click="dialogVisible = true">上传</el-button>
   <el-dialog title="上传图片" v-model="dialogVisible" width="30%">
     <div class="dialog_content">
       <div class="upload_com">
