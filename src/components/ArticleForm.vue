@@ -42,45 +42,30 @@
       <el-button
         type="primary"
         plain
-        @click="dialogGalleryVisible = true"
+        @click="chooseCloud"
         style="margin-left: 12px"
         >从图库选择</el-button
       >
-      <!-- <el-button
-        type="primary"
-        plain
-        @click="dialogGalleryVisible = true"
-        style="margin-left: 12px"
-        >网络图片</el-button
-      > -->
-      <!-- <el-dialog title="图库" v-model="dialogGalleryVisible">
-        <div class="dia_content"></div>
-        <el-card :body-style="{ padding: '0px' }">
-          <img
-            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-            class="image"
-          />
-          <div style="padding: 14px">
-            <span>好吃的汉堡</span>
-            <div class="bottom">
-              <time class="time">{{ new Date() }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-dialog> -->
       <el-drawer
         title="图库"
         v-model="dialogGalleryVisible"
-        direction="ltr"
-        custom-class="demo-drawer"
+        direction="rtl"
+        size="40%"
         ref="drawer"
       >
-        <div class="demo-drawer__content">
-          <span>123</span>
-          <div class="demo-drawer__footer">
-            <el-button @click="cancelForm">取 消</el-button>
-          </div>
+        <div class="drawer__content">
+          <template v-for="item in cloudGalleryData" :key="item.id">
+            <el-card :body-style="{ padding: '0px' }" class="cloud_item">
+              <img style="width: 140px" :src="item.src" class="image" />
+              <div style="padding: 14px">
+                <span>{{ item.desc }}</span>
+                <div class="bottom">
+                  <time class="time">{{ item.update_time }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </template>
         </div>
       </el-drawer>
     </el-form-item>
@@ -139,8 +124,9 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import Compressor from "compressorjs";
 import Upload from "./Upload.vue";
 import WEditor from "./WEditor.vue";
-import { apiUploadImg } from "../api/image";
+import { apiUploadImg, apiGetImages } from "../api/image";
 import { apiGetClassify } from "../api/article";
+import dayjs from "dayjs";
 export default defineComponent({
   name: "ArticleForm",
   props: ["articleData"],
@@ -150,7 +136,14 @@ export default defineComponent({
     const articleFormRef = ref(null);
     const WEditor = ref(null);
     const MdEditor = ref(null);
-    const dialogGalleryVisible = ref(false);
+    const cloudGallery = reactive({
+      dialogGalleryVisible: false,
+      query: {
+        currentPage: 1,
+        limit: 8,
+      },
+      cloudGalleryData: [],
+    });
     const state = reactive({
       shortcuts: [
         // 时间选择器额外配置
@@ -275,23 +268,49 @@ export default defineComponent({
         },
       });
     };
+
+    // 从在线图库选择
+    const chooseCloud = async () => {
+      cloudGallery.dialogGalleryVisible = true;
+      if (!cloudGallery.cloudGalleryData.length) {
+        await fetchImages();
+      }
+    };
+
+    // 获取图片数据
+    const fetchImages = async () => {
+      const { query } = cloudGallery;
+      try {
+        const res = await apiGetImages(query);
+        res.data.forEach((item) => {
+          item.update_time = dayjs(item.update_time).format(
+            "YYYY-MM-DD HH:mm:ss"
+          );
+        });
+        cloudGallery.cloudGalleryData = [...res.data];
+      } catch (e) {
+        ElMessage.error("图片获取失败！");
+        console.log(e);
+      }
+    };
     return {
       articleFormRef,
       WEditor,
       MdEditor,
+      ...toRefs(cloudGallery),
       ...toRefs(state),
       validateForm,
       uploadSuc,
       getEditor,
       editorChange,
       handleUploadImage,
-      dialogGalleryVisible,
+      chooseCloud,
     };
   },
 });
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .article_form {
   width: 80%;
   margin: 0 auto;
@@ -364,6 +383,36 @@ export default defineComponent({
   ul,
   ol {
     margin: 10px 0 10px 20px;
+  }
+}
+:deep(.el-drawer__header) {
+  font-size: 22px;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px !important;
+  color: rgba(0, 0, 0, 0.85);
+}
+.drawer__content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  .cloud_item {
+    width: 30%;
+    height: 220px;
+    margin-bottom: 12px;
+    :deep(.el-card) {
+      height: 100%;
+      &:hover {
+        border-color: transparent;
+        box-shadow: 0 1px 2px -2px rgb(0 0 0 / 16%),
+          0 3px 6px 0 rgb(0 0 0 / 12%), 0 5px 12px 4px rgb(0 0 0 / 9%);
+      }
+    }
+  }
+  &::after {
+    content: "";
+    width: 30%;
+    height: 220px;
+    margin-bottom: 12px;
   }
 }
 .sub_bths {

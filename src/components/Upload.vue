@@ -1,5 +1,5 @@
 <template>
-  <el-button type="primary" plain @click="dialogVisible = true">上传</el-button>
+  <el-button type="primary" plain @click="openUpload">上传</el-button>
   <el-dialog title="上传图片" v-model="dialogVisible" width="30%">
     <div class="dialog_content">
       <div class="upload_com">
@@ -10,6 +10,7 @@
           :on-change="fileChange"
           :drag="true"
           :multiple="false"
+          :file-list="fileList"
           :show-file-list="false"
           :auto-upload="false"
           :http-request="httpRequest"
@@ -35,26 +36,28 @@
   </el-dialog>
 </template>
 <script>
-import { defineComponent, watch, ref, reactive } from "vue";
+import { defineComponent, watch, ref, reactive, toRefs } from "vue";
 import { ElMessage } from "element-plus";
 import useImgRequest from "../utils/imgHttpRequest";
 export default defineComponent({
   emits: ["uploadSuc"],
   setup(props, context) {
     const { httpRequest, resSrc } = useImgRequest();
-    const dialogVisible = ref(false);
     const uploadRef = ref(null);
-    const localSrc = ref("");
-    const imgDesc = reactive({ desc: "" });
+    const state = reactive({
+      fileList: [],
+      imgDesc: { desc: "" },
+      localSrc: "",
+      dialogVisible: false,
+    });
     watch(resSrc, (newVal) => {
       context.emit("uploadSuc", newVal);
     });
-    watch(dialogVisible, (newVal) => {
-      if (!newVal) {
-        localSrc.value = "";
-        imgDesc.desc = "";
-      }
-    });
+    const openUpload = () => {
+      state.localSrc = "";
+      state.imgDesc.desc = "";
+      state.dialogVisible = true;
+    };
     const fileChange = (file) => {
       const isJPG =
         file.raw.type === "image/jpeg" || file.raw.type === "image/png";
@@ -75,18 +78,18 @@ export default defineComponent({
         return;
       }
       if (isJPG && isLt4M) {
-        localSrc.value = URL.createObjectURL(file.raw);
+        state.localSrc = URL.createObjectURL(file.raw);
       }
     };
-    const submitUpload = () => {
-      if (!localSrc.value) {
+    const submitUpload = async () => {
+      if (!state.localSrc) {
         ElMessage.warning({
           message: "请先选择上传图片！",
           type: "warning",
         });
         return;
       }
-      if (!imgDesc.desc) {
+      if (!state.imgDesc.desc) {
         ElMessage.warning({
           message: "请输入图片描述！",
           type: "warning",
@@ -94,15 +97,15 @@ export default defineComponent({
         return;
       }
       uploadRef.value.submit();
-      dialogVisible.value = false;
+      state.fileList = [];
+      state.dialogVisible = false;
     };
     return {
       httpRequest,
-      dialogVisible,
       uploadRef,
+      openUpload,
       resSrc,
-      localSrc,
-      imgDesc,
+      ...toRefs(state),
       fileChange,
       submitUpload,
     };
@@ -122,14 +125,6 @@ export default defineComponent({
   width: 240px;
   height: 178px;
 }
-// :deep(.avatar-uploader-icon) {
-//   font-size: 28px;
-//   color: #8c939d;
-//   width: 178px;
-//   height: 178px;
-//   line-height: 178px;
-//   text-align: center;
-// }
 .avatar {
   width: 240px;
   height: 178px;

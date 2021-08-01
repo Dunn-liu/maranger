@@ -10,6 +10,7 @@ export default function useImgRequest() {
             quality: 0.6,
             async success(result) {
                 const formData = new FormData();
+                console.log("option.data.desc", option.data.desc);
                 formData.append('file', result, result.name);
                 formData.append('desc', option.data.desc)
                 try {
