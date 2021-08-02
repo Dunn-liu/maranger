@@ -50,23 +50,50 @@
         title="图库"
         v-model="dialogGalleryVisible"
         direction="rtl"
-        size="40%"
-        ref="drawer"
+        size="35%"
       >
-        <div class="drawer__content">
-          <template v-for="item in cloudGalleryData" :key="item.id">
-            <el-card :body-style="{ padding: '0px' }" class="cloud_item">
-              <img style="width: 140px" :src="item.src" class="image" />
-              <div style="padding: 14px">
-                <span>{{ item.desc }}</span>
-                <div class="bottom">
-                  <time class="time">{{ item.update_time }}</time>
-                  <el-button type="text" class="button">操作按钮</el-button>
+        <div>
+          <el-input
+            placeholder="请输入内容"
+            prefix-icon="el-icon-search"
+            v-model="searchWord"
+            style="margin: 12px 0"
+          >
+          </el-input>
+          <div class="drawer__content">
+            <template v-for="item in cloudGalleryData" :key="item.id">
+              <el-card :body-style="{ padding: '12px' }" class="cloud_item">
+                <img
+                  style="width: 100%; height: 116px"
+                  :src="item.src"
+                  class="image"
+                />
+                <h4
+                  style="text-align: center; line-height: 14px; margin: 16px 0"
+                >
+                  {{ item.desc }}
+                </h4>
+                <div style="color: #000; text-align: center">
+                  <el-button
+                    type="text"
+                    style="font-size: 20px"
+                    icon="el-icon-document-copy"
+                    @click="copySrc(item.src)"
+                  />
                 </div>
-              </div>
-            </el-card>
-          </template>
+              </el-card>
+            </template>
+          </div>
         </div>
+        <el-pagination
+          layout="prev, pager, next"
+          background
+          :total="total"
+          :page-size="12"
+          @current-change="pageChange"
+          style="margin-top: 20px"
+        >
+        </el-pagination>
       </el-drawer>
     </el-form-item>
     <el-form-item label="文章内容" prop="article_content">
@@ -140,9 +167,10 @@ export default defineComponent({
       dialogGalleryVisible: false,
       query: {
         currentPage: 1,
-        limit: 8,
+        limit: 12,
       },
       cloudGalleryData: [],
+      total: 0,
     });
     const state = reactive({
       shortcuts: [
@@ -277,6 +305,18 @@ export default defineComponent({
       }
     };
 
+    // 图库页码改变
+    const pageChange = async (currentPage) => {
+      cloudGallery.query.currentPage = currentPage;
+      await fetchImages();
+    };
+
+    //复制云图库链接
+    const copySrc = (src) => {
+      context.emit("getUrl", src);
+      cloudGallery.dialogGalleryVisible = false;
+    };
+
     // 获取图片数据
     const fetchImages = async () => {
       const { query } = cloudGallery;
@@ -288,6 +328,7 @@ export default defineComponent({
           );
         });
         cloudGallery.cloudGalleryData = [...res.data];
+        cloudGallery.total = res.pageNation.total;
       } catch (e) {
         ElMessage.error("图片获取失败！");
         console.log(e);
@@ -305,6 +346,8 @@ export default defineComponent({
       editorChange,
       handleUploadImage,
       chooseCloud,
+      pageChange,
+      copySrc,
     };
   },
 });
@@ -390,15 +433,24 @@ export default defineComponent({
   border-bottom: 1px solid #f0f0f0;
   padding: 16px 24px !important;
   color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 0 !important;
+}
+:deep(.el-drawer__body) {
+  height: calc(100% - 73px);
+  overflow-x: scroll;
 }
 .drawer__content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 15px;
   .cloud_item {
-    width: 30%;
+    width: 150px;
     height: 220px;
     margin-bottom: 12px;
+    .image {
+      vertical-align: middle;
+    }
     :deep(.el-card) {
       height: 100%;
       &:hover {
@@ -410,9 +462,7 @@ export default defineComponent({
   }
   &::after {
     content: "";
-    width: 30%;
-    height: 220px;
-    margin-bottom: 12px;
+    width: 150px;
   }
 }
 .sub_bths {

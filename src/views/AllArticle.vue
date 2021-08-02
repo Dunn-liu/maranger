@@ -122,8 +122,8 @@
     title="编辑文章"
     v-model="showDrawer"
     direction="rtl"
+    size="60%"
     destroy-on-close
-    append-to-body
   >
     <ArticleForm
       v-if="showDrawer"
@@ -403,21 +403,29 @@ export default {
       width: 160px;
     }
   }
-  .page_nation {
-    margin: 20px auto 10px;
-  }
+}
+.page_nation {
+  margin: 20px auto 10px;
 }
 .el-table_body tr,
 .el-table_body td {
   height: 36px;
 }
-.el-drawer {
-  width: 60% !important;
-  overflow: auto;
-  padding-bottom: 20px;
+.el-drawer__header {
+  font-size: 22px;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px !important;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 0 !important;
+}
+.el-drawer__body {
+  height: calc(100% - 73px);
+  overflow-x: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .sub_bths {
-  width: 40%;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 </style>
