@@ -10,6 +10,9 @@
       <el-form-item label="图片名">
         <el-input v-model="query.name"></el-input>
       </el-form-item>
+      <el-form-item label="图片描述">
+        <el-input v-model="query.desc"></el-input>
+      </el-form-item>
       <el-form-item label="上传时间">
         <el-date-picker
           v-model="query.update_time"
