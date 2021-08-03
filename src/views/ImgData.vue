@@ -10,9 +10,6 @@
       <el-form-item label="图片名">
         <el-input v-model="query.name"></el-input>
       </el-form-item>
-      <el-form-item label="图片描述">
-        <el-input v-model="query.desc"></el-input>
-      </el-form-item>
       <el-form-item label="上传时间">
         <el-date-picker
           v-model="query.update_time"
@@ -40,6 +37,8 @@
       <el-table-column fixed prop="id" label="ID" width="100" sortable="custom">
       </el-table-column>
       <el-table-column prop="name" label="图片名" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="desc" label="图片描述" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="src" label="图片路径">
         <template v-slot="scope">
