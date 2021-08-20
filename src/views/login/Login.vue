@@ -308,7 +308,7 @@ export default defineComponent({
     const claerCookies = () => {};
     // 点击更换验证码
     const changeCaptcha = () => {
-      state.codeSrc = state.codeSrc + Date.now();
+      state.codeSrc = `${state.codeSrc}?${Date.now()}`;
     };
     return {
       loginForm,
