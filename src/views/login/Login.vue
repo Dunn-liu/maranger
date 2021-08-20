@@ -50,9 +50,10 @@
       </el-form>
       <el-button
         type="success"
+        :loading="loginLoading"
         @click="toLogin('loginForm')"
         style="width: 250px; margin-left: 10px"
-        >登录</el-button
+        >{{ loginLoading ? "登录中" : "登录" }}</el-button
       >
       <div class="login-bottom">
         <el-button type="text" class="forgetPass" @click="lookPass()"
@@ -146,6 +147,7 @@ export default defineComponent({
     const router = useRouter();
     const loginForm = ref(null);
     const registerForm = ref(null);
+    const loginLoading = ref(false);
     const __DEV__ = import.meta.env.MODE === "development";
     const state = reactive({
       loginForms: {
@@ -254,6 +256,7 @@ export default defineComponent({
     const toLogin = () => {
       loginForm.value.validate(async (valid) => {
         if (valid) {
+          loginLoading.value = true;
           const newForm = JSON.parse(JSON.stringify(state.loginForms));
           newForm.passWord = md5(newForm.passWord);
           const res = await apiToLogin(newForm);
@@ -265,8 +268,10 @@ export default defineComponent({
               showClose: true,
               message: "登录成功!",
             });
+            loginLoading.value = false;
             await router.push("/home");
           } else {
+            loginLoading.value = false;
             changeCaptcha();
           }
         }
@@ -319,6 +324,7 @@ export default defineComponent({
       register,
       lookPass,
       changeCaptcha,
+      loginLoading,
     };
   },
 });

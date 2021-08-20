@@ -1,5 +1,5 @@
 <template :key="index">
-  <template v-if="item.children && item.children.length > 0">
+  <div v-if="item.children && item.children.length > 0">
     <el-submenu index="1">
       <template #title>
         <i :class="item.icon"></i>
@@ -9,13 +9,13 @@
         <MenuItem :item="c"></MenuItem>
       </el-menu-item-group>
     </el-submenu>
-  </template>
-  <template v-else>
+  </div>
+  <div v-else>
     <el-menu-item :index="item.link || item.path">
       <i :class="item.icon"></i>
       <template #title>{{ item.title }}</template>
     </el-menu-item>
-  </template>
+  </div>
 </template>
 
 <script>
