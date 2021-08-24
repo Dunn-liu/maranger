@@ -241,11 +241,12 @@ export default {
           duration: 2000,
         });
       } else {
-        state.editData.post_date = dayjs(state.editData.post_date).format(
+        const newEditData = JSON.parse(JSON.stringify(state.editData));
+        (newEditData.post_date = dayjs(newEditData.post_date).format(
           "YYYY-MM-DD HH:mm:ss"
-        );
-        state.editData.classifyId = state.editData.classifyId.join(",");
-        const res = await apiUpdateArticle(state.editData);
+        )),
+          (newEditData.classifyId = newEditData.classifyId.join(","));
+        const res = await apiUpdateArticle(newEditData);
         if (res.code === 200) {
           ElNotification({
             type: "success",
@@ -272,12 +273,13 @@ export default {
       }
     };
     // 清空搜索表单
-    const clearQuery = () => {
+    const clearQuery = async () => {
       state.queryData = {
         keyword: "",
         classifyId: "",
         articleStatus: "",
       };
+      await getArticle();
     };
     // 选择文章
     const handleSelectionChange = (val) => {
