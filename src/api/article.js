@@ -15,10 +15,10 @@ export function apiAddClassify(data) {
     })
 }
 // 更新文章分类
-export function apiEditClassify(data) {
+export function apiUpdataClassify(data) {
     return fetch({
         method: 'post',
-        url: '/editClassify',
+        url: '/updataClassify',
         data
     })
 }

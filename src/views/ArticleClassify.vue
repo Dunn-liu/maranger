@@ -34,7 +34,10 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-dialog :title="title" v-model="dialogFormVisible">
+  <el-dialog
+    :title="type ? '编辑文章分类' : '添加文章分类'"
+    v-model="dialogFormVisible"
+  >
     <el-form :model="form" ref="classifyRef" :rules="rules">
       <el-form-item label="分类名称" label-width="80" prop="classifyName">
         <el-input
@@ -66,7 +69,7 @@ import {
   apiGetClassify,
   apiAddClassify,
   apiDelClassify,
-  apiEditClassify,
+  apiUpdataClassify,
 } from "@/api/article";
 import { ElMessage } from "element-plus";
 
@@ -75,7 +78,7 @@ export default {
   setup() {
     const classifyRef = ref(null);
     const classifyTableRef = ref(null);
-    const title = ref("添加文章分类");
+    const type = ref(0);
     const state = reactive({
       classifyData: [],
       loading: false,
@@ -121,7 +124,9 @@ export default {
       classifyRef.value.validate(async (valid) => {
         if (valid) {
           try {
-            const res = await apiAddClassify(state.form);
+            const res = type.value
+              ? await apiUpdataClassify(state.form)
+              : await apiAddClassify(state.form);
             console.log(res);
             if (res.code === 200) {
               ElMessage.success({
@@ -129,13 +134,13 @@ export default {
                 type: "success",
               });
               await getClassifyData();
+              state.dialogFormVisible = false;
             } else {
               ElMessage.error({
                 message: "添加失败",
                 type: "error",
               });
             }
-            state.dialogFormVisible = false;
           } catch (e) {
             console.log(e);
           }
@@ -144,12 +149,13 @@ export default {
     };
 
     const editClassify = (record) => {
-      title.value = "编辑文章分类";
+      type.value = 1;
       state.dialogFormVisible = true;
-      const { classifyName, description } = record;
+      const { classifyName, description, id } = record;
       state.form = {
         classifyName,
         description,
+        id,
       };
     };
 
@@ -166,14 +172,14 @@ export default {
       }
     };
     const showModal = () => {
-      title.value = "添加文章分类";
+      type.value = 0;
       state.dialogFormVisible = true;
     };
     return {
       ...toRefs(state),
       classifyRef,
       classifyTableRef,
-      title,
+      type,
       addClassify,
       editClassify,
       delClassify,
