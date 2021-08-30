@@ -262,6 +262,7 @@ export default defineComponent({
           const res = await apiToLogin(newForm);
           if (res.code === 200) {
             localSet("token", res.data.token);
+            localSet("phone", newForm.phone);
             // 登录成功,获取用户信息
             await store.dispatch("getUserInfo");
             ElMessage.success({
