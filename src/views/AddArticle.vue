@@ -74,11 +74,15 @@ export default {
           duration: "2000",
         });
       } else {
-        state.articleForm.post_date = dayjs(state.articleForm.post_date).format(
+        console.log('sta',state);
+        debugger
+        const newFormState = JSON.parse(JSON.stringify(state.articleForm))
+
+        newFormState.post_date = dayjs(newFormState.post_date).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        state.articleForm.classifyId = state.articleForm.classifyId.join(",");
-        const res = await apiPublishArticle(state.articleForm);
+        newFormState.classifyId = newFormState.classifyId.join(",");
+        const res = await apiPublishArticle(newFormState);
         if (res.code === 200) {
           router.push("/article/allArticle");
           ElNotification({

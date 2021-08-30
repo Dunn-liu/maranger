@@ -163,6 +163,7 @@ export default defineComponent({
     const articleFormRef = ref(null);
     const WEditor = ref(null);
     const MdEditor = ref(null);
+    const searchWord = ref('')
     const cloudGallery = reactive({
       dialogGalleryVisible: false,
       query: {
@@ -348,6 +349,7 @@ export default defineComponent({
       chooseCloud,
       pageChange,
       copySrc,
+      searchWord
     };
   },
 });
