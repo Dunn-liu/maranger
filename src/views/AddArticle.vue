@@ -74,8 +74,6 @@ export default {
           duration: "2000",
         });
       } else {
-        console.log('sta',state);
-        debugger
         const newFormState = JSON.parse(JSON.stringify(state.articleForm))
 
         newFormState.post_date = dayjs(newFormState.post_date).format(
