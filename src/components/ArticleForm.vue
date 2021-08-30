@@ -18,7 +18,7 @@
         v-model="articleData.classifyId"
         placeholder="请选择"
         multiple
-        :collapse-tags="false"
+        collapse-tags
       >
         <el-option
           v-for="item in classify"
@@ -121,7 +121,7 @@
       ></v-md-editor>
     </el-form-item>
     <el-form-item label="作者" prop="author_nickname">
-      <el-input v-model="articleData.author_nickname"></el-input>
+      <el-input v-model="articleData.author_nickname" disabled></el-input>
     </el-form-item>
     <el-form-item label="内容摘要" prop="article_abstract">
       <el-input
