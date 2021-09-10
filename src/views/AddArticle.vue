@@ -15,8 +15,8 @@
   </div>
 </template>
 
-<script>
-import { ref, reactive, toRefs, defineAsyncComponent } from "vue";
+<script lang="ts">
+import { ref, reactive, defineAsyncComponent } from "vue";
 import { useStore } from "vuex";
 import { ElNotification } from "element-plus";
 import dayjs from "dayjs";
@@ -27,6 +27,19 @@ const ArticleForm = defineAsyncComponent({
   loader: () => import("@/components/ArticleForm.vue"),
   loadingComponent: Loading,
 });
+interface Article {
+  article_title: string,
+  article_content: string,
+  article_cover: string,
+  author: any,
+  author_nickname: any,
+  edit_date: Date,
+  article_abstract: string,
+  article_keywords: string,
+  article_status: number,
+  classifyId: [],
+  editorType: number,
+}
 export default {
   name: "AddArticle",
   components: { ArticleForm },
@@ -35,8 +48,7 @@ export default {
     const router = useRouter();
     const articleFormRef = ref(null);
     let formValid = null;
-    const state = reactive({
-      articleForm: {
+    const articleForm: Article = reactive({
         // 文章表单数据
         article_title: "",
         article_content: "",
@@ -49,21 +61,19 @@ export default {
         article_status: 1,
         classifyId: [],
         editorType: 0,
-      },
-      text: "",
     });
-    const getFormValid = (e) => {
+    const getFormValid = (e):void => {
       // 获取表单验证结果
       formValid = e;
     };
-    const getEditorType = (e) => {
-      state.articleForm.editorType = e;
+    const getEditorType = (e):void => {
+      articleForm.editorType = e;
     };
-    const getUrl = (e) => {
-      state.articleForm.article_cover = e;
+    const getUrl = (e) :void => {
+      articleForm.article_cover = e;
     };
-    const getContent = (e) => {
-      state.articleForm.article_content = e;
+    const getContent = (e):void => {
+      articleForm.article_content = e;
     };
     const postArticle = async () => {
       articleFormRef.value.validateForm(); // 调用子组件方法
@@ -71,10 +81,10 @@ export default {
         ElNotification({
           type: "error",
           message: "请检查表单内容!",
-          duration: "2000",
+          duration: 2000,
         });
       } else {
-        const newFormState = JSON.parse(JSON.stringify(state.articleForm))
+        const newFormState = JSON.parse(JSON.stringify(articleForm))
 
         newFormState.post_date = dayjs(newFormState.post_date).format(
           "YYYY-MM-DD HH:mm:ss"
@@ -93,16 +103,17 @@ export default {
     };
     const publishArticle = async () => {
       // 发布按钮
-      state.articleForm.article_status = 1;
+      articleForm.article_status = 1;
       await postArticle();
     };
     const saveDraft = async () => {
-      state.articleForm.article_status = 0;
+      articleForm.article_status = 0;
       await postArticle();
     };
+
     return {
       articleFormRef,
-      ...toRefs(state),
+      articleForm,
       publishArticle,
       saveDraft,
       getFormValid,

@@ -68,6 +68,7 @@ export default defineComponent({
           message: "上传图片只能是 JPG 或 png 格式!",
           type: "warning",
         });
+        state.fileList = [];
         return;
       }
       if (!isLt4M) {
@@ -75,6 +76,7 @@ export default defineComponent({
           message: "上传图片大小不能超过 4MB!",
           type: "warning",
         });
+        state.fileList = [];
         return;
       }
       if (isJPG && isLt4M) {

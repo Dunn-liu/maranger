@@ -145,7 +145,7 @@
   </el-form>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import Compressor from "compressorjs";
@@ -153,10 +153,17 @@ import Upload from "./Upload.vue";
 import WEditor from "./WEditor.vue";
 import { apiUploadImg, apiGetImages } from "../api/image";
 import { apiGetClassify } from "../api/article";
-import dayjs from "dayjs";
+import * as dayjs from "dayjs";
 export default defineComponent({
   name: "ArticleForm",
-  props: ["articleData"],
+  props: {
+    articleData: {
+      type:Object,
+      default: function () {
+        return { }
+      }
+    }
+  },
   emits: ["getValid", "getEditorType", "getUrl", "getContent"],
   components: { Upload, WEditor },
   setup(props, context) {
@@ -164,7 +171,7 @@ export default defineComponent({
     const WEditor = ref(null);
     const MdEditor = ref(null);
     const searchWord = ref('')
-    const cloudGallery = reactive({
+    const cloudGallery:object = reactive({
       dialogGalleryVisible: false,
       query: {
         currentPage: 1,
@@ -239,14 +246,13 @@ export default defineComponent({
       const res = await apiGetClassify();
       state.classify = res.data;
     });
-    const editorChange = (val) => {
+    const editorChange = (val:number) => {
       ElMessageBox.confirm(
         `切换编辑器后，保存内容将被清空，确定要切换吗?`,
         "提示",
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning",
         }
       )
         .then(() => {
@@ -268,11 +274,11 @@ export default defineComponent({
         context.emit("getValid", valid);
       });
     };
-    const uploadSuc = (e) => {
+    const uploadSuc = (e) :void=> {
       // 获取图片上传src
       context.emit("getUrl", e);
     };
-    const getEditor = (e) => {
+    const getEditor = (e):void => {
       context.emit("getContent", e);
     };
     const handleUploadImage = (event, insertImage, files) => {
@@ -307,13 +313,13 @@ export default defineComponent({
     };
 
     // 图库页码改变
-    const pageChange = async (currentPage) => {
+    const pageChange  = async (currentPage:number) => {
       cloudGallery.query.currentPage = currentPage;
       await fetchImages();
     };
 
     //复制云图库链接
-    const copySrc = (src) => {
+    const copySrc = (src:string) => {
       context.emit("getUrl", src);
       cloudGallery.dialogGalleryVisible = false;
     };

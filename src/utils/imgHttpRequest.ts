@@ -3,7 +3,7 @@ import { ElMessage } from "element-plus";
 import Compressor from "compressorjs";
 import { apiUploadImg } from "../api/image";
 export default function useImgRequest() {
-    const resSrc = ref('')
+    const resSrc= ref<string>('')
     const httpRequest = (option) => {
         const file = option.file
         new Compressor(file, {
@@ -11,12 +11,12 @@ export default function useImgRequest() {
             async success(result) {
                 const formData = new FormData();
                 console.log("option.data.desc", option.data.desc);
-                formData.append('file', result, result.name);
+                formData.append('file', result, result['name']);
                 formData.append('desc', option.data.desc)
                 try {
                     const res = await apiUploadImg(formData)
-                    if (res.code === 200) {
-                        resSrc.value = res.src
+                    if (res['code'] === 200) {
+                        resSrc.value = res['src']
                         ElMessage({
                             type: 'success',
                             message: '上传成功!',
@@ -25,7 +25,7 @@ export default function useImgRequest() {
                     } else {
                         ElMessage({
                             type: 'error',
-                            message: res.msg,
+                            message: res['msg'],
                             showClose: true
                         })
                     }

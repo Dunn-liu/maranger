@@ -10,7 +10,7 @@ export function apiGetClassify() {
 export function apiAddClassify(data) {
     return fetch({
         method: 'post',
-        url: '/addClassify',
+        url: '/article/addClassify',
         data
     })
 }
@@ -18,7 +18,7 @@ export function apiAddClassify(data) {
 export function apiUpdataClassify(data) {
     return fetch({
         method: 'post',
-        url: '/updataClassify',
+        url: '/article/updataClassify',
         data
     })
 }
@@ -26,7 +26,7 @@ export function apiUpdataClassify(data) {
 export function apiDelClassify(id) {
     return fetch({
         method: 'post',
-        url: '/delClassify',
+        url: '/article/delClassify',
         data: {
             id
         }
@@ -36,7 +36,7 @@ export function apiDelClassify(id) {
 export function apiPublishArticle(data) {
     return fetch({
         method: 'post',
-        url: '/publishArticle',
+        url: '/article/publishArticle',
         data
     })
 }
@@ -44,14 +44,14 @@ export function apiPublishArticle(data) {
 export function apiGetArticle(params) {
     return fetch({
         method: 'get',
-        url: '/queryArticle',
+        url: '/article/queryArticle',
         params: params
     })
 }
 //更新文章
 export function apiUpdateArticle(data) {
     return fetch({
-        url: '/updateArticle',
+        url: '/article/updateArticle',
         method: 'post',
         data
     })
@@ -59,8 +59,16 @@ export function apiUpdateArticle(data) {
 //删除文章
 export function apiDelArticle(params) {
     return fetch({
-        url: 'delArticle',
+        url: '/article/delArticle',
         method: 'get',
         params: params
+    })
+}
+// 更改文章状态
+export function apiChangeStatus(data) {
+    return fetch({
+        url:'/article/changeStatus',
+        method: 'post',
+        data
     })
 }

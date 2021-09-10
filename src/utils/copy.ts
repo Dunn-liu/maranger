@@ -1,5 +1,5 @@
 import { ElMessage } from 'element-plus'
-export default function copyUrl(val) {
+export default function copyUrl(val:string) {
   const oInput = document.createElement("input");
   oInput.value = val;
   document.body.appendChild(oInput);

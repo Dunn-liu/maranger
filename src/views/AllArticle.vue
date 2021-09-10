@@ -149,6 +149,7 @@ import {
   apiGetArticle,
   apiGetClassify,
   apiUpdateArticle,
+  apiChangeStatus
 } from "../api/article";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading.vue";
@@ -349,7 +350,7 @@ export default {
         id: row.id,
         article_status: +type,
       };
-      const res = await apiUpdateArticle(data);
+      const res = await apiChangeStatus(data);
       if (res.code === 200) {
         ElMessage({
           type: type === "0" ? "warning" : "success",
