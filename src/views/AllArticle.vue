@@ -67,12 +67,12 @@
       </el-table-column>
       <el-table-column prop="edit_date" label="更新时间" sortable="custom">
       </el-table-column>
-      <el-table-column
-        prop="article_content"
-        label="内容"
-        show-overflow-tooltip
-      >
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="article_content"-->
+<!--        label="内容"-->
+<!--        show-overflow-tooltip-->
+<!--      >-->
+<!--      </el-table-column>-->
       <el-table-column prop="article_status" label="状态" width="100">
         <template v-slot="scope">
           <el-tag
@@ -84,8 +84,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template v-slot="scope">
+          <el-button type="info" size="mini" @click="previewArticle(scope.row?.article_content)"
+          >预览</el-button
+          >
           <el-button type="primary" size="mini" @click="editArticle(scope.row)"
-            >编辑</el-button
+          >编辑</el-button
           >
           <el-button
             v-if="scope.row.article_status !== 1"
@@ -139,6 +142,7 @@
       <el-button type="success" @click="cancelEdit">取消</el-button>
     </div>
   </el-drawer>
+  <PreView :centerDialogVisible="previewVisible" :text="previewContent" />
 </template>
 
 <script>
@@ -153,17 +157,20 @@ import {
 } from "../api/article";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading.vue";
+import PreView from '@/components/PreView.vue'
 const ArticleForm = defineAsyncComponent({
   loader: () => import("@/components/ArticleForm.vue"),
   loadingComponent: Loading,
 });
 export default {
   name: "AllArticle",
-  components: { ArticleForm },
+  components: { ArticleForm,PreView },
   setup() {
     let formValid = null;
     const articleFormRef = ref(null);
     const tableRef = ref(null);
+    const previewVisible = ref(false)
+    const previewContent = ref('')
     const state = reactive({
       articleData: [], // 页面文章数据
       queryData: {
@@ -369,9 +376,17 @@ export default {
         });
       }
     };
+    // 预览
+    const previewArticle = (content) => {
+      previewVisible.value = true
+      previewContent.value=content
+      console.log(content)
+    }
     return {
       articleFormRef,
       tableRef,
+      previewVisible,
+      previewContent,
       ...toRefs(state),
       editArticle,
       getFormValid,
@@ -389,6 +404,7 @@ export default {
       handleSizeChange,
       handlerSort,
       changeStatus,
+      previewArticle
     };
   },
 };

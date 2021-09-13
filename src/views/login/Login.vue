@@ -23,6 +23,7 @@
         </el-form-item>
         <el-form-item label="密码" prop="passWord">
           <el-input
+            show-password
             type="password"
             v-model="loginForms.passWord"
             autocomplete="off"
@@ -52,6 +53,7 @@
         type="success"
         :loading="loginLoading"
         @click="toLogin('loginForm')"
+        :disabled="loginDisable"
         style="width: 250px; margin-left: 10px"
         >{{ loginLoading ? "登录中" : "登录" }}</el-button
       >
@@ -100,6 +102,7 @@
         <el-form-item label="密码" prop="passWord">
           <el-input
             type="password"
+            show-password
             v-model="registerForms.passWord"
             autocomplete="off"
           ></el-input>
@@ -108,6 +111,7 @@
         <el-form-item label="确认密码" prop="checkPassWord">
           <el-input
             type="password"
+            show-password
             v-model="registerForms.checkPassWord"
             autocomplete="off"
           ></el-input>
@@ -244,6 +248,7 @@ export default defineComponent({
         : "https://admin.codespring.top/api/captcha",
       isregister: false,
       headerText: "登录",
+      loginDisable: false
     });
     watch(
       () => state.isregister,
@@ -257,6 +262,7 @@ export default defineComponent({
       loginForm.value.validate(async (valid) => {
         if (valid) {
           loginLoading.value = true;
+          state.loginDisable = true;
           const newForm = JSON.parse(JSON.stringify(state.loginForms));
           newForm.passWord = md5(newForm.passWord);
           const res = await apiToLogin(newForm);
@@ -270,9 +276,11 @@ export default defineComponent({
               message: "登录成功!",
             });
             loginLoading.value = false;
+            state.loginDisable = false;
             await router.push("/home");
           } else {
             loginLoading.value = false;
+            state.loginDisable = false;
             changeCaptcha();
           }
         }

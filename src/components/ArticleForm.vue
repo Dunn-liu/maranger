@@ -260,11 +260,7 @@ export default defineComponent({
           context.emit("getContent", "");
         })
         .catch(() => {
-          if (val === 0) {
-            state.editorType = 1;
-          } else {
-            state.editorType = 0;
-          }
+          state.editorType = val === 0 ? 1 : 0
         });
       context.emit("getEditorType", state.editorType);
     };

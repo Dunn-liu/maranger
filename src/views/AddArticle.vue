@@ -60,7 +60,7 @@ export default {
         article_keywords: "",
         article_status: 1,
         classifyId: [],
-        editorType: 0,
+        editorType: 1,
     });
     const getFormValid = (e):void => {
       // 获取表单验证结果

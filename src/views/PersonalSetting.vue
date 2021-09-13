@@ -101,6 +101,7 @@
               type="password"
               placeholder="请输入原密码"
               v-model="passWordForm.pass"
+              show-password
               autocomplete="off"
             ></el-input>
           </el-form-item>
@@ -109,12 +110,14 @@
               type="password"
               v-model="passWordForm.newPass"
               autocomplete="off"
+              show-password
             ></el-input>
             <password-strength :password="passWordForm.newPass" />
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
             <el-input
               type="password"
+              show-password
               v-model="passWordForm.checkPass"
             ></el-input>
           </el-form-item>

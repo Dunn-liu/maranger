@@ -9,6 +9,7 @@ import 'dayjs/locale/zh-cn'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 // markdown编辑器
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor';
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/codemirror-editor.css';
 // github 主题
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
@@ -32,6 +33,7 @@ import 'codemirror/addon/scroll/simplescrollbars';
 import 'codemirror/addon/scroll/simplescrollbars.css';
 // style
 import 'codemirror/lib/codemirror.css';
+import hljs from 'highlight.js';
 
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme,{
@@ -43,7 +45,10 @@ VMdEditor.use(githubTheme,{
     })
     .use(createEmojiPlugin());
 
+VMdPreview.use(githubTheme, {
+    Hljs: hljs,
+});
 createApp(App)
-  .use(router).use(store).use(VMdEditor)
+  .use(router).use(store).use(VMdEditor).use(VMdPreview)
   .use(ElementPlus, { locale })
   .mount('#app')
