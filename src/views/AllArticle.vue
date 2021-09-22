@@ -51,7 +51,7 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column fixed prop="id" label="ID" width="50" sortable="custom">
       </el-table-column>
-      <el-table-column prop="article_title" label="标题" show-overflow-tooltip>
+      <el-table-column prop="article_title" label="标题" width="200" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="classifyId" label="分类">
         <template v-slot="scope">
@@ -63,9 +63,9 @@
       </el-table-column>
       <el-table-column prop="author_nickname" label="作者" width="80">
       </el-table-column>
-      <el-table-column prop="post_date" label="发布时间" sortable="custom">
+      <el-table-column prop="post_date" label="发布时间" width="150" sortable="custom" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="edit_date" label="更新时间" sortable="custom">
+      <el-table-column prop="edit_date" label="更新时间" width="150" sortable="custom" show-overflow-tooltip>
       </el-table-column>
 <!--      <el-table-column-->
 <!--        prop="article_content"-->
