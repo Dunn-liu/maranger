@@ -49,7 +49,7 @@
       border
     >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column fixed prop="id" label="ID" width="100" sortable="custom">
+      <el-table-column fixed prop="id" label="ID" width="50" sortable="custom">
       </el-table-column>
       <el-table-column prop="article_title" label="标题" show-overflow-tooltip>
       </el-table-column>
@@ -61,7 +61,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column prop="author_nickname" label="作者" width="100">
+      <el-table-column prop="author_nickname" label="作者" width="80">
       </el-table-column>
       <el-table-column prop="post_date" label="发布时间" sortable="custom">
       </el-table-column>
@@ -73,7 +73,7 @@
 <!--        show-overflow-tooltip-->
 <!--      >-->
 <!--      </el-table-column>-->
-      <el-table-column prop="article_status" label="状态" width="100">
+      <el-table-column prop="article_status" label="状态" width="80">
         <template v-slot="scope">
           <el-tag
             :type="scope.row.article_status === 1 ? 'success' : 'primary'"
