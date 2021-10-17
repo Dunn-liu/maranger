@@ -137,7 +137,7 @@ export default {
               state.dialogFormVisible = false;
             } else {
               ElMessage.error({
-                message: "添加失败",
+                message: type.value?"更新失败":'添加失败',
                 type: "error",
               });
             }

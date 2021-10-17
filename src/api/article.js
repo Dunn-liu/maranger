@@ -10,7 +10,7 @@ export function apiGetClassify() {
 export function apiAddClassify(data) {
     return fetch({
         method: 'post',
-        url: '/article/addClassify',
+        url: '/addClassify',
         data
     })
 }
@@ -18,7 +18,7 @@ export function apiAddClassify(data) {
 export function apiUpdataClassify(data) {
     return fetch({
         method: 'post',
-        url: '/article/updataClassify',
+        url: '/updataClassify',
         data
     })
 }
@@ -26,7 +26,7 @@ export function apiUpdataClassify(data) {
 export function apiDelClassify(id) {
     return fetch({
         method: 'post',
-        url: '/article/delClassify',
+        url: '/delClassify',
         data: {
             id
         }
