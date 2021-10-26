@@ -153,7 +153,7 @@ import Upload from "./Upload.vue";
 import WEditor from "./WEditor.vue";
 import { apiUploadImg, apiGetImages } from "../api/image";
 import { apiGetClassify } from "../api/article";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 export default defineComponent({
   name: "ArticleForm",
   props: {
