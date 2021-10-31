@@ -12,7 +12,10 @@ export default function useImgRequest() {
                 const formData = new FormData();
                 console.log("option.data.desc", option.data.desc);
                 formData.append('file', result, result['name']);
-                formData.append('desc', option.data.desc)
+                if (option.data.desc) {
+                    formData.append('desc', option.data.desc)
+                    formData.append('type', '1')
+                }
                 try {
                     const res = await apiUploadImg(formData)
                     if (res['code'] === 200) {

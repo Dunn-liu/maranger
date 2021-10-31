@@ -176,6 +176,7 @@ export default defineComponent({
       query: {
         currentPage: 1,
         limit: 12,
+        type: '1'
       },
       cloudGalleryData: [],
       total: 0,
