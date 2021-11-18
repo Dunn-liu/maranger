@@ -22,7 +22,7 @@
         </el-upload>
         <el-input
           style="width: 240px; margin-top: 15px"
-          v-model.trim="imgDesc.desc"
+          v-model.trim="imgDesc.describe"
           placeholder="请输入图片描述"
         ></el-input>
       </div>
@@ -46,7 +46,7 @@ export default defineComponent({
     const uploadRef = ref(null);
     const state = reactive({
       fileList: [],
-      imgDesc: { desc: "" },
+      imgDesc: { describe: "" },
       localSrc: "",
       dialogVisible: false,
     });
@@ -55,7 +55,7 @@ export default defineComponent({
     });
     const openUpload = () => {
       state.localSrc = "";
-      state.imgDesc.desc = "";
+      state.imgDesc.describe = "";
       state.dialogVisible = true;
     };
     const fileChange = (file) => {
@@ -91,7 +91,7 @@ export default defineComponent({
         });
         return;
       }
-      if (!state.imgDesc.desc) {
+      if (!state.imgDesc.describe) {
         ElMessage.warning({
           message: "请输入图片描述！",
           type: "warning",

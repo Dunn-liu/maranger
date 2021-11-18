@@ -56,11 +56,12 @@
           <el-input
             placeholder="请输入内容"
             prefix-icon="el-icon-search"
-            v-model="searchWord"
-            style="margin: 12px 0"
+            v-model="query.describe"
+            style="margin: 12px;width: 91%"
+            @keyup.enter.native="onSearch"
           >
           </el-input>
-          <div class="drawer__content">
+          <div class="drawer__content" v-if="cloudGalleryData.length">
             <template v-for="item in cloudGalleryData" :key="item.id">
               <el-card :body-style="{ padding: '12px' }" class="cloud_item">
                 <img
@@ -71,7 +72,7 @@
                 <h4
                   style="text-align: center; line-height: 14px; margin: 16px 0"
                 >
-                  {{ item.desc }}
+                  {{ item.describe }}
                 </h4>
                 <div style="color: #000; text-align: center">
                   <el-button
@@ -84,6 +85,9 @@
               </el-card>
             </template>
           </div>
+          <template v-else>
+            <DataNull />
+          </template>
         </div>
         <el-pagination
           layout="prev, pager, next"
@@ -151,6 +155,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import Compressor from "compressorjs";
 import Upload from "./Upload.vue";
 import WEditor from "./WEditor.vue";
+import DataNull from "./DataNull.vue";
 import { apiUploadImg, apiGetImages } from "../api/image";
 import { apiGetClassify } from "../api/article";
 import dayjs from "dayjs";
@@ -165,18 +170,18 @@ export default defineComponent({
     }
   },
   emits: ["getValid", "getEditorType", "getUrl", "getContent"],
-  components: { Upload, WEditor },
+  components: { Upload, WEditor,DataNull },
   setup(props, context) {
     const articleFormRef = ref(null);
     const WEditor = ref(null);
     const MdEditor = ref(null);
-    const searchWord = ref('')
     const cloudGallery:object = reactive({
       dialogGalleryVisible: false,
       query: {
         currentPage: 1,
         limit: 12,
-        type: '1'
+        type: '1',
+        describe:''
       },
       cloudGalleryData: [],
       total: 0,
@@ -308,6 +313,10 @@ export default defineComponent({
         await fetchImages();
       }
     };
+    const onSearch =async () => {
+      cloudGallery.query.currentPage = 1;
+      await fetchImages();
+    }
 
     // 图库页码改变
     const pageChange  = async (currentPage:number) => {
@@ -326,7 +335,7 @@ export default defineComponent({
       const { query } = cloudGallery;
       try {
         const res = await apiGetImages(query);
-        res.data.forEach((item) => {
+        res.data?.forEach((item) => {
           item.update_time = dayjs(item.update_time).format(
             "YYYY-MM-DD HH:mm:ss"
           );
@@ -352,7 +361,7 @@ export default defineComponent({
       chooseCloud,
       pageChange,
       copySrc,
-      searchWord
+      onSearch
     };
   },
 });
@@ -447,12 +456,12 @@ export default defineComponent({
 .drawer__content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   padding: 15px;
   .cloud_item {
-    width: 150px;
+    width: 140px;
     height: 220px;
     margin-bottom: 12px;
+    margin-right: 12px;
     .image {
       vertical-align: middle;
     }
