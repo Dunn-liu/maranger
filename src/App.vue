@@ -28,5 +28,17 @@ export default defineComponent({
   border-radius: 4px;
   // border: 1px solid #EBEEF5;
   background-color: #fff;
+  .search_bar {
+    display: flex;
+    .el-form-item {
+      margin-right: 40px;
+    }
+    .el-input {
+      width: 160px;
+    }
+  }
+  .page_nation {
+    margin: 20px auto 10px;
+  }
 }
 </style>

@@ -314,7 +314,7 @@ export default defineComponent({
     };
     // 忘记密码
     const lookPass = () => {
-      ElMessage("不好意思,暂不支持找回密码,忘了就忘了吧");
+      ElMessage("请联系管理员重置密码！");
     };
     // 设置cookies
     const setCookie = () => {};
