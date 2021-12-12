@@ -11,8 +11,8 @@
                 v-model="queryData.status"
                 clearable
         >
-          <el-option label="禁用" :value="1" :key="1"> </el-option>
-          <el-option label="启用" :value="0" :key="0"> </el-option>
+          <el-option label="有效" :value="1" :key="1"> </el-option>
+          <el-option label="禁用" :value="0" :key="0"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="账号类型">
