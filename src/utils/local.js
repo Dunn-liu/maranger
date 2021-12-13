@@ -14,3 +14,7 @@ export function localSet (key, value) {
 export function localRemove (key) {
     window.localStorage.removeItem(key)
 }
+
+export function sessionRemove(key) {
+    window.localStorage.removeItem(key)
+}
