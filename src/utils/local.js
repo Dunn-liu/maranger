@@ -16,5 +16,5 @@ export function localRemove (key) {
 }
 
 export function sessionRemove(key) {
-    window.localStorage.removeItem(key)
+    window.sessionStorage.removeItem(key)
 }
