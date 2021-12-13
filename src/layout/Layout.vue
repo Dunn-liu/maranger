@@ -65,7 +65,7 @@
 <script>
 import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { localRemove } from "@/utils/local";
+import { loginOut } from "@/utils/loginOut";
 import MMenuItem from "../components/MenuItem.vue";
 import { useStore } from "vuex";
 export default defineComponent({
@@ -78,8 +78,7 @@ export default defineComponent({
     const store = useStore();
     const isCollapse = ref(false);
     const logOut = () => {
-      localRemove("token");
-      router.push("/login");
+      loginOut()
     };
     onMounted(async () => {
       if (JSON.stringify(store.state.userinfo) === "{}") {
