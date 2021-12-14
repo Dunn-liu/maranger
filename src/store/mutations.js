@@ -11,4 +11,7 @@ export default {
     saveHeaderTitle(state,payload){
         state.headerTitle = payload
     },
+    removeUserInfo(state) {
+        state.userinfo = {}
+    }
 }
