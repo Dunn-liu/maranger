@@ -50,7 +50,7 @@
       <el-table-column  prop="create_time" label="创建时间"  ></el-table-column>
       <el-table-column  prop="sex" label="性别"  >
         <template v-slot="scope">
-          {{scope.row.sex === 'male' ? '男':'女'}}
+          {{scope.row.sex === '0' ? '男':'女'}}
         </template>
       </el-table-column>
       <el-table-column  prop="user_nickname" label="昵称"  ></el-table-column>
