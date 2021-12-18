@@ -245,7 +245,6 @@
                     duration: 1500,
                     message: "删除操作成功！",
                   });
-                  await getDataSource()
                   state.dataSource = state.dataSource.filter(item => item.id !== id)
                 }
               })
