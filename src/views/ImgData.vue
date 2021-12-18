@@ -168,7 +168,7 @@ export default defineComponent({
           message: "删除成功!",
           showClose: true,
         });
-        await fetchImages();
+        state.imgData = state.imgData.filter(item => item.id !== id)
       }
     };
     const clearQuery = () => {
