@@ -17,9 +17,12 @@
                 disabled
               ></el-input>
             </el-form-item>
-            <el-form-item label="手机号">
-              <el-input v-model="userForm.phone" disabled></el-input>
+            <el-form-item label="邮箱">
+              <el-input v-model="userForm.email" disabled></el-input>
             </el-form-item>
+<!--            <el-form-item label="手机号">-->
+<!--              <el-input v-model="userForm.phone" disabled></el-input>-->
+<!--            </el-form-item>-->
             <el-form-item label="注册时间">
               <el-input v-model="userForm.create_time" disabled></el-input>
             </el-form-item>
@@ -39,9 +42,6 @@
                 placeholder="选择日期"
               >
               </el-date-picker>
-            </el-form-item>
-            <el-form-item label="邮箱">
-              <el-input v-model="userForm.email"></el-input>
             </el-form-item>
             <el-form-item label="地区">
               <el-cascader
@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { onMounted, reactive, ref, toRefs, watch } from "vue";
+import { onMounted, reactive, ref, toRefs, watch, h } from "vue";
 import { useStore } from "vuex";
 import dayjs from "dayjs";
 import md5 from "js-md5";
@@ -139,7 +139,8 @@ import useImgRequest from "../hooks/useHttpRequest";
 import { apiGetArea } from "../api/area";
 import loginOut from "@/utils/loginOut";
 import { apiUpdateAvatar, apiUpdateInfo, apiResetPass } from "../api/userInfo";
-import { ElMessage } from "element-plus";
+import {email} from '@/utils/regTest'
+import {ElMessage, ElNotification} from "element-plus";
 import PasswordStrength from "@/components/PasswordStrength.vue";
 
 export default {
@@ -243,6 +244,13 @@ export default {
     });
     const updateInfo = async () => {
       const { userForm } = state;
+      if (!email(userForm.email)) {
+        ElNotification({
+          title: '提示',
+          message: h('i', { style: 'color: red' }, '邮箱格式不正确！'),
+        })
+        return
+      }
       const newForm = Object.assign({}, userForm);
       newForm.birthday = dayjs(newForm.birthday).format("YYYY-MM-DD");
       newForm.area = Array.isArray(newForm.area)
@@ -269,14 +277,14 @@ export default {
       passWordFormRef.value.validate(async (valid) => {
         if (valid) {
           const {
-            userinfo: { phone },
+            userinfo: { email },
           } = state;
           const pass = md5(state.passWordForm.pass);
           const newPass = md5(state.passWordForm.newPass);
           const data = {
             pass,
             newPass,
-            phone,
+            email,
           };
           const res = await apiResetPass(data);
           if (res.code === 200) {

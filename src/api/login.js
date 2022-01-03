@@ -13,7 +13,15 @@ function apiRegister(data){
         data
     })
 }
+function apiSendCode(data){
+    return fetch({
+        url:'/getEmailCode',
+        method:'post',
+        data
+    })
+}
 export {
     apiToLogin,
-    apiRegister
+    apiRegister,
+    apiSendCode
 }

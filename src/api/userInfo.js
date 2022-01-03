@@ -1,16 +1,16 @@
 import fetch from './index'
-export function apiGetUserInfo(phone) {
+export function apiGetUserInfo(email) {
     return fetch({
         method: 'get',
         url: '/profile',
-        params: { phone }
+        params: { email }
     })
 }
-export function apiGetUserAuth(phone) {
+export function apiGetUserAuth(email) {
     return fetch({
         method: "get",
         url: '/router',
-        params: { phone }
+        params: { email }
     })
 }
 export function apiUpdateInfo(data) {

@@ -14,10 +14,10 @@
         class="demo-ruleForm"
         label-position="right"
       >
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item label="邮箱" prop="email">
           <el-input
             type="text"
-            v-model="loginForms.phone"
+            v-model="loginForms.email"
             prefix-icon="el-icon-user-solid"
           ></el-input>
         </el-form-item>
@@ -84,6 +84,23 @@
         :rules="registerRules"
         ref="registerForm"
       >
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+                  type="email"
+                  v-model="registerForms.email"
+                  autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="code" label="验证码" class="imgCode">
+          <el-input
+                  :style="`width: ${!isDisabled?'164px':'186px'}`"
+                  type="text"
+                  v-model="registerForms.code"
+                  autocomplete="off"
+                  prefix-icon="el-icon-coin"
+          ></el-input>
+          <el-button type="primary" @click="sendCode" :disabled="!isDisabled">{{isDisabled ?'发送验证码':`${countdown}s后重新发送`}}</el-button>
+        </el-form-item>
         <el-form-item label="用户名" prop="user_nickname">
           <el-input
             type="text"
@@ -96,9 +113,6 @@
             <el-radio label="female">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input type="text" v-model="registerForms.phone"></el-input>
-        </el-form-item>
         <el-form-item label="密码" prop="passWord">
           <el-input
             type="password"
@@ -106,20 +120,13 @@
             v-model="registerForms.passWord"
             autocomplete="off"
           ></el-input>
-          <password-strength :password="registerForms.passWord" />
+          <password-strength v-if="registerForms.passWord.trim()" :password="registerForms.passWord" />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPassWord">
           <el-input
             type="password"
             show-password
             v-model="registerForms.checkPassWord"
-            autocomplete="off"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input
-            type="email"
-            v-model="registerForms.email"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -132,13 +139,14 @@
 </template>
 
 <script>
-import { ref, reactive, defineComponent, toRefs, watch } from "vue";
+import { ref, reactive, defineComponent, toRefs, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElMessage } from "element-plus";
 import md5 from "js-md5";
-import { apiToLogin, apiRegister } from "@/api/login.js";
+import { apiToLogin, apiRegister,apiSendCode } from "@/api/login.js";
 import { localSet, localGet } from "@/utils/local";
+import {email,code} from '@/utils/regTest'
 import PasswordStrength from "@/components/PasswordStrength.vue";
 
 export default defineComponent({
@@ -155,30 +163,28 @@ export default defineComponent({
     const __DEV__ = import.meta.env.MODE === "development";
     const state = reactive({
       loginForms: {
-        phone: localGet("phone") || "",
+        email: localGet("email") || "",
         passWord: "",
         capCode: "",
         isKeepLogin: false,
       },
       registerForms: {
         user_nickname: "",
-        phone: "",
+        code: "",
         passWord: "",
         checkPassWord: "",
         email: "",
         sex: "male",
       },
       loginRules: {
-        phone: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
           {
             validator: (rule, value, callback) => {
-              const reg =
-                /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
-              if (reg.test(value)) {
+              if (email(value)) {
                 callback();
               } else {
-                callback(new Error("请输入正确的手机号码格式!"));
+                callback(new Error("请输入正确的邮箱地址!"));
               }
             },
             trigger: ["change", "blur"],
@@ -192,16 +198,14 @@ export default defineComponent({
           { required: true, message: "请输入用户名", trigger: "blur" },
           { min: 3, max: 8, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
-        phone: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
+        code: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
           {
             validator: (rule, value, callback) => {
-              const reg =
-                /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
-              if (reg.test(value)) {
+              if (code(value)) {
                 callback();
               } else {
-                callback(new Error("请输入正确的手机号码格式!"));
+                callback(new Error("请输入正确的验证码格式!"));
               }
             },
             trigger: ["change", "blur"],
@@ -237,9 +241,14 @@ export default defineComponent({
         email: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" },
           {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-            trigger: ["blur", "change"],
+            validator: (rule, value, callback) => {
+              if (email(value)) {
+                callback();
+              } else {
+                callback(new Error("请输入正确的邮箱地址!"));
+              }
+            },
+            trigger: ["change", "blur"],
           },
         ],
       },
@@ -248,8 +257,13 @@ export default defineComponent({
         : "https://admin.codespring.top/api/captcha",
       isregister: false,
       headerText: "登录",
-      loginDisable: false
+      loginDisable: false,
+      countdown:60,
+      timerId:null
     });
+    const isDisabled = computed(()=>{
+      return state.countdown === 60
+    })
     watch(
       () => state.isregister,
       (value) => {
@@ -268,7 +282,7 @@ export default defineComponent({
           const res = await apiToLogin(newForm);
           if (res.code === 200) {
             localSet("token", res.data.token);
-            localSet("phone", newForm.phone);
+            localSet("email", newForm.email);
             // 登录成功,获取用户信息
             await store.dispatch("getUserInfo");
             ElMessage.success({
@@ -291,6 +305,37 @@ export default defineComponent({
       state.isregister = true;
       document.title = "注册";
     };
+    const sendCode =async () => {
+      const {email} = state.registerForms
+      if (!email) {
+        ElMessage.error({
+          showClose: true,
+          message: "请先输入邮箱地址！",
+        })
+        return
+      }
+      try {
+        const res = await apiSendCode({email,type:1})
+        if (res.code === 200) {
+          ElMessage.success({
+            showClose: true,
+            message: "验证码发送成功！",
+          })
+          countDown()
+        }
+      }catch (e) {
+
+      }
+    }
+    const countDown = () =>{
+      state.timerId =  setInterval(() =>{
+        state.countdown--
+        if(state.countdown === 0){
+          clearInterval(state.timerId)
+          state.countdown = 60
+        }
+      },1000)
+    }
     // 注册
     const register = () => {
       registerForm.value.validate(async (valid) => {
@@ -307,7 +352,7 @@ export default defineComponent({
             });
             registerForm.value.resetFields();
             state.isregister = false;
-            state.loginForms.phone = newRegisterForm.phone;
+            state.loginForms.email = newRegisterForm.email;
           }
         }
       });
@@ -325,6 +370,7 @@ export default defineComponent({
       state.codeSrc = `${state.codeSrc}?${Date.now()}`;
     };
     return {
+      isDisabled,
       loginForm,
       registerForm,
       ...toRefs(state),
@@ -334,6 +380,7 @@ export default defineComponent({
       lookPass,
       changeCaptcha,
       loginLoading,
+      sendCode
     };
   },
 });
@@ -343,17 +390,17 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url("../../assets/img/bg.jpg");
+  background-image: url("http://cdn-ali-img-staticbz.shanhutech.cn/bizhi/staticwp/201708/c3a5b984ba9c232064735bb6a63c8407.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   /*background-color: #409EFF;*/
   .login-conent,
   .register-conent {
     min-height: 500px;
-    width: 500px;
+    width: 600px;
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 78%;
+    top: 38%;
     margin-left: -300px;
     margin-top: -280px;
     background-color: rgba(255, 255, 255, 0.8);
