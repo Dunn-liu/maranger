@@ -46,7 +46,6 @@
           {{AUTH_MAP[scope.row.user_type]}}
         </template>
       </el-table-column>
-      <el-table-column  prop="email" label="邮箱" ></el-table-column>
       <el-table-column  prop="create_time" label="创建时间"  ></el-table-column>
       <el-table-column  prop="sex" label="性别"  >
         <template v-slot="scope">
@@ -54,6 +53,12 @@
         </template>
       </el-table-column>
       <el-table-column  prop="user_nickname" label="昵称"  ></el-table-column>
+       <el-table-column  label="地址" >
+         <template v-slot="scope">
+           <span v-if="scope.row.area">{{scope.row.area}}</span>/
+           <span v-if="scope.row.address">{{scope.row.address}}</span>
+         </template>
+       </el-table-column>
       <el-table-column  prop="user_status" label="账号状态"  >
         <template v-slot="scope">
           {{scope.row.user_status === 1 ? '有效':'禁用'}}
