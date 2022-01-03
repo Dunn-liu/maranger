@@ -1,8 +1,8 @@
 <template>
   <div class="my_card user-card">
     <el-form class="search_bar" label-width="70px" label-position="left">
-      <el-form-item label="手机号">
-        <el-input v-model="queryData.phone"></el-input>
+      <el-form-item label="邮箱">
+        <el-input v-model="queryData.email"></el-input>
       </el-form-item>
       <el-form-item label="账号状态">
         <el-select
@@ -40,7 +40,7 @@
             ref="tableRef"
             border
     >
-      <el-table-column fixed prop="phone" label="手机"  ></el-table-column>
+      <el-table-column fixed prop="email" label="邮箱"  ></el-table-column>
       <el-table-column  prop="user_type" label="账号类型" >
         <template v-slot="scope">
           {{AUTH_MAP[scope.row.user_type]}}
@@ -136,7 +136,7 @@
       label: 'title',
     })
     const queryData = reactive({
-      phone:'',
+      email:'',
       status:'',
       type: '',
       page:1,
@@ -180,7 +180,7 @@
     }
     const clearQuery =async () => {
       queryData.status = ''
-      queryData.phone=''
+      queryData.email=''
       queryData.type=''
       await getDataSource();
     }
