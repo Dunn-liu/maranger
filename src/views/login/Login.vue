@@ -390,7 +390,7 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url("http://cdn-ali-img-staticbz.shanhutech.cn/bizhi/staticwp/201708/c3a5b984ba9c232064735bb6a63c8407.jpg");
+  background-image: url("https://ae01.alicdn.com/kf/Hd5a34c2b8ad44a58a941b2a9669a2e0d7.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   /*background-color: #409EFF;*/
