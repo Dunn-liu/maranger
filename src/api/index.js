@@ -5,7 +5,8 @@ import loginOut from '@/utils/loginOut'
 
 const fetch = axios.create({
   baseURL: '/api',
-  withCredentials: true
+  withCredentials: true,
+  timeout:6000
 })
 fetch.interceptors.request.use(
   config => {

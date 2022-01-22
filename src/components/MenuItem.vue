@@ -1,27 +1,27 @@
 <template :key="index">
-  <div v-if="item.children && item.children.length > 0">
+  <template v-if="item.children && item.children.length > 0">
     <el-submenu index="1">
       <template #title>
         <i :class="item.icon"></i>
         <span>{{ item.title }}</span>
       </template>
       <el-menu-item-group v-for="(c, i) in item.children" :key="i">
-        <MenuItem :item="c"></MenuItem>
+        <MMenuItem :item="c"></MMenuItem>
       </el-menu-item-group>
     </el-submenu>
-  </div>
-  <div v-else>
+  </template>
+  <template v-else>
     <el-menu-item :index="item.link || item.path">
       <i :class="item.icon"></i>
       <template #title>{{ item.title }}</template>
     </el-menu-item>
-  </div>
+  </template>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Menu",
+  name: "MMenuItem ",
   props: ["isCollapse", "item", "index"],
   setup(props) {
     return {

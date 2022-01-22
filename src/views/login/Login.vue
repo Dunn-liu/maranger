@@ -279,20 +279,26 @@ export default defineComponent({
           state.loginDisable = true;
           const newForm = JSON.parse(JSON.stringify(state.loginForms));
           newForm.passWord = md5(newForm.passWord);
-          const res = await apiToLogin(newForm);
-          if (res.code === 200) {
-            localSet("token", res.data.token);
-            localSet("email", newForm.email);
-            // 登录成功,获取用户信息
-            await store.dispatch("getUserInfo");
-            ElMessage.success({
-              showClose: true,
-              message: "登录成功!",
-            });
-            loginLoading.value = false;
-            state.loginDisable = false;
-            await router.push("/home");
-          } else {
+          try {
+            const res = await apiToLogin(newForm);
+            if (res.code === 200) {
+              localSet("token", res.data.token);
+              localSet("email", newForm.email);
+              // 登录成功,获取用户信息
+              await store.dispatch("getUserInfo");
+              ElMessage.success({
+                showClose: true,
+                message: "登录成功!",
+              });
+              loginLoading.value = false;
+              state.loginDisable = false;
+              await router.push("/home");
+            } else {
+              loginLoading.value = false;
+              state.loginDisable = false;
+              changeCaptcha();
+            }
+          }catch (e) {
             loginLoading.value = false;
             state.loginDisable = false;
             changeCaptcha();
@@ -367,7 +373,8 @@ export default defineComponent({
     const claerCookies = () => {};
     // 点击更换验证码
     const changeCaptcha = () => {
-      state.codeSrc = `${state.codeSrc}?${Date.now()}`;
+      const newSrc =  __DEV__ ? "http://localhost:8000/captcha" : "https://admin.codespring.top/api/captcha"
+      state.codeSrc = `${newSrc}?${Date.now()}`;
     };
     return {
       isDisabled,
