@@ -66,7 +66,7 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import loginOut from "@/utils/loginOut";
-import MMenuItem from "../components/MenuItem.vue";
+import MMenuItem from "../components/MMenuItem.vue";
 import { useStore } from "vuex";
 export default defineComponent({
   components: {
