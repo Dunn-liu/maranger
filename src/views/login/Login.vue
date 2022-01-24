@@ -149,6 +149,8 @@ import { localSet, localGet } from "@/utils/local";
 import {email,code} from '@/utils/regTest'
 import PasswordStrength from "@/components/PasswordStrength.vue";
 
+const imgSrc = window.location.origin
+
 export default defineComponent({
   name: "Login",
   components: {
@@ -160,7 +162,7 @@ export default defineComponent({
     const loginForm = ref(null);
     const registerForm = ref(null);
     const loginLoading = ref(false);
-    const __DEV__ = import.meta.env.MODE === "development";
+    // const __DEV__ = import.meta.env.MODE === "development";
     const state = reactive({
       loginForms: {
         email: localGet("email") || "",
@@ -252,9 +254,7 @@ export default defineComponent({
           },
         ],
       },
-      codeSrc: __DEV__
-        ? "http://localhost:8000/captcha"
-        : "https://admin.codespring.top/api/captcha",
+      codeSrc: `${imgSrc}/api/captcha`,
       isregister: false,
       headerText: "登录",
       loginDisable: false,
@@ -373,8 +373,7 @@ export default defineComponent({
     const claerCookies = () => {};
     // 点击更换验证码
     const changeCaptcha = () => {
-      const newSrc =  __DEV__ ? "http://localhost:8000/captcha" : "https://admin.codespring.top/api/captcha"
-      state.codeSrc = `${newSrc}?${Date.now()}`;
+      state.codeSrc = `${state.codeSrc}?${Date.now()}`;
     };
     return {
       isDisabled,
