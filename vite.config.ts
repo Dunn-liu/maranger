@@ -15,11 +15,11 @@ export default defineConfig({
       ext: ".gz",
     }),
   ],
-  base:'./',
+  base:'/',
     // 配置别名
   resolve: {
       alias: {
-          '@': path.resolve(__dirname, 'src'),
+          '@': path.resolve(__dirname, './src'),
       },
   },
   server: {
