@@ -1,4 +1,4 @@
-import fetch from './index.js'
+import fetch from '@/utils/http'
 function apiToLogin(data){
     return fetch({
         url:'/login',

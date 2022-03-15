@@ -1,4 +1,4 @@
-import fetch from './index'
+import fetch from '@/utils/http'
 // 获取文章分类数据
 export function apiGetClassify() {
     return fetch({

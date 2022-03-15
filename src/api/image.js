@@ -1,4 +1,4 @@
-import fetch from './index'
+import fetch from '@/utils/http'
 export function apiUploadImg(data){
     return fetch({
         url:'/upload/image',

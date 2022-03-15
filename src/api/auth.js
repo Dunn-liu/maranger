@@ -1,4 +1,4 @@
-import fetch from './index.js'
+import fetch from '@/utils/http'
 export function apiGetRouterAll(){
     return fetch({
         method: 'get',

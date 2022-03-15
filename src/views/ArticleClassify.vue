@@ -92,6 +92,7 @@ export default {
         // 表单验证规则
         classifyName: [
           { required: true, message: "请输入分类名称!", trigger: "blur" },
+          { min: 3, max: 8, message: '分类名称最少3个字符', trigger: 'blur' },
         ],
       },
     });
@@ -117,17 +118,23 @@ export default {
             classifyName: "",
             description: "",
           };
+          classifyRef.value.resetFields()
         }
       }
     );
     const addClassify = () => {
       classifyRef.value.validate(async (valid) => {
         if (valid) {
+          if (state.classifyData.some(item=>item.classifyName === state.form.classifyName)) {
+            ElMessage.info({
+              message: '分类名称有重复，请检查！'
+            });
+            return
+          }
           try {
             const res = type.value
               ? await apiUpdataClassify(state.form)
               : await apiAddClassify(state.form);
-            console.log(res);
             if (res.code === 200) {
               ElMessage.success({
                 message: res.msg,
@@ -172,6 +179,12 @@ export default {
       }
     };
     const showModal = () => {
+      if (state.classifyData.length && state.classifyData.length >= 10) {
+        ElMessage.info({
+          message: '分类最多添加10项，请检查！'
+        });
+        return
+      }
       type.value = 0;
       state.dialogFormVisible = true;
     };

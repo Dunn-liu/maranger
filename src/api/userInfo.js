@@ -1,4 +1,4 @@
-import fetch from './index'
+import fetch from '@/utils/http'
 export function apiGetUserInfo(email) {
     return fetch({
         method: 'get',
