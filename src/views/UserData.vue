@@ -87,11 +87,9 @@
       </el-pagination>
     </div>
   </div>
-  <el-drawer
+  <el-dialog
           title="用户权限"
           v-model="showDrawer"
-          direction="rtl"
-          size="25%"
           destroy-on-close
   >
     <el-tree
@@ -105,7 +103,7 @@
     <div style="display: flex;justify-content: center;margin-top: 200px">
       <el-button type="primary" @click="confirmEdit">确认修改</el-button>
     </div>
-  </el-drawer>
+  </el-dialog>
 </template>
 
 <script lang="ts">
