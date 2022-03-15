@@ -22,10 +22,10 @@ import { ElNotification } from "element-plus";
 import dayjs from "dayjs";
 import { apiPublishArticle } from "../api/article";
 import { useRouter } from "vue-router";
-import Loading from "@/components/Loading.vue";
+import ComponentLoading from "@/components/ComponentLoading.vue";
 const ArticleForm = defineAsyncComponent({
   loader: () => import("@/components/ArticleForm.vue"),
-  loadingComponent: Loading,
+  loadingComponent: ComponentLoading,
 });
 interface Article {
   article_title: string,

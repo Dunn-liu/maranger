@@ -9,10 +9,10 @@
       apiChangeStatus
     } from "../api/article";
     import dayjs from "dayjs";
-    import Loading from "@/components/Loading.vue";
+    import ComponentLoading from "@/components/ComponentLoading.vue";
     const ArticleForm = defineAsyncComponent({
       loader: () => import("@/components/ArticleForm.vue"),
-      loadingComponent: Loading,
+      loadingComponent: ComponentLoading,
     });
     let formValid = null;
     const articleFormRef = ref(null);
@@ -28,7 +28,7 @@
           limit: 10,
           orderSort: {},
     })
-    const loading = ref(false)
+    const queryLoading = ref(false)
     const showDrawer = ref(false)
     const editData = ref({})
     const classify = ref([])
@@ -40,11 +40,11 @@
       // 获取分类数据
       const classifyData = await apiGetClassify();
       classify.value = classifyData.data;
-      tableRef.value.doLayout(); // 解决表格有时表头错位问题
+      tableRef.value?.doLayout(); // 解决表格有时表头错位问题
     });
     // 获取文章信息
     const getArticle = async () => {
-      loading.value = true;
+      queryLoading.value = true;
       // 获取所有文章信息
       const res = await apiGetArticle(queryData.value);
       if (res.code === 200) {
@@ -58,9 +58,9 @@
         });
         totalNum.value = res.pageNation.total;
         articleData.value = JSON.parse(JSON.stringify(res.data));
-        loading.value = false;
+        queryLoading.value = false;
       } else {
-        loading.value = false;
+        queryLoading.value = false;
         ElNotification({
           type: "error",
           message: "数据加载失败,请刷新页面!",
@@ -268,7 +268,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label-width="0">
-          <el-button type="primary" @click="getArticle" :loading="loading">查询</el-button>
+          <el-button type="primary" @click="getArticle" :loading="queryLoading">查询</el-button>
           <el-button @click="clearQuery">清除</el-button>
           <el-button type="danger" @click="delArticle">删除文章</el-button>
         </el-form-item>
@@ -277,7 +277,7 @@
     <el-table
             :data="articleData"
             style="width: 100%"
-            v-loading="loading"
+            v-loading="queryLoading"
             element-loading-text="拼命加载中"
             @selection-change="handleSelectionChange"
             ref="tableRef"
@@ -338,7 +338,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="page_nation" v-if="totalNum > 0">
+    <div class="page_nation">
       <el-pagination
               background
               layout="prev, pager, next ,sizes,total "
@@ -346,46 +346,47 @@
               :page-size="queryData.limit"
               :current-page="queryData.page"
               :total="totalNum"
+              :hide-on-single-page="true"
               @current-change="handleCurrentChange"
               @size-change="handleSizeChange"
       >
       </el-pagination>
     </div>
-  </div>
-  <el-drawer
-          title="编辑文章"
-          v-model="showDrawer"
-          direction="rtl"
-          size="60%"
-          destroy-on-close
-  >
-    <ArticleForm
-            v-if="showDrawer"
-            :articleData="editData"
-            @get-url="getUrl"
-            @get-content="getContent"
-            @getEditorType="getEditorType"
-            @get-valid="getFormValid"
-            ref="articleFormRef"
-    />
-    <div class="sub_bths">
-      <el-button type="success" @click="saveEdit">保存</el-button>
-      <el-button type="success" @click="cancelEdit">取消</el-button>
-    </div>
-  </el-drawer>
-  <el-dialog title="预览" v-model="previewVisible" :destroy-on-close="true" width="80%" center>
-    <el-scrollbar class="dialog-center ">
-      <v-md-preview :text="previewContent"></v-md-preview>
-    </el-scrollbar>
-    <template #footer>
+    <el-drawer
+            title="编辑文章"
+            v-model="showDrawer"
+            direction="rtl"
+            size="60%"
+            destroy-on-close
+    >
+      <ArticleForm
+              v-if="showDrawer"
+              :articleData="editData"
+              @get-url="getUrl"
+              @get-content="getContent"
+              @getEditorType="getEditorType"
+              @get-valid="getFormValid"
+              ref="articleFormRef"
+      />
+      <div class="sub_bths">
+        <el-button type="success" @click="saveEdit">保存</el-button>
+        <el-button type="success" @click="cancelEdit">取消</el-button>
+      </div>
+    </el-drawer>
+    <el-dialog title="预览" v-model="previewVisible" :destroy-on-close="true" width="80%" center>
+      <el-scrollbar class="dialog-center ">
+        <v-md-preview :text="previewContent"></v-md-preview>
+      </el-scrollbar>
+      <template #footer>
     <span class="dialog-footer">
       <el-button @click="setVisible">取 消</el-button>
     </span>
-    </template>
-  </el-dialog>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .all_article {
   flex-direction: column;
   .search_bar {
@@ -400,29 +401,31 @@
       width: 160px;
     }
   }
+  .page_nation {
+    margin: 20px auto 10px;
+  }
+  .sub_bths {
+    margin: 20px auto;
+  }
 }
-.page_nation {
-  margin: 20px auto 10px;
-}
-.el-table_body tr,
-.el-table_body td {
-  height: 36px;
-}
-.el-drawer__header {
-  font-size: 22px;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 16px 24px !important;
-  color: rgba(0, 0, 0, 0.85);
-  margin-bottom: 0 !important;
-}
-.el-drawer__body {
-  height: calc(100% - 73px);
-  overflow-x: scroll;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.sub_bths {
-  margin: 20px auto;
-}
+</style>
+<style lang="scss">
+  .el-table_body tr,
+  .el-table_body td {
+    height: 36px;
+  }
+  .el-drawer__header {
+    font-size: 22px;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 24px !important;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 0 !important;
+  }
+  .el-drawer__body {
+    height: calc(100% - 73px);
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 </style>

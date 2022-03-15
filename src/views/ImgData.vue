@@ -3,31 +3,32 @@
     <div class="upload">
       <Upload @uploadSuc="uploadSuc" />
     </div>
-    <el-form class="search_bar" label-width="70px" label-position="left">
-      <el-form-item label="ID" label-width="40px">
-        <el-input v-model="query.id" type="number"></el-input>
-      </el-form-item>
-      <el-form-item label="图片名">
-        <el-input v-model="query.name"></el-input>
-      </el-form-item>
-      <el-form-item label="上传时间">
-        <el-date-picker
-          v-model="query.update_time"
-          type="date"
-          placeholder="选择日期"
-        >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label-width="0">
-        <el-button type="primary" @click="fetchImages">查询</el-button>
-        <el-button @click="clearQuery">清除</el-button>
-      </el-form-item>
-    </el-form>
+    <el-affix :offset="115">
+      <el-form class="search_bar" label-width="70px" label-position="left">
+        <el-form-item label="ID" label-width="40px">
+          <el-input v-model="state.query.id" type="number"></el-input>
+        </el-form-item>
+        <el-form-item label="图片名">
+          <el-input v-model="state.query.name"></el-input>
+        </el-form-item>
+        <el-form-item label="上传时间">
+          <el-date-picker
+                  v-model="state.query.update_time"
+                  type="date"
+                  placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label-width="0">
+          <el-button type="primary" @click="fetchImages" :loading="state.loading">查询</el-button>
+          <el-button @click="clearQuery">清除</el-button>
+        </el-form-item>
+      </el-form>
+    </el-affix>
     <el-table
-      :data="imgData"
+      :data="state.imgData"
       style="width: 100%"
-      max-height="600"
-      v-loading="loading"
+      v-loading="state.loading"
       element-loading-text="拼命加载中"
       ref="tableRef"
       :default-sort="{ prop: 'id', order: 'descending' }"
@@ -79,35 +80,30 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="page_nation" v-if="totalNum > 0">
+    <div class="page_nation">
       <el-pagination
         background
         layout="prev, pager, next ,sizes,total "
         :page-sizes="[5, 10, 20]"
-        :page-size="query.limit"
-        :current-page="query.currentPage"
-        :total="totalNum"
+        :page-size="state.query.limit"
+        :current-page="state.query.currentPage"
+        :total="state.totalNum"
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
+        :hide-on-single-page="true"
       >
       </el-pagination>
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
 import Upload from "@/components/Upload.vue";
 import { apiGetImages, apiDelImage } from "@/api/image";
 import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 import copyUrl from "@/utils/copy";
-export default defineComponent({
-  name: "ImgData",
-  components: {
-    Upload,
-  },
-  setup() {
     const state = reactive({
       imgData: [],
       query: {
@@ -176,21 +172,9 @@ export default defineComponent({
         id: "",
         name: "",
         update_time: "",
+        ...state.query
       };
     };
-    return {
-      ...toRefs(state),
-      fetchImages,
-      handlerSort,
-      handleCurrentChange,
-      handleSizeChange,
-      uploadSuc,
-      delImage,
-      clearQuery,
-      copyUrl,
-    };
-  },
-});
 </script>
 
 <style scoped lang="scss">
@@ -201,6 +185,9 @@ export default defineComponent({
   }
   .search_bar {
     display: flex;
+    width: 100%;
+    background-color: #fff;
+    padding-top: 10px;
     .el-form-item {
       margin-right: 40px;
     }
