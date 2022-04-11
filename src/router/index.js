@@ -72,6 +72,8 @@ router.beforeEach(async (to, from, next) => {
             next()
         } else { // 其他页面
             ElMessage.error('请先登录!')
+            store.commit('saveUserinfo',{})
+            store.commit('saveAuth',false)
             next({
                 path: '/login',
                 params: {
