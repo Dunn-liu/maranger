@@ -68,7 +68,7 @@
     <div class="register-conent" v-if="isregister">
       <el-button
         icon="el-icon-arrow-left"
-        size="mini"
+        size="small"
         @click="isregister = false"
         class="return-login"
         >返回</el-button
@@ -142,7 +142,7 @@
 import { ref, reactive, defineComponent, toRefs, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ElMessage } from "element-plus";
+// import { ElMessage } from "element-plus";
 import md5 from "js-md5";
 import { apiToLogin, apiRegister,apiSendCode } from "@/api/login.js";
 import { localSet, localGet } from "@/utils/local";

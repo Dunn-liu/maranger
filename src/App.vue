@@ -1,15 +1,12 @@
 <template>
-  <router-view />
+  <el-config-provider :locale="zhCn" size="large">
+    <router-view />
+  </el-config-provider>
 </template>
 
-<script>
+<script lang='ts' setup>
 import { defineComponent } from "vue";
-export default defineComponent({
-  name: "app",
-  setup() {
-    return {};
-  },
-});
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md

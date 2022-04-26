@@ -1,5 +1,6 @@
 <template>
-  <el-button @click="showModal" style="margin: 20px 0">添加文章分类</el-button>
+  <div>
+    <el-button @click="showModal" style="margin: 20px 0">添加文章分类</el-button>
   <el-table
     :data="classifyData"
     v-loading="loading"
@@ -18,17 +19,15 @@
       <template v-slot="scope">
         <el-button
           type="primary"
-          size="mini"
-          icon="el-icon-edit"
+          size="small"
           @click="editClassify(scope.row)"
-        ></el-button>
+        >编辑</el-button>
         <el-popconfirm title="确认删除吗？" @confirm="delClassify(scope.row)">
           <template #reference>
             <el-button
               type="danger"
-              size="mini"
-              icon="el-icon-delete"
-            ></el-button>
+              size="small"
+            >删除</el-button>
           </template>
         </el-popconfirm>
       </template>
@@ -61,6 +60,7 @@
       </span>
     </template>
   </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -71,7 +71,7 @@ import {
   apiDelClassify,
   apiUpdataClassify,
 } from "@/api/article";
-import { ElMessage } from "element-plus";
+// import { ElMessage } from "element-plus";
 
 export default {
   name: "ArticleClassify",

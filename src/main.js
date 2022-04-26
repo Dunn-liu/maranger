@@ -1,12 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import ElementPlus from 'element-plus'
-import 'element-plus/lib/theme-chalk/index.css'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/lib/theme-chalk/index.css'
 import './assets/css/commont.css'
 import router from './router/index'
 import store from './store/index'
 import 'dayjs/locale/zh-cn'
-import locale from 'element-plus/lib/locale/lang/zh-cn'
+// import locale from 'element-plus/lib/locale/lang/zh-cn'
 // markdown编辑器
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor';
 import VMdPreview from '@kangc/v-md-editor/lib/preview';
@@ -34,6 +34,7 @@ import 'codemirror/addon/scroll/simplescrollbars.css';
 // style
 import 'codemirror/lib/codemirror.css';
 import hljs from 'highlight.js';
+import '@/styles/fade.scss'
 
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme,{
@@ -50,5 +51,4 @@ VMdPreview.use(githubTheme, {
 });
 createApp(App)
   .use(router).use(store).use(VMdEditor).use(VMdPreview)
-  .use(ElementPlus, { locale })
   .mount('#app')

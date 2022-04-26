@@ -37,7 +37,6 @@
 </template>
 <script>
 import { defineComponent, watch, ref, reactive, toRefs } from "vue";
-import { ElMessage } from "element-plus";
 import useImgRequest from "../hooks/useHttpRequest";
 export default defineComponent({
   emits: ["uploadSuc"],

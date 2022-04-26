@@ -1,6 +1,8 @@
 <template>
-  <div class="my_card">网站设置</div>
-  <div v-html="currentData"></div>
+  <div>
+    <div class="my_card">网站设置</div>
+    <!-- <div v-html="currentData"></div> -->
+  </div>
 </template>
 
 <script>

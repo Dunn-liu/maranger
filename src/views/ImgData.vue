@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template v-slot="scope">
-          <el-button size="mini" type="primary" @click="copyUrl(scope.row.src)"
+          <el-button size="small" type="primary" @click="copyUrl(scope.row.src)"
             >复制链接</el-button
           >
           <el-popconfirm
@@ -74,7 +74,7 @@
             @confirm="delImage(scope.row.id)"
           >
             <template #reference>
-              <el-button type="danger" size="mini">删除</el-button>
+              <el-button type="danger" size="small">删除</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -101,7 +101,7 @@
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
 import Upload from "@/components/Upload.vue";
 import { apiGetImages, apiDelImage } from "@/api/image";
-import { ElMessage } from "element-plus";
+// import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 import copyUrl from "@/utils/copy";
 export default defineComponent({

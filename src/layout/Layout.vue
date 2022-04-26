@@ -32,7 +32,7 @@
           :default-active="$route.path"
         >
           <el-menu-item index="/home">
-            <i class="el-icon-s-home"></i>
+            <iconpark-icon name="calendar" /> &nbsp;&nbsp;
             <template #title>日历</template>
           </el-menu-item>
           <template
@@ -55,7 +55,21 @@
           :content="$store.state.headerTitle"
         ></el-page-header>
         <el-scrollbar>
-          <router-view></router-view>
+          <router-view>
+            <template #default="{ Component, route }">
+            <transition
+            name="fade-slide"
+            mode="out-in"
+            appear
+            >
+            <component :is="Component" :key="route.fullPath" />
+        <!-- <keep-alive v-if="openCache" :include="getCaches">
+          <component :is="Component" :key="route.fullPath" />
+        </keep-alive>
+        <component v-else :is="Component" :key="route.fullPath" /> -->
+      </transition>
+    </template>
+          </router-view>
         </el-scrollbar>
       </el-main>
     </el-container>
@@ -121,7 +135,7 @@ export default defineComponent({
   }
 }
 :deep(.el-scrollbar) {
-  height: calc(100vh - 160px);
+  height: calc(100% - 160px);
 }
 :deep(.el-aside) {
   width: auto !important;

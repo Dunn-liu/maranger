@@ -1,5 +1,6 @@
 <template>
-  <div class="my_card user-card">
+<div>
+    <div class="my_card user-card">
     <el-form class="search_bar" label-width="70px" label-position="left">
       <el-form-item label="邮箱">
         <el-input v-model="queryData.email"></el-input>
@@ -104,6 +105,7 @@
       <el-button type="primary" @click="confirmEdit">确认修改</el-button>
     </div>
   </el-dialog>
+</div>
 </template>
 
 <script lang="ts">

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
     import { defineAsyncComponent, onMounted, ref } from "vue";
-    import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
     import {
       apiDelArticle,
       apiGetArticle,
@@ -214,11 +213,7 @@
         });
         articleData.value.forEach((item) => {
           if (item.id === row.id) {
-            if (item.article_status === 0) {
-              item.article_status = 1;
-            } else {
-              item.article_status = 0;
-            }
+            item.article_status = item.article_status === 0 ? 1: 0
           }
         });
       }
@@ -235,7 +230,7 @@
 
 <template>
   <div class="my_card all_article">
-    <el-affix :offset="115">
+    <el-affix >
       <el-form class="search_bar" label-width="70px" label-position="left">
         <el-form-item label="关键词">
           <el-input v-model="queryData.keyword"></el-input>
@@ -286,7 +281,7 @@
             border
     >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column fixed prop="id" label="ID" width="50" sortable="custom">
+      <el-table-column fixed prop="id" label="ID" width="70" sortable="custom">
       </el-table-column>
       <el-table-column prop="article_title" label="标题" width="200" show-overflow-tooltip>
       </el-table-column>
@@ -304,36 +299,28 @@
       </el-table-column>
       <el-table-column prop="edit_date" label="更新时间" width="220" sortable="custom" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="article_status" label="状态" width="80">
+      <el-table-column prop="article_status" label="状态" width="120">
         <template v-slot="scope">
-          <el-tag
-                  :type="scope.row.article_status === 1 ? 'success' : 'primary'"
-                  disable-transitions
-          >{{ scope.row.article_status === 1 ? "已发布" : "草稿" }}</el-tag
-          >
+          <el-switch
+                  :model-value="scope.row.article_status"
+                  inline-prompt
+                  active-text="已发布"
+                  inactive-text="草稿"
+                  :width="60"
+                  active-color="#13ce66"
+                  :active-value="1"
+                  :inactive-value="0"
+                  @change="(value)=>changeStatus(scope.row, value)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template v-slot="scope">
-          <el-button type="info" size="mini" @click="previewArticle(scope.row?.article_content)"
+          <el-button type="info" size="small" @click="previewArticle(scope.row?.article_content)"
           >预览</el-button
           >
-          <el-button type="primary" size="mini" @click="editArticle(scope.row)"
+          <el-button type="primary" size="small" @click="editArticle(scope.row)"
           >编辑</el-button
-          >
-          <el-button
-                  v-if="scope.row.article_status !== 1"
-                  @click="changeStatus(scope.row, '1')"
-                  type="success"
-                  size="mini"
-          >发布</el-button
-          >
-          <el-button
-                  v-else
-                  type="warning"
-                  size="mini"
-                  @click="changeStatus(scope.row, '0')"
-          >下架</el-button
           >
         </template>
       </el-table-column>
