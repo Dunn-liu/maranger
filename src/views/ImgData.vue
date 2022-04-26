@@ -3,7 +3,7 @@
     <div class="upload">
       <Upload @uploadSuc="uploadSuc" />
     </div>
-    <el-affix :offset="115">
+    <el-affix>
       <el-form class="search_bar" label-width="70px" label-position="left">
         <el-form-item label="ID" label-width="40px">
           <el-input v-model="query.id" type="number"></el-input>
