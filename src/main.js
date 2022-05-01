@@ -35,6 +35,9 @@ import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/lib/codemirror.css';
 import hljs from 'highlight.js';
 import '@/styles/fade.scss'
+import 'virtual:windi-base.css';
+import 'virtual:windi-components.css';
+import 'virtual:windi-utilities.css';
 
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme,{
