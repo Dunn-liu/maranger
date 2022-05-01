@@ -23,6 +23,7 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn'
   padding: 20px;
   box-sizing: border-box;
   border-radius: 4px;
+  min-height:600px;
   // border: 1px solid #EBEEF5;
   background-color: #fff;
   .search_bar {

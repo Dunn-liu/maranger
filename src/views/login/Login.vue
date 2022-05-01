@@ -1,71 +1,91 @@
 <template>
-  <div class="login">
-    <div class="login-conent" v-if="!isregister">
-      <div class="login-header">
-        <div>DunnBlog</div>
-        &nbsp;&nbsp;&nbsp;{{ headerText }}
-      </div>
-      <el-form
-        :model="loginForms"
-        status-icon
-        :rules="loginRules"
-        ref="loginForm"
-        label-width="80px"
-        class="demo-ruleForm"
-        label-position="right"
-      >
-        <el-form-item label="邮箱" prop="email">
-          <el-input
-            type="text"
-            v-model="loginForms.email"
-            prefix-icon="el-icon-user-solid"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="passWord">
-          <el-input
-            show-password
-            type="password"
-            v-model="loginForms.passWord"
-            autocomplete="off"
-            prefix-icon="el-icon-lock"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="capCode" label="验证码" class="imgCode">
-          <el-input
-            type="text"
-            v-model="loginForms.capCode"
-            autocomplete="off"
-            prefix-icon="el-icon-coin"
-          ></el-input>
-          <img
-            style="width: 112px; height: 40px"
-            :src="codeSrc"
-            @click="changeCaptcha"
-          />
-        </el-form-item>
-        <el-form-item style="margin-left: 80px">
-          <el-checkbox v-model="loginForms.isKeepLogin"
-            >7天内保持登录</el-checkbox
+
+  <div class="container relative login h-full py-2 mx-auto sm:px-10">
+      <div class="flex h-full">
+        <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
+          <div class="my-auto">
+            <img
+              alt="博客"
+              src="../../assets/svg/login-box-bg.svg"
+              class="w-1/2 -mt-16 -enter-x"
+            />
+            <div class="mt-10 font-medium text-white -enter-x">
+              <span class="inline-block mt-4 text-3xl">Dunn Blog</span>
+            </div>
+            <div class="mt-5 font-normal text-white text-md dark:text-gray-500 -enter-x">
+              博客后台管理系统
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
+          <div
+            class="relative w-full px-5 py-8 mx-auto my-auto rounded-md shadow-md xl:ml-16 xl:bg-transparent sm:px-8 xl:p-4 xl:shadow-none sm:w-3/4 lg:w-2/4 xl:w-auto enter-x"
           >
-        </el-form-item>
-      </el-form>
-      <el-button
-        type="success"
-        :loading="loginLoading"
-        @click="toLogin('loginForm')"
-        :disabled="loginDisable"
-        style="width: 250px; margin-left: 10px"
-        >{{ loginLoading ? "登录中" : "登录" }}</el-button
-      >
-      <div class="login-bottom">
-        <el-button type="text" class="forgetPass" @click="lookPass()"
-          >忘记密码?</el-button
+                <div class="login-conent enter-x" v-if="!isregister">
+        <div class="login-header">
+          <div>DunnBlog</div>
+          &nbsp;&nbsp;&nbsp;{{ headerText }}
+        </div>
+        <el-form
+          :model="loginForms"
+          status-icon
+          :rules="loginRules"
+          ref="loginForm"
+          label-width="80px"
+          class="demo-ruleForm enter-x"
+          label-position="right"
         >
-        <el-button type="text" @click="toRegister">去注册</el-button>
+          <el-form-item label="邮箱" prop="email">
+            <el-input
+              type="text"
+              v-model="loginForms.email"
+              prefix-icon="el-icon-user-solid"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="passWord">
+            <el-input
+              show-password
+              type="password"
+              v-model="loginForms.passWord"
+              autocomplete="off"
+              prefix-icon="el-icon-lock"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="capCode" label="验证码" class="imgCode">
+            <el-input
+              type="text"
+              v-model="loginForms.capCode"
+              autocomplete="off"
+              prefix-icon="el-icon-coin"
+            ></el-input>
+            <img
+              style="width: 112px; height: 40px"
+              :src="codeSrc"
+              @click="changeCaptcha"
+            />
+          </el-form-item>
+          <el-form-item style="margin-left: 80px">
+            <el-checkbox v-model="loginForms.isKeepLogin"
+              >7天内保持登录</el-checkbox
+            >
+          </el-form-item>
+        </el-form>
+        <el-button
+          type="success"
+          :loading="loginLoading"
+          @click="toLogin('loginForm')"
+          :disabled="loginDisable"
+          style="width: 250px; margin-left: 10px"
+          >{{ loginLoading ? "登录中" : "登录" }}</el-button
+        >
+        <div class="login-bottom">
+          <el-button type="text" class="forgetPass" @click="lookPass()"
+            >忘记密码?</el-button
+          >
+          <el-button type="text" @click="toRegister">去注册</el-button>
+        </div>
       </div>
-    </div>
-    <!--    </div>-->
-    <div class="register-conent" v-if="isregister">
+    <div class="register-conent enter-x" v-if="isregister">
       <el-button
         icon="el-icon-arrow-left"
         size="small"
@@ -135,7 +155,10 @@
         >注册</el-button
       >
     </div>
-  </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -396,19 +419,29 @@ export default defineComponent({
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url("https://ae01.alicdn.com/kf/Hd5a34c2b8ad44a58a941b2a9669a2e0d7.jpg");
+  // background-image: url("https://ae01.alicdn.com/kf/Hd5a34c2b8ad44a58a941b2a9669a2e0d7.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  /*background-color: #409EFF;*/
+  &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin-left: -48%;
+      background-image: url(@/assets/svg/login-bg.svg);
+      background-position: 100%;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      content: '';
+      @media (max-width: 700px) {
+        display: none;
+      }
+    }
   .login-conent,
   .register-conent {
     min-height: 500px;
     width: 600px;
-    position: absolute;
-    left: 78%;
-    top: 38%;
-    margin-left: -300px;
-    margin-top: -280px;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 30px;
     border-radius: 10px;
@@ -441,9 +474,6 @@ export default defineComponent({
     }
     .el-form-item__content {
       margin-left: 0 !important;
-      // display: flex;
-      // justify-content: space-between;
-      // align-items: center;
     }
     .el-input {
       width: 300px;
