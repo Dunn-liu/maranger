@@ -1,42 +1,27 @@
 <template>
-  <div class="pass_strength">
+  <div class="pass_strength w-full">
     <el-row style="align-items: center">
       密码强度：
       <el-col :span="4" :offset="1">
-        <el-progress
-          :percentage="onePercentage"
-          :color="oneCustomColors"
-          :format="
-            () => {
-              return '';
-            }
-          "
-          :stroke-width="3"
-        ></el-progress>
+        <el-progress :percentage="onePercentage" :color="oneCustomColors" :format="
+          () => {
+            return '';
+          }
+        " :stroke-width="3"></el-progress>
       </el-col>
       <el-col :span="4" :offset="1">
-        <el-progress
-          :percentage="twoPercentage"
-          :color="twoCustomColors"
-          :format="
-            () => {
-              return '';
-            }
-          "
-          :stroke-width="3"
-        ></el-progress>
+        <el-progress :percentage="twoPercentage" :color="twoCustomColors" :format="
+          () => {
+            return '';
+          }
+        " :stroke-width="3"></el-progress>
       </el-col>
       <el-col :span="4" :offset="1">
-        <el-progress
-          :percentage="ThreePercentage"
-          :color="ThreeCustomColors"
-          :format="
-            () => {
-              return '';
-            }
-          "
-          :stroke-width="3"
-        ></el-progress>
+        <el-progress :percentage="ThreePercentage" :color="ThreeCustomColors" :format="
+          () => {
+            return '';
+          }
+        " :stroke-width="3"></el-progress>
       </el-col>
       <el-col :span="2" :offset="1" style="line-height: 15px">
         {{ content }}
@@ -123,9 +108,11 @@ export default defineComponent({
 .pass_strength {
   color: #606266;
 }
+
 .el-progress__text {
   display: none;
 }
+
 .el-progress-bar {
   padding-right: 0px;
   margin: 0px;

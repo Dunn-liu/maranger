@@ -3,7 +3,7 @@
     <div class="upload">
       <Upload @uploadSuc="uploadSuc" />
     </div>
-    <el-affix>
+    <!-- <el-affix> -->
       <el-form class="search_bar" label-width="70px" label-position="left">
         <el-form-item label="ID" label-width="40px">
           <el-input v-model="query.id" type="number"></el-input>
@@ -24,7 +24,7 @@
           <el-button @click="clearQuery">清除</el-button>
         </el-form-item>
       </el-form>
-    </el-affix>
+    <!-- </el-affix> -->
     <el-table
       :data="imgData"
       style="width: 100%"

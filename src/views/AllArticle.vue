@@ -230,7 +230,7 @@
 
 <template>
   <div class="my_card all_article">
-    <el-affix >
+    <!-- <el-affix > -->
       <el-form class="search_bar" label-width="70px" label-position="left">
         <el-form-item label="关键词">
           <el-input v-model="queryData.keyword"></el-input>
@@ -268,10 +268,11 @@
           <el-button type="danger" @click="delArticle">删除文章</el-button>
         </el-form-item>
       </el-form>
-    </el-affix>
+    <!-- </el-affix> -->
     <el-table
             :data="articleData"
             style="width: 100%"
+            max-height="650"
             v-loading="queryLoading"
             element-loading-text="拼命加载中"
             @selection-change="handleSelectionChange"
@@ -285,7 +286,7 @@
       </el-table-column>
       <el-table-column prop="article_title" label="标题" width="200" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="classifyId" label="分类">
+      <el-table-column prop="classifyId" label="分类" width="200">
         <template v-slot="scope">
           <template v-for="(item, index) in scope.row.classifyId">
             {{ filterClassify(item).classifyName }}
@@ -314,7 +315,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="200">
         <template v-slot="scope">
           <el-button type="info" size="small" @click="previewArticle(scope.row?.article_content)"
           >预览</el-button

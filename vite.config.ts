@@ -3,12 +3,14 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import windiCSS from 'vite-plugin-windicss';
 const path = require('path')
 import viteCompression from "vite-plugin-compression";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
       vue(),
+      windiCSS(),
       AutoImport({
         resolvers: [ElementPlusResolver()],
       }),
@@ -34,7 +36,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://test.liuqidong.com',
         changeOrigin: true,
         rewrite:(path)=>path.replace(/^\/api/,'')
       }
