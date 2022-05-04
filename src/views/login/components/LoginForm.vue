@@ -127,7 +127,8 @@ const lookPass = () => {
 };
 // 点击更换验证码
 const changeCaptcha = () => {
-  codeSrc.value = `${codeSrc.value}?${Date.now()}`;
+  const src = `${window.location.origin}/api/captcha`
+  codeSrc.value = `${src}?${Date.now()}`;
 };
 </script>
 <style lang="scss">
