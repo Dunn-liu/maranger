@@ -105,7 +105,7 @@ const isregister = ref(false)
     }
 
     @media (max-width: 576px) {
-      min-width: 320px;
+      min-width: 120px;
     }
   }
 
@@ -126,7 +126,7 @@ const isregister = ref(false)
       }
 
       @media (max-width: 576px) {
-        min-width: 320px;
+        min-width: 120px;
       }
     }
   }
