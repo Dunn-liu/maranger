@@ -21,9 +21,9 @@
       <Upload @uploadSuc="uploadSuc" />
       <el-button type="primary" plain @click="chooseCloud" style="margin-left: 12px">从图库选择</el-button>
       <el-drawer title="图库" v-model="dialogGalleryVisible" direction="rtl" size="35%">
-        <div>
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="query.describe"
-            style="margin: 12px;width: 91%" @keyup.enter.native="onSearch">
+        <div style="width:100%">
+          <el-input placeholder="请输入内容" v-model="query.describe" style="margin: 12px;width: 91%"
+            @keyup.enter.native="onSearch">
           </el-input>
           <div class="drawer__content" v-if="cloudGalleryData.length">
             <template v-for="item in cloudGalleryData" :key="item.id">
@@ -43,8 +43,8 @@
             <DataNull />
           </template>
         </div>
-        <el-pagination layout="prev, pager, next" background :total="total" :page-size="12" @current-change="pageChange"
-          style="margin-top: 20px">
+        <el-pagination layout="prev, pager, next" :hide-on-single-page="true" background :total="total" :page-size="12"
+          @current-change="pageChange" style="margin-top: 20px">
         </el-pagination>
       </el-drawer>
     </el-form-item>

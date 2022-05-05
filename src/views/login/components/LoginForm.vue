@@ -104,12 +104,15 @@ const toLogin = () => {
           localSet("email", newForm.email);
           // 登录成功,获取用户信息
           await store.dispatch("getUserInfo");
-          ElMessage.success({
-            showClose: true,
-            message: "登录成功!",
-          });
           loginLoading.value = false;
           await router.push("/home");
+          const { user_nickname } = store.state.userinfo
+          ElNotification({
+            message: `${user_nickname} 欢迎回来!`,
+            type: 'success',
+            showClose: false,
+            duration: 1000
+          })
         } else {
           loginLoading.value = false;
           changeCaptcha();
