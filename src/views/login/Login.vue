@@ -20,8 +20,9 @@
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
           <div
             class="form-conent relative w-full px-5 py-8 mx-auto my-auto rounded-md shadow-md xl:ml-16 xl:bg-transparent sm:px-8 xl:p-4 xl:shadow-none sm:w-3/4 lg:w-2/4 xl:w-auto enter-x">
-            <LoginForm v-model:visible="isregister" />
-            <RegisterForm v-model:visible="isregister" />
+            <LoginForm :visible="isLogin" @updata-visible="updataVisible" />
+            <RegisterForm :visible="isregister" @updata-visible="updataVisible" />
+            <QrLogin :visible="isQrLogin" @updata-visible="updataVisible" />
           </div>
         </div>
       </div>
@@ -33,7 +34,28 @@
 import { ref } from "vue";
 import LoginForm from "./components/LoginForm.vue";
 import RegisterForm from "./components/RegisterForm.vue";
+import QrLogin from "./components/QrLogin.vue";
 const isregister = ref(false)
+const isLogin = ref(true)
+const isQrLogin = ref(false)
+const updataVisible = (type: 'login' | 'register' | 'qr') => {
+  if (type === 'login') {
+    isQrLogin.value = false
+    isregister.value = false
+    isLogin.value = true
+  }
+  if (type === 'register') {
+    isLogin.value = false
+    isQrLogin.value = false
+    isregister.value = true
+  }
+  if (type === 'qr') {
+    isLogin.value = false
+    isregister.value = false
+    isQrLogin.value = true
+  }
+
+}
 </script>
 
 <style lang="scss">

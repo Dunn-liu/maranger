@@ -1,11 +1,11 @@
 <template>
-  <div class="login" v-if="!props.visible">
+  <div class="login" v-if="props.visible">
     <div class="mb-3 px-4 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
       登录
     </div>
     <el-form :model="loginForms" :rules="loginRules" ref="formRef" class="p-4 enter-x" label-position="right">
       <el-form-item prop="email" class="enter-x">
-        <el-input type="text" placeholder="邮箱" v-model="loginForms.email"></el-input>
+        <el-input type="email" placeholder="邮箱" v-model="loginForms.email"></el-input>
       </el-form-item>
       <el-form-item prop="passWord" class="enter-x">
         <el-input show-password type="password" placeholder="密码" v-model="loginForms.passWord" autocomplete="off">
@@ -34,10 +34,10 @@
       </el-form-item>
       <el-row justify="center" class="enter-x">
         <el-col :md="8" :sm="24">
-          <el-button class="w-full"> 二维码登录 </el-button>
+          <el-button class="w-full" @click="updateVisible('qr')"> 二维码登录 </el-button>
         </el-col>
         <el-col :md="4" :sm="24" class="!my-2 !lg:my-0 xs:mx-0 md:mx-2">
-          <el-button class="w-full" @click="updateVisible"> 注册 </el-button>
+          <el-button class="w-full" @click="updateVisible('register')"> 注册 </el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -58,7 +58,7 @@ const props = defineProps({
     default: false
   }
 })
-const emit = defineEmits(['update:visible'])
+const emit = defineEmits(['updataVisible'])
 const store = useStore();
 const router = useRouter();
 const formRef = ref<FormInstance>();
@@ -88,8 +88,8 @@ const loginRules = ref({
   passWord: [{ required: true, message: "请输入密码", trigger: "blur" }],
   capCode: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 });
-const updateVisible = () => {
-  emit('update:visible', true)
+const updateVisible = (type) => {
+  emit('updataVisible', type)
 }
 const toLogin = () => {
   formRef?.value?.validate(async (valid) => {
@@ -107,6 +107,7 @@ const toLogin = () => {
           loginLoading.value = false;
           await router.push("/home");
           const { user_nickname } = store.state.userinfo
+          // @ts-ignore
           ElNotification({
             message: `${user_nickname} 欢迎回来!`,
             type: 'success',
@@ -126,6 +127,7 @@ const toLogin = () => {
 };
 // 忘记密码
 const lookPass = () => {
+  // @ts-ignore
   ElMessage("请联系管理员重置密码！");
 };
 // 点击更换验证码
