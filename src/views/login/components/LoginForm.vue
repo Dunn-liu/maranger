@@ -104,8 +104,8 @@ const toLogin = () => {
           localSet("email", newForm.email);
           // 登录成功,获取用户信息
           await store.dispatch("getUserInfo");
-          loginLoading.value = false;
           await router.push("/home");
+          loginLoading.value = false;
           const { user_nickname } = store.state.userinfo
           // @ts-ignore
           ElNotification({
