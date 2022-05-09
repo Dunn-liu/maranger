@@ -5,7 +5,6 @@
 </template>
 
 <script lang='ts' setup>
-import { defineComponent } from "vue";
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
@@ -16,25 +15,30 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 .el-table--border th.gutter:last-of-type {
   display: block !important;
 }
+
 .my_card {
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  min-height:600px;
+  min-height: 600px;
   // border: 1px solid #EBEEF5;
   background-color: #fff;
+
   .search_bar {
     display: flex;
+
     .el-form-item {
       margin-right: 40px;
     }
+
     .el-input {
       width: 160px;
     }
   }
+
   .page_nation {
     margin: 20px auto 10px;
   }
