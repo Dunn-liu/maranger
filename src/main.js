@@ -3,6 +3,7 @@ import App from './App.vue'
 import './assets/css/commont.css'
 import router from './router/index'
 import store from './store/index'
+import { createPinia } from "pinia";
 import 'dayjs/locale/zh-cn'
 // markdown编辑器
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor';
@@ -49,6 +50,8 @@ VMdEditor.use(githubTheme,{
 VMdPreview.use(githubTheme, {
     Hljs: hljs,
 });
+
+const piniaStore = createPinia();
 createApp(App)
-  .use(router).use(store).use(VMdEditor).use(VMdPreview)
+  .use(router).use(store).use(piniaStore).use(VMdEditor).use(VMdPreview)
   .mount('#app')

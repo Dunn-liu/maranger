@@ -1,6 +1,6 @@
 <template>
   <el-container style="height:100%">
-      <el-aside>
+      <!-- <el-aside>
         <div class='logo'>
           <img
             src="../assets/img/logo_touming.png"
@@ -26,7 +26,8 @@
             <MMenuItem :isCollapse="isCollapse" :item="item" :index="index" />
           </template>
         </el-menu>
-      </el-aside>
+      </el-aside> -->
+      <SideBar />
       <el-container>
         <el-header class="m-header">
           <div @click="isCollapse = !isCollapse">
@@ -47,7 +48,7 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            &nbsp;欢迎您,&nbsp;{{ $store.state.userinfo.user_nickname }}
+            &nbsp;欢迎您,&nbsp;{{ userStore.getUserInfo.user_nickname }}
           </div>
         </el-header>
               <el-main>
@@ -84,28 +85,33 @@ import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import loginOut from "@/utils/loginOut";
 import MMenuItem from "../components/MMenuItem.vue";
+import SideBar from './sideBar/index.vue'
 import { useStore } from "vuex";
+import {useUserStore} from '@/store/modules/user'
 export default defineComponent({
   components: {
     MMenuItem,
+    SideBar
   },
   name: "Layout",
   setup() {
     const router = useRouter();
     const store = useStore();
     const isCollapse = ref(false);
+    const userStore = useUserStore()
     const logOut = () => {
-      loginOut()
+      userStore.confirmLoginOut()
     };
     onMounted(async () => {
       if (JSON.stringify(store.state.userinfo) === "{}") {
-        store.dispatch("getUserInfo");
+        await userStore.getUserInfoAction()
       }
     });
     const goBack = () => {
       router.go(-1);
     };
     return {
+      userStore,
       router,
       logOut,
       isCollapse,

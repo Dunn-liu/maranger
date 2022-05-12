@@ -52,6 +52,7 @@ import md5 from "js-md5";
 import { apiToLogin } from "@/api/login.js";
 import { localSet, localGet } from "@/utils/local";
 import { email } from "@/utils/regTest";
+import { useUserStore } from "@/store/modules/user";
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -61,6 +62,7 @@ const props = defineProps({
 const emit = defineEmits(['updataVisible'])
 const store = useStore();
 const router = useRouter();
+const userStore = useUserStore()
 const formRef = ref<FormInstance>();
 const codeSrc = ref(`${window.location.origin}/api/captcha`);
 const loginLoading = ref(false);
@@ -103,10 +105,11 @@ const toLogin = () => {
           localSet("token", res.data.token);
           localSet("email", newForm.email);
           // 登录成功,获取用户信息
-          await store.dispatch("getUserInfo");
+          // await store.dispatch("getUserInfo");
+          await userStore.getUserInfoAction()
           await router.push("/home");
           loginLoading.value = false;
-          const { user_nickname } = store.state.userinfo
+          const { user_nickname } = userStore.getUserInfo
           // @ts-ignore
           ElNotification({
             message: `${user_nickname} 欢迎回来!`,
