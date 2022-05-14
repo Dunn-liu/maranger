@@ -59,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
                     await userStore.getAuthRouterAction()
                     const accessRouters = generateRouter(userStore.getRoleList)
                     addRouters(accessRouters)
-                    next()
+                    next({ path: to.path, replace: true })
                 } catch (e) {
                     localRemove('token')
                     next({
