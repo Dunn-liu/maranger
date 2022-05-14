@@ -5,13 +5,12 @@ import { ElMessage } from 'element-plus'
 import store from '@/store/index'
 import { localGet, localRemove } from '@/utils/local'
 import { generateRouter } from '@/utils/routerFormat'
-import { useUserStoreWithOut } from '@/store/modules/user'
+import { useUserStore } from '@/store/modules/user'
 const addRouters = (_route) => {
     _route.forEach(item => {
         router.addRoute(item.parentName, item)
     })
 }
-const userStore = useUserStoreWithOut()
 const routes = [
     // 路由重定向
     // {
@@ -41,10 +40,12 @@ const routes = [
 ]
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
+    scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 router.beforeEach(async (to, from, next) => {
     NProgress.start()
+    const userStore = useUserStore()
     if (localGet('token')) { // 已登录
         if (to.path.includes('/login')) { // 已登录不可访问登录页
             next({ path: '/home' }) // 跳转到首页
@@ -58,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
                     await userStore.getAuthRouterAction()
                     const accessRouters = generateRouter(userStore.getRoleList)
                     addRouters(accessRouters)
-                    next({ path: to.path, replace: true })
+                    next()
                 } catch (e) {
                     localRemove('token')
                     next({

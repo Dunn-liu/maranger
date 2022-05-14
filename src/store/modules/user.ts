@@ -1,7 +1,13 @@
 import { defineStore } from "pinia";
 import { store } from "../pinia";
 import router from "@/router/index";
-import { localRemove, localSet, localGet } from "@/utils/local";
+import {
+  localRemove,
+  localGet,
+  sessionGet,
+  sessionRemove,
+  sessionSet,
+} from "@/utils/local";
 import { apiGetUserAuth, apiGetUserInfo } from "@/api/userInfo.js";
 import { formatRouterTree } from "@/utils/routerFormat";
 import { isEmpty } from "@/utils/is";
@@ -24,40 +30,33 @@ export const useUserStore = defineStore({
   getters: {
     getUserInfo(): any {
       if (isEmpty(this.userInfo)) {
-        return localGet("userInfo");
+        return sessionGet("userInfo");
       }
       return this.userInfo;
     },
     getRoleList(): any[] {
-      if (isEmpty(this.userRouters)) {
-        return localGet("roleList");
-      }
       return this.userRouters;
     },
     getHasAuth(): boolean {
-      return this.hasAuth || localGet("hasAuth");
+      return this.hasAuth;
     },
   },
   actions: {
     setRoleList(userRouters: any[]) {
       this.userRouters = [...userRouters];
-      localSet("roleList", userRouters);
     },
     setUserInfo(info: any | null) {
       this.userInfo = info;
-      localSet("userInfo", this.userInfo);
+      sessionSet("userInfo", this.userInfo);
     },
     setHasAuth(auth: boolean) {
       this.hasAuth = auth;
-      localSet("hasAuth", auth);
     },
     async getAuthRouterAction() {
-      try {
-        const res = await apiGetUserAuth(localGet("email")),
-          list = formatRouterTree(res.auth);
-        this.setRoleList(list);
-        this.setHasAuth(true);
-      } catch {}
+      const res = await apiGetUserAuth(localGet("email"));
+      const list = formatRouterTree(res.auth);
+      this.setRoleList(list);
+      this.setHasAuth(true);
     },
     async getUserInfoAction(): Promise<any> {
       if (!localGet("email")) return null;
@@ -72,6 +71,8 @@ export const useUserStore = defineStore({
     logoutAction() {
       localRemove("token");
       this.setUserInfo(null);
+      this.setHasAuth(false);
+      this.setRoleList([]);
       router.push("/login");
     },
 

@@ -1,29 +1,37 @@
 <template :key="index">
-  <template v-if="props?.item?.children && props?.item?.children.length > 0">
+  <template v-if="menuSource.children && menuSource.children.length > 0">
     <el-sub-menu>
       <template #title>
-        <iconpark-icon :name="props?.item?.icon" />&nbsp; &nbsp;
-        <span>{{ props?.item?.title }}</span>
+        <svg-icon :name="menuSource.icon" />
+        &nbsp; &nbsp;
+        <span>{{ menuSource.title }}</span>
       </template>
-      <el-menu-item-group v-for="(c, i) in props?.item?.children" :key="i">
+      <el-menu-item-group v-for="(c, i) in menuSource.children" :key="i">
         <MMenuItem :item="c"></MMenuItem>
       </el-menu-item-group>
     </el-sub-menu>
   </template>
   <template v-else>
-    <el-menu-item :index="props?.item?.link || props?.item?.path">
-      <iconpark-icon :name="props?.item?.icon" />&nbsp; &nbsp;
-      <template #title>{{ props?.item?.title }}</template>
+    <el-menu-item :index="menuSource.link || menuSource.path" @click="handleClick">
+      <svg-icon :name="menuSource.icon" />
+      &nbsp; &nbsp;
+      <template #title>{{ menuSource.title }}</template>
     </el-menu-item>
   </template>
 </template>
 
 <script lang="ts" setup>
+import { useAppStore } from '@/store/modules/app';
+import { computed } from 'vue';
 const props = defineProps({
-  isCollapse:Boolean,
-  item:Object,
-  index:Number
+  item: Object,
+  index: Number
 })
+const menuSource = computed(() => props.item || {})
+const appStore = useAppStore()
+const handleClick = () => {
+  appStore.setMobileCollapage(false)
+}
 </script>
 
 <style scoped>

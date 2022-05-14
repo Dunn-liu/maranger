@@ -18,6 +18,8 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 // 表情
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+import SvgIcon from "@/components/SvgIcon";
+
 // codemirror 编辑器的相关资源
 import Codemirror from 'codemirror';
 // mode
@@ -36,7 +38,7 @@ import '@/styles/index.scss'
 import 'virtual:windi-base.css';
 import 'virtual:windi-components.css';
 import 'virtual:windi-utilities.css';
-
+import 'virtual:svg-icons-register'
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme,{
     })
@@ -52,6 +54,6 @@ VMdPreview.use(githubTheme, {
 });
 
 const piniaStore = createPinia();
-createApp(App)
+createApp(App).component('svg-icon',SvgIcon)
   .use(router).use(store).use(piniaStore).use(VMdEditor).use(VMdPreview)
   .mount('#app')

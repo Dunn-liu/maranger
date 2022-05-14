@@ -1,13 +1,7 @@
 <template>
   <div class="add_article my_card">
-    <ArticleForm
-      :articleData="articleForm"
-      @get-url="getUrl"
-      @get-content="getContent"
-      @get-valid="getFormValid"
-      @getEditorType="getEditorType"
-      ref="articleFormRef"
-    />
+    <ArticleForm :articleData="articleForm" @get-url="getUrl" @get-content="getContent" @get-valid="getFormValid"
+      @getEditorType="getEditorType" ref="articleFormRef" />
     <div class="sub_bths">
       <el-button type="success" @click="publishArticle">发布</el-button>
       <el-button type="info" @click="saveDraft">存为草稿</el-button>
@@ -49,30 +43,30 @@ export default {
     const articleFormRef = ref(null);
     let formValid = null;
     const articleForm: Article = reactive({
-        // 文章表单数据
-        article_title: "",
-        article_content: "",
-        article_cover: "",
-        author: store.state.userinfo.phone,
-        author_nickname: store.state.userinfo.user_nickname || "",
-        edit_date: new Date(),
-        article_abstract: "",
-        article_keywords: "",
-        article_status: 1,
-        classifyId: [],
-        editorType: 1,
+      // 文章表单数据
+      article_title: "",
+      article_content: "",
+      article_cover: "",
+      author: store.state.userinfo.phone,
+      author_nickname: store.state.userinfo.user_nickname || "",
+      edit_date: new Date(),
+      article_abstract: "",
+      article_keywords: "",
+      article_status: 1,
+      classifyId: [],
+      editorType: 1,
     });
-    const getFormValid = (e):void => {
+    const getFormValid = (e): void => {
       // 获取表单验证结果
       formValid = e;
     };
-    const getEditorType = (e):void => {
+    const getEditorType = (e): void => {
       articleForm.editorType = e;
     };
-    const getUrl = (e) :void => {
+    const getUrl = (e): void => {
       articleForm.article_cover = e;
     };
-    const getContent = (e):void => {
+    const getContent = (e): void => {
       articleForm.article_content = e;
     };
     const postArticle = async () => {
