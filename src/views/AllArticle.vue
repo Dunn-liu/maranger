@@ -231,7 +231,7 @@ const setVisible = () => {
 <template>
   <div class="my_card all_article">
     <!-- <el-affix > -->
-    <el-form class="search_bar" label-width="70px" label-position="left">
+    <el-form class="search_bar flex flex-wrap" label-width="70px" label-position="left">
       <el-form-item label="关键词">
         <el-input v-model="queryData.keyword"></el-input>
       </el-form-item>

@@ -16,6 +16,7 @@
     "js-md5": "^0.7.3",
     "node-sass": "^5.0.0",
     "nprogress": "^0.2.0",
+    "pinia": "^2.0.14",
     "qrcode": "^1.5.0",
     "qs": "^6.9.6",
     "sass": "^1.32.8",
@@ -47,6 +48,7 @@
     "unplugin-vue-components": "^0.19.3",
     "vite": "2.9.5",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vite-plugin-windicss": "^1.8.4",
     "vue-tsc": "^0.34.7",
     "windicss": "^3.5.1"

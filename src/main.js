@@ -3,6 +3,7 @@ import App from './App.vue'
 import './assets/css/commont.css'
 import router from './router/index'
 import store from './store/index'
+import { createPinia } from "pinia";
 import 'dayjs/locale/zh-cn'
 // markdown编辑器
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor';
@@ -17,6 +18,8 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 // 表情
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+import SvgIcon from "@/components/SvgIcon";
+
 // codemirror 编辑器的相关资源
 import Codemirror from 'codemirror';
 // mode
@@ -35,7 +38,7 @@ import '@/styles/index.scss'
 import 'virtual:windi-base.css';
 import 'virtual:windi-components.css';
 import 'virtual:windi-utilities.css';
-
+import 'virtual:svg-icons-register'
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme,{
     })
@@ -49,6 +52,8 @@ VMdEditor.use(githubTheme,{
 VMdPreview.use(githubTheme, {
     Hljs: hljs,
 });
-createApp(App)
-  .use(router).use(store).use(VMdEditor).use(VMdPreview)
+
+const piniaStore = createPinia();
+createApp(App).component('svg-icon',SvgIcon)
+  .use(router).use(store).use(piniaStore).use(VMdEditor).use(VMdPreview)
   .mount('#app')
