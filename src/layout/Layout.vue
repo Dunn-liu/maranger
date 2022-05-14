@@ -3,10 +3,6 @@
     <SideBar />
     <el-container>
       <el-header class="m-header">
-        <!-- <div @click="handleCollapse">
-          <svg-icon size="24" v-show="appStore.isCollapse" name="menu-unfold-one" />
-          <svg-icon size="24" v-show="!appStore.isCollapse" name="menu-fold-one" />
-        </div> -->
         <MenuFold />
         <div class="userinfo">
           <el-dropdown>

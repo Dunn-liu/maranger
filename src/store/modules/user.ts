@@ -1,13 +1,7 @@
 import { defineStore } from "pinia";
 import { store } from "../pinia";
 import router from "@/router/index";
-import {
-  localRemove,
-  localGet,
-  sessionGet,
-  sessionRemove,
-  sessionSet,
-} from "@/utils/local";
+import { localRemove, localGet, localSet } from "@/utils/local";
 import { apiGetUserAuth, apiGetUserInfo } from "@/api/userInfo.js";
 import { formatRouterTree } from "@/utils/routerFormat";
 import { isEmpty } from "@/utils/is";
@@ -30,7 +24,7 @@ export const useUserStore = defineStore({
   getters: {
     getUserInfo(): any {
       if (isEmpty(this.userInfo)) {
-        return sessionGet("userInfo");
+        return localGet("userInfo");
       }
       return this.userInfo;
     },
@@ -47,7 +41,7 @@ export const useUserStore = defineStore({
     },
     setUserInfo(info: any | null) {
       this.userInfo = info;
-      sessionSet("userInfo", this.userInfo);
+      localSet("userInfo", this.userInfo);
     },
     setHasAuth(auth: boolean) {
       this.hasAuth = auth;
