@@ -4,10 +4,16 @@
     <el-container>
       <el-header class="m-header">
         <MenuFold />
-        <div class="userinfo">
+        <div class="ml-2">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item v-for="item in breadcrumbList" :to="{ path: item.path }">{{ item.meta.title }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+        <div class="userinfo flex-1 justify-end">
           <el-dropdown>
             <span class="el-dropdown-link">
-              <el-avatar :src="$store.state.userinfo.avatar" />
+              <el-avatar :src="userInfo.avatar" />
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -16,15 +22,15 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          &nbsp;欢迎您,&nbsp;{{ userStore.getUserInfo.user_nickname }}
+          &nbsp;欢迎您,&nbsp;{{ userInfo.user_nickname }}
         </div>
       </el-header>
       <el-main>
-        <el-page-header style="
+        <!-- <el-page-header style="
             border-bottom: 1px solid #ebeef5;
             padding-bottom: 10px;
             margin-bottom: 0;
-          " icon="el-icon-arrow-left" @back="goBack" :content="$store.state.headerTitle"></el-page-header>
+          " icon="el-icon-arrow-left" @back="goBack" :content="$store.state.headerTitle"></el-page-header> -->
         <!-- <el-scrollbar> -->
         <router-view>
           <template #default="{ Component, route }">
@@ -40,20 +46,29 @@
 </template>
 
 <script setup lang="ts">
+import type { RouteLocationMatched } from "vue-router";
 import { useRouter } from "vue-router";
 import SideBar from './sideBar/index.vue'
 import MenuFold from './MenuFold/MenuFold.vue'
 import { useUserStore } from '@/store/modules/user'
-import { useAppStore } from '@/store/modules/app';
+import { localGet } from "@/utils/local";
+import { isEmpty, isNull } from "@/utils/is";
+import { computed, ref, watchEffect } from "vue";
 const router = useRouter();
 const userStore = useUserStore()
-const appStore = useAppStore()
+const userInfo = computed(() => userStore.getUserInfo || {})
+const breadcrumbList = ref<RouteLocationMatched[]>([])
+const getUserInfo = async () => {
+  if (isNull(localGet('userInfo')) || isEmpty(localGet('userInfo'))) { await userStore.getUserInfoAction() }
+}
+getUserInfo()
+watchEffect(() => {
+  const routeMatched = router.currentRoute.value?.matched
+  breadcrumbList.value = routeMatched
+})
 const goBack = () => {
   router.go(-1);
 };
-const handleCollapse = () => {
-  appStore.setCollapage()
-}
 const loginOut = () => {
   userStore.confirmLoginOut()
 }

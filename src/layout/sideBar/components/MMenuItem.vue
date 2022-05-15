@@ -1,6 +1,6 @@
 <template :key="index">
   <template v-if="menuSource.children && menuSource.children.length > 0">
-    <el-sub-menu>
+    <el-sub-menu :index="'' + index">
       <template #title>
         <svg-icon :name="menuSource.icon" />
         &nbsp; &nbsp;

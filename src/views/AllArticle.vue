@@ -8,14 +8,15 @@ import {
   apiChangeStatus
 } from "../api/article";
 import dayjs from "dayjs";
+import type { ElTable, FormInstance } from 'element-plus'
 import ComponentLoading from "@/components/ComponentLoading.vue";
 const ArticleForm = defineAsyncComponent({
   loader: () => import("@/components/ArticleForm.vue"),
   loadingComponent: ComponentLoading,
 });
 let formValid = null;
-const articleFormRef = ref(null);
-const tableRef = ref(null);
+const articleFormRef = ref<FormInstance>();
+const tableRef = ref<InstanceType<typeof ElTable>>();
 const previewVisible = ref(false)
 const previewContent = ref('')
 const articleData = ref([])
@@ -139,7 +140,7 @@ const clearQuery = async () => {
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
   delSelect.value = multipleSelection.value
-    .map((item) => {
+    .map((item: any) => {
       return item.id;
     })
     .join(",");
@@ -171,7 +172,7 @@ const delArticle = async () => {
         }
       })
       .catch(() => {
-        tableRef.value.clearSelection();
+        tableRef?.value?.clearSelection();
         ElNotification({
           type: "info",
           message: "取消操作!",
@@ -206,12 +207,12 @@ const changeStatus = async (row, type) => {
   const res = await apiChangeStatus(data);
   if (res.code === 200) {
     ElMessage({
-      type: type === "0" ? "warning" : "success",
+      type: +type === 0 ? "warning" : "success",
       showClose: true,
       duration: 1500,
-      message: type === "0" ? "文章下架成功!" : "文章发布成功!",
+      message: +type === 0 ? "文章下架成功!" : "文章发布成功!",
     });
-    articleData.value.forEach((item) => {
+    articleData.value.forEach((item: any) => {
       if (item.id === row.id) {
         item.article_status = item.article_status === 0 ? 1 : 0
       }
