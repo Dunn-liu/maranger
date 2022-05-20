@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { apiPublishArticle } from "../api/article";
 import { useRouter } from "vue-router";
 import ComponentLoading from "@/components/ComponentLoading.vue";
+import { useUserStore } from "@/store/modules/user";
 const ArticleForm = defineAsyncComponent({
   loader: () => import("@/components/ArticleForm.vue"),
   loadingComponent: ComponentLoading,
@@ -38,7 +39,7 @@ export default {
   name: "AddArticle",
   components: { ArticleForm },
   setup() {
-    const store = useStore();
+    const store = useUserStore();
     const router = useRouter();
     const articleFormRef = ref(null);
     let formValid = null;
@@ -47,8 +48,8 @@ export default {
       article_title: "",
       article_content: "",
       article_cover: "",
-      author: store.state.userinfo.phone,
-      author_nickname: store.state.userinfo.user_nickname || "",
+      author: store.getUserInfo.phone,
+      author_nickname: store.getUserInfo.user_nickname || "",
       edit_date: new Date(),
       article_abstract: "",
       article_keywords: "",
