@@ -47,7 +47,6 @@
 import { ref, unref } from "vue";
 import type { FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 import md5 from "js-md5";
 import { apiToLogin } from "@/api/login.js";
 import { localSet, localGet } from "@/utils/local";
@@ -60,7 +59,6 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['updataVisible'])
-const store = useStore();
 const router = useRouter();
 const userStore = useUserStore()
 const formRef = ref<FormInstance>();

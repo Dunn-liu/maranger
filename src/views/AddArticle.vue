@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import { ref, reactive, defineAsyncComponent } from "vue";
-import { useStore } from "vuex";
 import { ElNotification } from "element-plus";
 import dayjs from "dayjs";
 import { apiPublishArticle } from "../api/article";

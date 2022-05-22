@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/css/commont.css'
 import router from './router/index'
-import store from './store/index'
+// import store from './store/index'
 import { createPinia } from "pinia";
 import 'dayjs/locale/zh-cn'
 // markdown编辑器
@@ -55,5 +55,5 @@ VMdPreview.use(githubTheme, {
 
 const piniaStore = createPinia();
 createApp(App).component('svg-icon',SvgIcon)
-  .use(router).use(store).use(piniaStore).use(VMdEditor).use(VMdPreview)
+  .use(router).use(piniaStore).use(VMdEditor).use(VMdPreview)
   .mount('#app')
