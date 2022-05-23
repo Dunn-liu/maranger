@@ -62,7 +62,7 @@ export const useUserStore = defineStore({
     /**
      * @description: logout
      */
-    logoutAction() {
+    loginOutAction() {
       localRemove("token");
       this.setUserInfo(null);
       this.setHasAuth(false);
@@ -80,7 +80,7 @@ export const useUserStore = defineStore({
         cancelButtonText: "取消",
       })
         .then(() => {
-          this.logoutAction();
+          this.loginOutAction();
         })
         .catch(() => {});
     },

@@ -85,7 +85,6 @@ import md5 from "js-md5";
 import { AUTH_MAP } from "../config/config";
 import useImgRequest from "../hooks/useHttpRequest";
 import { apiGetArea } from "../api/area";
-import loginOut from "@/utils/loginOut";
 import { apiUpdateAvatar, apiUpdateInfo, apiResetPass } from "../api/userInfo";
 import { email } from '@/utils/regTest'
 import PasswordStrength from "@/components/PasswordStrength.vue";
@@ -243,7 +242,7 @@ const resetPass = () => {
           message: "密码重置成功，请重新登录!",
           showClose: true,
         });
-        loginOut();
+        userStore.loginOutAction()
       }
     }
   });
