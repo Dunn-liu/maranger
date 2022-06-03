@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { ElMessage } from "element-plus";
@@ -10,6 +10,8 @@ const addRouters = (_route) => {
     router.addRoute(item.parentName, item);
   });
 };
+// * 处理路由
+export let routerArray: RouteRecordRaw[] = [];
 const routes = [
   // 路由重定向
   // {
@@ -21,7 +23,7 @@ const routes = [
     name: "Home",
     meta: { title: "首页" },
     redirect: "/home",
-    component: () => import("../layout/Layout.vue"),
+    component: () => import("../layout/index.vue"),
     children: [
       {
         path: "/home",
@@ -68,6 +70,7 @@ router.beforeEach(async (to, from, next) => {
         try {
           await userStore.getAuthRouterAction();
           const accessRouters = generateRouter(userStore.getRoleList);
+          routerArray = accessRouters;
           addRouters(accessRouters);
           next({ path: to.path, replace: true });
         } catch (e) {

@@ -38,6 +38,7 @@ function generateRouter(userRouter) {
                 link: item.link,
                 icon: item.icon,
                 title: item.title,
+                keepAlive:+item.keepAlive === 1
             },
             component: () => import(/* @vite-ignore */ `../views/${item.name}.vue`)
         }
