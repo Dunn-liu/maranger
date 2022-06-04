@@ -1,4 +1,5 @@
 function formatRouterTree(data) {
+    const accessRouters = data.filter(item => !item.hidden)
     const handle = (property) => {
         return function (a, b) {
             const val1 = a[property];
@@ -6,9 +7,9 @@ function formatRouterTree(data) {
             return val1 - val2;
         }
     }
-    data.sort(handle('id'))
-    let parentsRouter = data.filter(p => p.pid == 0),
-        childrenRouter = data.filter(c => c.pid != 0)
+    accessRouters.sort(handle('id'))
+    let parentsRouter = accessRouters.filter(p => p.pid == 0),
+        childrenRouter = accessRouters.filter(c => c.pid != 0)
     dataToTree(parentsRouter, childrenRouter);
     function dataToTree(parent, children) {
         parent.map(p => {
@@ -30,17 +31,19 @@ function formatRouterTree(data) {
 }
 function generateRouter(userRouter) {
     let newRouters = userRouter.map(item => {
+        const componentPath = item.layoutComponent===1 ? `../layout/index.vue`:`../views/${item.name}.vue`
         let router = {
             path: item.path,
             name: item.name,
             parentName: item.parentName,
+            redirect:item.redirect,
             meta: {
                 link: item.link,
                 icon: item.icon,
                 title: item.title,
                 keepAlive:+item.keepAlive === 1
             },
-            component: () => import(/* @vite-ignore */ `../views/${item.name}.vue`)
+            component: () => import(/* @vite-ignore */ componentPath)
         }
         if (item.children) {
             router.children = generateRouter(item.children)

@@ -11,9 +11,9 @@
 			<el-main>
 				<section class="main-box">
 					<router-view v-slot="{ Component, route }">
-						<transition appear name="fade-transform" mode="out-in">
-							<keep-alive :include="cacheRouter">
-								<component :is="Component" :key="route.path"></component>
+						<transition appear name="fade-slide" mode="out-in">
+							<keep-alive include="AddArticle">
+								<component :is="Component" :key="route.fullPath"></component>
 							</keep-alive>
 						</transition>
 					</router-view>
@@ -31,11 +31,10 @@ import Menu from "./Menu/index.vue";
 import Header from "./Header/index.vue";
 import Tabs from "./Tabs/index.vue";
 import Footer from "./Footer/index.vue";
-import cacheRouter from "@/router/cacheRouter";
+// import cacheRouter from "@/router/cacheRouter";
 import { useUserStore } from '@/store/modules/user'
 import { localGet } from "@/utils/local";
 import { isEmpty, isNull } from "@/utils/is";
-console.log('cacheRouter', cacheRouter);
 
 const userStore = useUserStore()
 const getUserInfo = async () => {

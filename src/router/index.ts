@@ -7,23 +7,21 @@ import { generateRouter } from "@/utils/routerFormat";
 import { useUserStore } from "@/store/modules/user";
 const addRouters = (_route) => {
   _route.forEach((item) => {
-    router.addRoute(item.parentName, item);
+    if (!item.hidden) {
+      router.addRoute(item.parentName, item);
+    }
   });
 };
+const Layout = () => import("../layout/index.vue");
 // * 处理路由
 export let routerArray: RouteRecordRaw[] = [];
 const routes = [
-  // 路由重定向
-  // {
-  //     path: '/',
-  //     redirect: '/login'
-  // },
   {
     path: "/",
     name: "Home",
     meta: { title: "首页" },
     redirect: "/home",
-    component: () => import("../layout/index.vue"),
+    component: Layout,
     children: [
       {
         path: "/home",
@@ -32,6 +30,35 @@ const routes = [
       },
     ],
   },
+  // {
+  //   path: "/article",
+  //   name: "Article",
+  //   meta: { title: "文章管理" },
+  //   redirect: "/article/allArticle",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/article/allArticle",
+  //       name: "AllArticle",
+  //       component: () => import("../views/AllArticle.vue"),
+  //       meta: {
+  //         title: "所有文章",
+  //         icon: "editor",
+  //         keepAlive: true,
+  //       },
+  //     },
+  //     {
+  //       path: "/article/addArticle",
+  //       name: "AddArticle",
+  //       component: () => import("../views/AddArticle.vue"),
+  //       meta: {
+  //         title: "添加文章",
+  //         icon: "file-addition-one",
+  //         keepAlive: true,
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: "/login",
     name: "Login",
