@@ -12,7 +12,7 @@ const addRouters = (_route) => {
     }
   });
 };
-const Layout = () => import("../layout/index.vue");
+const Layout = () => import("@/layout/index.vue");
 // * 处理路由
 export let routerArray: RouteRecordRaw[] = [];
 const routes = [

@@ -31,7 +31,12 @@ function formatRouterTree(data) {
 }
 function generateRouter(userRouter) {
     let newRouters = userRouter.map(item => {
-        const componentPath = item.layoutComponent===1 ? `../layout/index.vue`:`../views/${item.name}.vue`
+        let component;
+        if (item.layoutComponent===1) {
+            component = () => import(/* @vite-ignore */ `../layout/index.vue`)
+        }else {
+            component = () => import(/* @vite-ignore */ `../views/${item.name}.vue`)
+        }
         let router = {
             path: item.path,
             name: item.name,
@@ -43,7 +48,7 @@ function generateRouter(userRouter) {
                 title: item.title,
                 keepAlive:+item.keepAlive === 1
             },
-            component: () => import(/* @vite-ignore */ componentPath)
+            component: component
         }
         if (item.children) {
             router.children = generateRouter(item.children)
