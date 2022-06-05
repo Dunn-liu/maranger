@@ -31,7 +31,6 @@ import Menu from "./Menu/index.vue";
 import Header from "./Header/index.vue";
 import Tabs from "./Tabs/index.vue";
 import Footer from "./Footer/index.vue";
-// import cacheRouter from "@/router/cacheRouter";
 import { useUserStore } from '@/store/modules/user'
 import { localGet } from "@/utils/local";
 import { isEmpty, isNull } from "@/utils/is";

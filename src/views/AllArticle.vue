@@ -15,7 +15,7 @@ const ArticleForm = defineAsyncComponent({
   loadingComponent: ComponentLoading,
 });
 let formValid = null;
-const articleFormRef = ref<FormInstance>();
+const articleFormRef = ref<FormInstance | any>();
 const tableRef = ref<InstanceType<typeof ElTable>>();
 const previewVisible = ref(false)
 const previewContent = ref('')
@@ -30,8 +30,8 @@ const queryData = ref({
 })
 const queryLoading = ref(false)
 const showDrawer = ref(false)
-const editData = ref({})
-const classify = ref([])
+const editData: any = ref({})
+const classify = ref<ClassifyType[]>([])
 const multipleSelection = ref([])
 const delSelect = ref('')
 const totalNum = ref(0)
@@ -61,6 +61,7 @@ const getArticle = async () => {
     queryLoading.value = false;
   } else {
     queryLoading.value = false;
+    // @ts-ignore
     ElNotification({
       type: "error",
       message: "数据加载失败,请刷新页面!",
@@ -87,8 +88,9 @@ const editArticle = (row) => {
 };
 // 保存编辑
 const saveEdit = async () => {
-  articleFormRef.value.validateForm();
+  articleFormRef?.value?.validateForm();
   if (!formValid) {
+    // @ts-ignore
     ElNotification({
       type: "error",
       message: "请检查表单内容!",
@@ -102,6 +104,7 @@ const saveEdit = async () => {
       (newEditData.classifyId = newEditData.classifyId.join(","));
     const res = await apiUpdateArticle(newEditData);
     if (res.code === 200) {
+      // @ts-ignore
       ElNotification({
         type: "success",
         message: "文章更新成功!",
@@ -147,6 +150,7 @@ const handleSelectionChange = (val) => {
 };
 const delArticle = async () => {
   if (!delSelect.value) {
+    // @ts-ignore
     ElMessage.warning({
       showClose: true,
       duration: 1500,
@@ -154,6 +158,7 @@ const delArticle = async () => {
       type: "warning",
     });
   } else {
+    // @ts-ignore
     ElMessageBox.confirm("此操作不可恢复, 是否继续删除文章?", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
@@ -162,6 +167,7 @@ const delArticle = async () => {
       .then(async () => {
         const res = await apiDelArticle({ id: delSelect.value });
         if (res.code === 200) {
+          // @ts-ignore
           ElMessage({
             showClose: true,
             duration: 1500,
@@ -173,6 +179,7 @@ const delArticle = async () => {
       })
       .catch(() => {
         tableRef?.value?.clearSelection();
+        // @ts-ignore
         ElNotification({
           type: "info",
           message: "取消操作!",
@@ -206,6 +213,7 @@ const changeStatus = async (row, type) => {
   };
   const res = await apiChangeStatus(data);
   if (res.code === 200) {
+    // @ts-ignore
     ElMessage({
       type: +type === 0 ? "warning" : "success",
       showClose: true,

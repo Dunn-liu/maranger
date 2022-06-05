@@ -14,3 +14,9 @@ declare interface UserInfo {
   user_status: string | number;
   user_type: string | number;
 }
+
+declare interface ClassifyType {
+  id: number;
+  deescription: string;
+  classifyName: string;
+}

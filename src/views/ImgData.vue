@@ -6,7 +6,7 @@
     <!-- <el-affix> -->
     <el-form class="search_bar flex flex-wrap" label-width="70px" label-position="left">
       <el-form-item label="ID" label-width="40px">
-        <el-input v-model="query.id" type="number"></el-input>
+        <el-input v-model.number="query.id"></el-input>
       </el-form-item>
       <el-form-item label="图片名">
         <el-input v-model="query.name"></el-input>
@@ -38,13 +38,14 @@
       </el-table-column>
       <el-table-column label="内容" show-overflow-tooltip>
         <template v-slot="scope">
-          <el-image style="width: 200px; height: 100px" :src="scope.row.src" :preview-src-list="[scope.row.src]">
+          <el-image style="width: 200px; height: 100px" :src="scope.row.src" :preview-teleported="true"
+            :preview-src-list="[scope.row.src]">
           </el-image>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template v-slot="scope">
-          <el-button size="small" type="primary" @click="copyUrl(scope.row.src)">复制链接</el-button>
+          <el-button size="small" type="primary" v-copy="scope.row.src">复制链接</el-button>
           <el-popconfirm title="确认删除? 删除后不可恢复!" @confirm="delImage(scope.row.id)">
             <template #reference>
               <el-button type="danger" size="small">删除</el-button>
@@ -66,7 +67,6 @@
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
 import Upload from "@/components/Upload.vue";
 import { apiGetImages, apiDelImage } from "@/api/image";
-// import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 import copyUrl from "@/utils/copy";
 export default defineComponent({

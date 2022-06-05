@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { ElMessage } from "element-plus";
@@ -13,8 +13,6 @@ const addRouters = (_route) => {
   });
 };
 const Layout = () => import("@/layout/index.vue");
-// * 处理路由
-export let routerArray: RouteRecordRaw[] = [];
 const routes = [
   {
     path: "/",
@@ -97,7 +95,6 @@ router.beforeEach(async (to, from, next) => {
         try {
           await userStore.getAuthRouterAction();
           const accessRouters = generateRouter(userStore.getRoleList);
-          routerArray = accessRouters;
           addRouters(accessRouters);
           next({ path: to.path, replace: true });
         } catch (e) {
