@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, ref, toRefs, PropType } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import Compressor from "compressorjs";
 import Upload from "./Upload.vue";
@@ -92,7 +92,7 @@ export default defineComponent({
   name: "ArticleForm",
   props: {
     articleData: {
-      type: Object,
+      type: Object as PropType<ArticleData>,
       default: function () {
         return {}
       }

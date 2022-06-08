@@ -20,3 +20,21 @@ declare interface ClassifyType {
   deescription: string;
   classifyName: string;
 }
+
+declare interface ArticleData {
+  article_abstract: string;
+  article_content: string;
+  article_cover: string;
+  article_keywords: string;
+  article_status: number;
+  article_title: string;
+  author: number;
+  author_nickname: string;
+  classifyId: string;
+  edit_date: string;
+  editorType: number;
+  id: number;
+  post_date: string;
+  isDel?: number;
+  view_count?: number;
+}

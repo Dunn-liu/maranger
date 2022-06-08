@@ -30,7 +30,7 @@ const queryData = ref({
 })
 const queryLoading = ref(false)
 const showDrawer = ref(false)
-const editData: any = ref({})
+const editData = ref({})
 const classify = ref<ClassifyType[]>([])
 const multipleSelection = ref([])
 const delSelect = ref('')
@@ -124,9 +124,10 @@ const filterClassify = (id) => {
   if (classify.value.length === 0) {
     return "";
   } else {
-    return classify.value.filter((item) => {
+    const value = classify.value.filter((item) => {
       return item.id === id;
     })[0];
+    return value.classifyName
   }
 };
 // 清空搜索表单
@@ -274,7 +275,7 @@ const setVisible = () => {
       <el-table-column prop="classifyId" label="分类" width="200">
         <template v-slot="scope">
           <template v-for="(item, index) in scope.row.classifyId">
-            {{ filterClassify(item).classifyName }}
+            {{ filterClassify(item) }}
             {{ scope.row.classifyId.length === index + 1 ? "" : "," }}
           </template>
         </template>
