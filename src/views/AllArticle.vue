@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" setup name="AllArticle">
 import { defineAsyncComponent, onMounted, ref } from "vue";
 import {
   apiDelArticle,

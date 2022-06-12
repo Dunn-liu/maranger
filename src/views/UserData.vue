@@ -77,7 +77,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="UserData">
 import { ref, reactive, onMounted } from 'vue'
 import { apiGetRouterAll, apiGetUserList, apiChangeStatus, apiResetPassWord, apiUpdateRouter, apiDelUser } from "@/api/auth"
 import { formatRouterTree } from '@/utils/routerFormat'

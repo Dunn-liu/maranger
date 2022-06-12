@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="AddArticle">
 import { ref, unref, defineAsyncComponent } from "vue";
 import dayjs from "dayjs";
 import { apiPublishArticle } from "../api/article";
