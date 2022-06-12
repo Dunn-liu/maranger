@@ -28,13 +28,22 @@ declare interface ArticleData {
   article_keywords: string;
   article_status: number;
   article_title: string;
-  author: number;
+  author: string;
   author_nickname: string;
-  classifyId: string;
-  edit_date: string;
+  classifyId: string[] | string;
+  edit_date?: Date | string;
   editorType: number;
-  id: number;
-  post_date: string;
+  id?: number;
+  post_date: Date | string;
   isDel?: number;
   view_count?: number;
+}
+
+interface ImageType {
+  id: number;
+  describe: string;
+  name: string;
+  src: string;
+  type: number;
+  update_time: string;
 }

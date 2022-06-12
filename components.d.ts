@@ -6,6 +6,7 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ArticleForm: typeof import('./src/components/ArticleForm.vue')['default']
+    'ArticleForm copy': typeof import('./src/components/ArticleForm copy.vue')['default']
     ButtonList: typeof import('./src/components/ButtonList.vue')['default']
     ComponentLoading: typeof import('./src/components/ComponentLoading.vue')['default']
     DataNull: typeof import('./src/components/DataNull.vue')['default']
@@ -53,6 +54,7 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    FormArticle: typeof import('./src/components/FormArticle/FormArticle.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     PasswordStrength: typeof import('./src/components/PasswordStrength.vue')['default']
     Qrcode: typeof import('./src/components/Qrcode/src/Qrcode.vue')['default']
@@ -60,7 +62,7 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./src/components/SvgIcon/SvgIcon.vue')['default']
     Upload: typeof import('./src/components/Upload.vue')['default']
-    WEditor: typeof import('./src/components/WEditor.vue')['default']
+    WEditor: typeof import('./src/components/FormArticle/components/WEditor.vue')['default']
   }
 }
 

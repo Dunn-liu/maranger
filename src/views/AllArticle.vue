@@ -11,10 +11,9 @@ import dayjs from "dayjs";
 import type { ElTable, FormInstance } from 'element-plus'
 import ComponentLoading from "@/components/ComponentLoading.vue";
 const ArticleForm = defineAsyncComponent({
-  loader: () => import("@/components/ArticleForm.vue"),
+  loader: () => import("@/components/FormArticle"),
   loadingComponent: ComponentLoading,
 });
-let formValid = null;
 const articleFormRef = ref<FormInstance | any>();
 const tableRef = ref<InstanceType<typeof ElTable>>();
 const previewVisible = ref(false)
@@ -30,7 +29,21 @@ const queryData = ref({
 })
 const queryLoading = ref(false)
 const showDrawer = ref(false)
-const editData = ref({})
+const editData = ref<ArticleData>({
+  // 文章表单数据
+  article_title: "",
+  article_content: "",
+  article_cover: "",
+  author: "",
+  author_nickname: "",
+  post_date: new Date(),
+  edit_date: new Date(),
+  article_abstract: "",
+  article_keywords: "",
+  article_status: 1,
+  classifyId: [],
+  editorType: 1,
+})
 const classify = ref<ClassifyType[]>([])
 const multipleSelection = ref([])
 const delSelect = ref('')
@@ -68,35 +81,15 @@ const getArticle = async () => {
     });
   }
 };
-// 获取表单验证结果
-const getFormValid = (e) => {
-  formValid = e;
-};
-const getEditorType = (e) => {
-  editData.value.editorType = e;
-};
-const getUrl = (e) => {
-  editData.value.article_cover = e;
-};
-const getContent = (e) => {
-  editData.value.article_content = e;
-};
 // 打开编辑抽屉弹窗
-const editArticle = (row) => {
-  editData.value = JSON.parse(JSON.stringify(row));
+const editArticle = (row: ArticleData) => {
+  editData.value = row;
   showDrawer.value = true;
 };
 // 保存编辑
 const saveEdit = async () => {
-  articleFormRef?.value?.validateForm();
-  if (!formValid) {
-    // @ts-ignore
-    ElNotification({
-      type: "error",
-      message: "请检查表单内容!",
-      duration: 2000,
-    });
-  } else {
+  const formValid = await articleFormRef?.value?.validateForm(); // 调用子组件方法
+  if (formValid) {
     const newEditData = JSON.parse(JSON.stringify(editData.value));
     (newEditData.post_date = dayjs(newEditData.post_date).format(
       "YYYY-MM-DD HH:mm:ss"
@@ -307,11 +300,13 @@ const setVisible = () => {
       </el-pagination>
     </div>
     <el-drawer title="编辑文章" v-model="showDrawer" direction="rtl" size="60%" destroy-on-close>
-      <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
-        @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" />
+      <!-- <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
+        @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
+      <ArticleForm v-if="showDrawer" v-model:imgSrc="editData.article_cover" v-model:editorType="editData.editorType"
+        v-model:content="editData.article_content" :articleData="editData" ref="articleFormRef" />
       <div class="sub_bths">
         <el-button type="success" @click="saveEdit">保存</el-button>
-        <el-button type="success" @click="cancelEdit">取消</el-button>
+        <el-button type="info" @click="cancelEdit">取消</el-button>
       </div>
     </el-drawer>
     <el-dialog title="预览" v-model="previewVisible" :destroy-on-close="true" width="80%" center>
