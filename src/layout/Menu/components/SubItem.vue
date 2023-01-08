@@ -3,14 +3,14 @@
 		<el-sub-menu v-if="subItem.children && subItem.children.length > 0" :index="subItem.path">
 			<template #title>
 				<svg-icon :name="subItem.icon" />
-				<span>{{ subItem.title }}</span>
+				<span>&nbsp;&nbsp;{{ subItem.title }}</span>
 			</template>
 			<SubItem :menuList="subItem.children" />
 		</el-sub-menu>
 		<el-menu-item v-else :index="subItem.path">
 			<svg-icon :name="subItem.icon" />
 			<template v-if="!subItem.isLink" #title>
-				<span>{{ subItem.title }}</span>
+				<span>&nbsp;&nbsp;{{ subItem.title }}</span>
 			</template>
 			<template v-else #title>
 				<a class="href" :href="subItem.isLink" target="_blank">{{ subItem.title }}</a>

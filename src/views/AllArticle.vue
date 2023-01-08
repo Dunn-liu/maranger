@@ -252,7 +252,7 @@ const setVisible = () => {
       </el-form-item>
       <el-form-item label-width="0">
         <el-button type="primary" @click="getArticle" :loading="queryLoading">查询</el-button>
-        <el-button @click="clearQuery">清除</el-button>
+        <el-button @click="clearQuery">重置</el-button>
         <el-button type="danger" @click="delArticle">删除文章</el-button>
       </el-form-item>
     </el-form>
@@ -261,7 +261,7 @@ const setVisible = () => {
       element-loading-text="拼命加载中" @selection-change="handleSelectionChange" ref="tableRef"
       :default-sort="{ prop: 'id', order: 'descending' }" @sort-change="handlerSort" border>
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column fixed prop="id" label="ID" width="70" sortable="custom">
+      <el-table-column fixed prop="id" label="ID" width="90" sortable="custom">
       </el-table-column>
       <el-table-column prop="article_title" label="标题" width="200" show-overflow-tooltip>
       </el-table-column>
@@ -279,14 +279,14 @@ const setVisible = () => {
       </el-table-column>
       <el-table-column prop="edit_date" label="更新时间" width="220" sortable="custom" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="article_status" label="状态" width="120">
+      <el-table-column prop="article_status" label="状态" width="120" fixed="right">
         <template v-slot="scope">
           <el-switch :model-value="scope.row.article_status" inline-prompt active-text="已发布" inactive-text="草稿"
             :width="60" active-color="#13ce66" :active-value="1" :inactive-value="0"
             @change="(value) => changeStatus(scope.row, value)" />
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="160px" fixed="right">
         <template v-slot="scope">
           <el-button type="info" size="small" @click="previewArticle(scope.row?.article_content)">预览</el-button>
           <el-button type="primary" size="small" @click="editArticle(scope.row)">编辑</el-button>

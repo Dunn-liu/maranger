@@ -29,14 +29,14 @@
       </el-table-column>
       <el-table-column prop="desc" label="图片描述" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="src" label="图片路径">
+      <el-table-column prop="src" label="图片路径" show-overflow-tooltip>
         <template v-slot="scope">
           <el-link :href="scope.row.src" target="_blank" :underline="false" type="primary">{{ scope.row.src }}</el-link>
         </template>
       </el-table-column>
       <el-table-column prop="update_time" label="上传时间" sortable="custom">
       </el-table-column>
-      <el-table-column label="内容" show-overflow-tooltip>
+      <el-table-column label="内容">
         <template v-slot="scope">
           <el-image style="width: 200px; height: 100px" :src="scope.row.src" :preview-teleported="true"
             :preview-src-list="[scope.row.src]">

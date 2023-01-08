@@ -7,8 +7,10 @@
           :multiple="false" :file-list="fileList" :show-file-list="false" :auto-upload="false"
           :http-request="httpRequest" :data="imgDesc">
           <img v-if="localSrc" :src="localSrc" class="avatar" />
-          <svg-icon name="upload-picture" size="25" />
-          <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          <template v-else>
+            <svg-icon name="upload-picture" size="25" />
+            <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          </template>
         </el-upload>
         <el-input style="width: 240px; margin-top: 15px" v-model.trim="imgDesc.describe" placeholder="请输入图片描述">
         </el-input>

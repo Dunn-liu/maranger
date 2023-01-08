@@ -1,6 +1,6 @@
 <template>
   <div class="calendar">
-    <div class="date my_card">
+    <div class="date my_card justify-center">
       <div class="inner">
         <div class="location">
           <div>
