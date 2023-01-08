@@ -3,28 +3,17 @@
   <el-dialog title="上传图片" v-model="dialogVisible" width="30%">
     <div class="dialog_content">
       <div class="upload_com">
-        <el-upload
-          ref="uploadRef"
-          class="avatar-uploader"
-          action=""
-          :on-change="fileChange"
-          :drag="true"
-          :multiple="false"
-          :file-list="fileList"
-          :show-file-list="false"
-          :auto-upload="false"
-          :http-request="httpRequest"
-          :data="imgDesc"
-        >
+        <el-upload ref="uploadRef" class="avatar-uploader" action="" :on-change="fileChange" :drag="true"
+          :multiple="false" :file-list="fileList" :show-file-list="false" :auto-upload="false"
+          :http-request="httpRequest" :data="imgDesc">
           <img v-if="localSrc" :src="localSrc" class="avatar" />
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          <template v-else>
+            <svg-icon name="upload-picture" size="25" />
+            <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          </template>
         </el-upload>
-        <el-input
-          style="width: 240px; margin-top: 15px"
-          v-model.trim="imgDesc.describe"
-          placeholder="请输入图片描述"
-        ></el-input>
+        <el-input style="width: 240px; margin-top: 15px" v-model.trim="imgDesc.describe" placeholder="请输入图片描述">
+        </el-input>
       </div>
     </div>
     <template #footer>
@@ -119,13 +108,20 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
 }
+
 :deep(.avatar-uploader .el-upload:hover) {
   border-color: #409eff;
 }
+
 :deep(.el-upload-dragger) {
   width: 240px;
   height: 178px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
 .avatar {
   width: 240px;
   height: 178px;

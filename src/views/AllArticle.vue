@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" setup name="AllArticle">
 import { defineAsyncComponent, onMounted, ref } from "vue";
 import {
   apiDelArticle,
@@ -11,11 +11,10 @@ import dayjs from "dayjs";
 import type { ElTable, FormInstance } from 'element-plus'
 import ComponentLoading from "@/components/ComponentLoading.vue";
 const ArticleForm = defineAsyncComponent({
-  loader: () => import("@/components/ArticleForm.vue"),
+  loader: () => import("@/components/FormArticle"),
   loadingComponent: ComponentLoading,
 });
-let formValid = null;
-const articleFormRef = ref<FormInstance>();
+const articleFormRef = ref<FormInstance | any>();
 const tableRef = ref<InstanceType<typeof ElTable>>();
 const previewVisible = ref(false)
 const previewContent = ref('')
@@ -30,8 +29,22 @@ const queryData = ref({
 })
 const queryLoading = ref(false)
 const showDrawer = ref(false)
-const editData = ref({})
-const classify = ref([])
+const editData = ref<ArticleData>({
+  // 文章表单数据
+  article_title: "",
+  article_content: "",
+  article_cover: "",
+  author: "",
+  author_nickname: "",
+  post_date: new Date(),
+  edit_date: new Date(),
+  article_abstract: "",
+  article_keywords: "",
+  article_status: 1,
+  classifyId: [],
+  editorType: 1,
+})
+const classify = ref<ClassifyType[]>([])
 const multipleSelection = ref([])
 const delSelect = ref('')
 const totalNum = ref(0)
@@ -61,40 +74,22 @@ const getArticle = async () => {
     queryLoading.value = false;
   } else {
     queryLoading.value = false;
+    // @ts-ignore
     ElNotification({
       type: "error",
       message: "数据加载失败,请刷新页面!",
     });
   }
 };
-// 获取表单验证结果
-const getFormValid = (e) => {
-  formValid = e;
-};
-const getEditorType = (e) => {
-  editData.value.editorType = e;
-};
-const getUrl = (e) => {
-  editData.value.article_cover = e;
-};
-const getContent = (e) => {
-  editData.value.article_content = e;
-};
 // 打开编辑抽屉弹窗
-const editArticle = (row) => {
-  editData.value = JSON.parse(JSON.stringify(row));
+const editArticle = (row: ArticleData) => {
+  editData.value = row;
   showDrawer.value = true;
 };
 // 保存编辑
 const saveEdit = async () => {
-  articleFormRef.value.validateForm();
-  if (!formValid) {
-    ElNotification({
-      type: "error",
-      message: "请检查表单内容!",
-      duration: 2000,
-    });
-  } else {
+  const formValid = await articleFormRef?.value?.validateForm(); // 调用子组件方法
+  if (formValid) {
     const newEditData = JSON.parse(JSON.stringify(editData.value));
     (newEditData.post_date = dayjs(newEditData.post_date).format(
       "YYYY-MM-DD HH:mm:ss"
@@ -102,6 +97,7 @@ const saveEdit = async () => {
       (newEditData.classifyId = newEditData.classifyId.join(","));
     const res = await apiUpdateArticle(newEditData);
     if (res.code === 200) {
+      // @ts-ignore
       ElNotification({
         type: "success",
         message: "文章更新成功!",
@@ -121,9 +117,10 @@ const filterClassify = (id) => {
   if (classify.value.length === 0) {
     return "";
   } else {
-    return classify.value.filter((item) => {
+    const value = classify.value.filter((item) => {
       return item.id === id;
     })[0];
+    return value.classifyName
   }
 };
 // 清空搜索表单
@@ -147,6 +144,7 @@ const handleSelectionChange = (val) => {
 };
 const delArticle = async () => {
   if (!delSelect.value) {
+    // @ts-ignore
     ElMessage.warning({
       showClose: true,
       duration: 1500,
@@ -154,6 +152,7 @@ const delArticle = async () => {
       type: "warning",
     });
   } else {
+    // @ts-ignore
     ElMessageBox.confirm("此操作不可恢复, 是否继续删除文章?", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
@@ -162,6 +161,7 @@ const delArticle = async () => {
       .then(async () => {
         const res = await apiDelArticle({ id: delSelect.value });
         if (res.code === 200) {
+          // @ts-ignore
           ElMessage({
             showClose: true,
             duration: 1500,
@@ -173,6 +173,7 @@ const delArticle = async () => {
       })
       .catch(() => {
         tableRef?.value?.clearSelection();
+        // @ts-ignore
         ElNotification({
           type: "info",
           message: "取消操作!",
@@ -206,6 +207,7 @@ const changeStatus = async (row, type) => {
   };
   const res = await apiChangeStatus(data);
   if (res.code === 200) {
+    // @ts-ignore
     ElMessage({
       type: +type === 0 ? "warning" : "success",
       showClose: true,
@@ -250,7 +252,7 @@ const setVisible = () => {
       </el-form-item>
       <el-form-item label-width="0">
         <el-button type="primary" @click="getArticle" :loading="queryLoading">查询</el-button>
-        <el-button @click="clearQuery">清除</el-button>
+        <el-button @click="clearQuery">重置</el-button>
         <el-button type="danger" @click="delArticle">删除文章</el-button>
       </el-form-item>
     </el-form>
@@ -259,14 +261,14 @@ const setVisible = () => {
       element-loading-text="拼命加载中" @selection-change="handleSelectionChange" ref="tableRef"
       :default-sort="{ prop: 'id', order: 'descending' }" @sort-change="handlerSort" border>
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column fixed prop="id" label="ID" width="70" sortable="custom">
+      <el-table-column fixed prop="id" label="ID" width="90" sortable="custom">
       </el-table-column>
       <el-table-column prop="article_title" label="标题" width="200" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="classifyId" label="分类" width="200">
         <template v-slot="scope">
           <template v-for="(item, index) in scope.row.classifyId">
-            {{ filterClassify(item).classifyName }}
+            {{ filterClassify(item) }}
             {{ scope.row.classifyId.length === index + 1 ? "" : "," }}
           </template>
         </template>
@@ -277,14 +279,14 @@ const setVisible = () => {
       </el-table-column>
       <el-table-column prop="edit_date" label="更新时间" width="220" sortable="custom" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="article_status" label="状态" width="120">
+      <el-table-column prop="article_status" label="状态" width="120" fixed="right">
         <template v-slot="scope">
           <el-switch :model-value="scope.row.article_status" inline-prompt active-text="已发布" inactive-text="草稿"
             :width="60" active-color="#13ce66" :active-value="1" :inactive-value="0"
             @change="(value) => changeStatus(scope.row, value)" />
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="160px" fixed="right">
         <template v-slot="scope">
           <el-button type="info" size="small" @click="previewArticle(scope.row?.article_content)">预览</el-button>
           <el-button type="primary" size="small" @click="editArticle(scope.row)">编辑</el-button>
@@ -298,11 +300,13 @@ const setVisible = () => {
       </el-pagination>
     </div>
     <el-drawer title="编辑文章" v-model="showDrawer" direction="rtl" size="60%" destroy-on-close>
-      <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
-        @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" />
+      <!-- <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
+        @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
+      <ArticleForm v-if="showDrawer" v-model:imgSrc="editData.article_cover" v-model:editorType="editData.editorType"
+        v-model:content="editData.article_content" :articleData="editData" ref="articleFormRef" />
       <div class="sub_bths">
         <el-button type="success" @click="saveEdit">保存</el-button>
-        <el-button type="success" @click="cancelEdit">取消</el-button>
+        <el-button type="info" @click="cancelEdit">取消</el-button>
       </div>
     </el-drawer>
     <el-dialog title="预览" v-model="previewVisible" :destroy-on-close="true" width="80%" center>

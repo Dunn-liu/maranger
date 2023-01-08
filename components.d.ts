@@ -6,10 +6,10 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ArticleForm: typeof import('./src/components/ArticleForm.vue')['default']
+    'ArticleForm copy': typeof import('./src/components/ArticleForm copy.vue')['default']
     ButtonList: typeof import('./src/components/ButtonList.vue')['default']
     ComponentLoading: typeof import('./src/components/ComponentLoading.vue')['default']
     DataNull: typeof import('./src/components/DataNull.vue')['default']
-    ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -28,9 +28,11 @@ declare module '@vue/runtime-core' {
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElFooter: typeof import('element-plus/es')['ElFooter']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElLink: typeof import('element-plus/es')['ElLink']
@@ -39,7 +41,6 @@ declare module '@vue/runtime-core' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElOption: typeof import('element-plus/es')['ElOption']
-    ElPageHeader: typeof import('element-plus/es')['ElPageHeader']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
     ElProgress: typeof import('element-plus/es')['ElProgress']
@@ -54,6 +55,7 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    FormArticle: typeof import('./src/components/FormArticle/FormArticle.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     PasswordStrength: typeof import('./src/components/PasswordStrength.vue')['default']
     Qrcode: typeof import('./src/components/Qrcode/src/Qrcode.vue')['default']
@@ -61,7 +63,7 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./src/components/SvgIcon/SvgIcon.vue')['default']
     Upload: typeof import('./src/components/Upload.vue')['default']
-    WEditor: typeof import('./src/components/WEditor.vue')['default']
+    WEditor: typeof import('./src/components/FormArticle/components/WEditor.vue')['default']
   }
 }
 

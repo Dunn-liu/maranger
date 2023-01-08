@@ -77,7 +77,7 @@
     </el-tabs>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="PersonalSetting">
 import { ref, watch, h, unref } from "vue";
 import { useUserStore } from "@/store/modules/user";
 import dayjs from "dayjs";

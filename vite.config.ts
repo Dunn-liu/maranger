@@ -5,6 +5,7 @@ import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import windiCSS from "vite-plugin-windicss";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+import VueSetupExtend from "vite-plugin-vue-setup-extend";
 const path = require("path");
 import viteCompression from "vite-plugin-compression";
 // https://vitejs.dev/config/
@@ -12,6 +13,7 @@ export default defineConfig({
   plugins: [
     vue(),
     windiCSS(),
+    VueSetupExtend(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),

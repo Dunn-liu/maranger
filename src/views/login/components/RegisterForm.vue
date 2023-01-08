@@ -154,7 +154,7 @@ const register = () => {
         if (valid) {
             loading.value = true
             const newRegisterForm = JSON.parse(
-                JSON.stringify(registerForms)
+                JSON.stringify(unref(registerForms))
             );
             newRegisterForm.checkPassWord = undefined;
             const res = await apiRegister(newRegisterForm);

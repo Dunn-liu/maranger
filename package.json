@@ -49,6 +49,7 @@
     "vite": "2.9.5",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-svg-icons": "^2.0.1",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
     "vite-plugin-windicss": "^1.8.4",
     "vue-tsc": "^0.34.7",
     "windicss": "^3.5.1"

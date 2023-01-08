@@ -1,0 +1,21 @@
+.m-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-left: 30px;
+	background-color: #fff !important;
+	border-bottom: 1px solid #eee;
+	border-left: 1px solid #eee;
+  
+	.userinfo {
+	  display: flex;
+	  align-items: center;
+	  color: #000;
+	  font-size: 14px;
+	  letter-spacing: 3px;
+  
+	  .el-avatar {
+		margin-right: 10px;
+	  }
+	}
+  }
