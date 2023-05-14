@@ -20,22 +20,22 @@ const tabStore = TabsStore();
 
 // Close Current
 const closeCurrentTab = () => {
-	if (tabStore.tabsMenuValue === HOME_URL) return;
-	tabStore.removeTabs(tabStore.tabsMenuValue);
+  if (tabStore.tabsMenuValue === HOME_URL) return;
+  tabStore.removeTabs(tabStore.tabsMenuValue);
 };
 
 // Close Other
 const closeOtherTab = () => {
-	tabStore.closeMultipleTab(tabStore.tabsMenuValue);
+  tabStore.closeMultipleTab(tabStore.tabsMenuValue);
 };
 
 // Close All
 const closeAllTab = () => {
-	tabStore.closeMultipleTab();
-	tabStore.goHome();
+  tabStore.closeMultipleTab();
+  tabStore.goHome();
 };
 </script>
 
 <style scoped lang="less">
-@import "../index.scss";
+@import "../index.less";
 </style>

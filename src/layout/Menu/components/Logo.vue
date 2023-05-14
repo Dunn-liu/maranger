@@ -10,5 +10,5 @@ defineProps<{ isCollapse: boolean }>();
 </script>
 
 <style scoped lang="less">
-@import "../index.scss";
+@import "../index.less";
 </style>

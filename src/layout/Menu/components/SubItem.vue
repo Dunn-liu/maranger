@@ -24,5 +24,5 @@ defineProps<{ menuList: Menu.MenuOptions[] }>();
 </script>
 
 <style scoped lang="less">
-@import "../index.scss";
+@import "../index.less";
 </style>

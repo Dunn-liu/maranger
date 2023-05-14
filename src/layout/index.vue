@@ -41,17 +41,17 @@ const userStore = useUserStore()
 const router = useRouter()
 const keepAliveList: any = []
 watch(() => router.currentRoute.value, (val) => {
-	if (val.meta.keepAlive && keepAliveList.indexOf(val.name) === -1) {
-		keepAliveList.push(val.name)
-	}
-	console.log('keepAliveList', keepAliveList);
+  if (val.meta.keepAlive && keepAliveList.indexOf(val.name) === -1) {
+    keepAliveList.push(val.name)
+  }
+  console.log('keepAliveList', keepAliveList);
 }, { immediate: true, deep: true })
 const getUserInfo = async () => {
-	if (isNull(localGet('userInfo')) || isEmpty(localGet('userInfo'))) { await userStore.getUserInfoAction() }
+  if (isNull(localGet('userInfo')) || isEmpty(localGet('userInfo'))) { await userStore.getUserInfoAction() }
 }
 getUserInfo()
 </script>
 
 <style scoped lang="less">
-@import "./index.scss";
+@import "./index.less";
 </style>

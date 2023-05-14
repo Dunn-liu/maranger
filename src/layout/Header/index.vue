@@ -17,5 +17,5 @@ import Avatar from "./components/Avatar.vue";
 </script>
 
 <style scoped lang="less">
-@import "./index.scss";
+@import "./index.less";
 </style>

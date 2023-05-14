@@ -19,10 +19,10 @@ import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.getUserInfo || {})
 const loginOut = () => {
-	userStore.confirmLoginOut()
+  userStore.confirmLoginOut()
 }
 </script>
 
 <style scoped lang="less">
-@import "../index.scss";
+@import "../index.less";
 </style>

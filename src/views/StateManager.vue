@@ -70,7 +70,7 @@ const getData = async () => {
 };
 
 </script>
-<style lang='scss' scoped>
+<style lang='less' scoped>
 .state_manager {
   flex-direction: column;
 

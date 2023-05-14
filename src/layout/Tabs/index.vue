@@ -66,5 +66,5 @@ const removeTab = (activeTabPath: string) => {
 </script>
 
 <style scoped lang="less">
-@import "./index.scss";
+@import "./index.less";
 </style>

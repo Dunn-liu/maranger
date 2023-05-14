@@ -35,18 +35,18 @@ const screenWidth = ref<number>(0);
 const screenHeight = ref<number>(0);
 //监听窗口大小
 const listeningWindow = () => {
-	window.onresize = () => {
-		return (() => {
-			screenWidth.value = document.body.clientWidth;
-			screenHeight.value = document.body.clientHeight;
-			if (isCollapse.value === false && screenWidth.value < 1200) menuStore.setCollapse();
-			if (isCollapse.value === true && screenWidth.value > 1200) menuStore.setCollapse();
-		})();
-	};
+  window.onresize = () => {
+    return (() => {
+      screenWidth.value = document.body.clientWidth;
+      screenHeight.value = document.body.clientHeight;
+      if (isCollapse.value === false && screenWidth.value < 1200) menuStore.setCollapse();
+      if (isCollapse.value === true && screenWidth.value > 1200) menuStore.setCollapse();
+    })();
+  };
 };
 listeningWindow();
 </script>
 
 <style scoped lang="less">
-@import "./index.scss";
+@import "./index.less";
 </style>
