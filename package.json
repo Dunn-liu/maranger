@@ -44,6 +44,7 @@
     "unplugin-vue-components": "^0.24.1",
     "vite": "4.3.5",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-html": "^3.2.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-plugin-vue-setup-extend": "^0.4.0",
     "vite-plugin-windicss": "^1.9.0",
