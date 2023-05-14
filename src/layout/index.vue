@@ -1,29 +1,29 @@
 <template>
-	<el-container>
-		<el-aside>
-			<Menu></Menu>
-		</el-aside>
-		<el-container>
-			<el-header>
-				<Header></Header>
-				<Tabs></Tabs>
-			</el-header>
-			<el-main>
-				<section class="main-box">
-					<router-view v-slot="{ Component, route }">
-						<transition appear name="fade-slide" mode="out-in">
-							<keep-alive :include="keepAliveList">
-								<component :is="Component" :key="route.fullPath"></component>
-							</keep-alive>
-						</transition>
-					</router-view>
-				</section>
-			</el-main>
-			<el-footer>
-				<Footer></Footer>
-			</el-footer>
-		</el-container>
-	</el-container>
+  <el-container>
+    <el-aside>
+      <Menu></Menu>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <Header></Header>
+        <Tabs></Tabs>
+      </el-header>
+      <el-main>
+        <section class="main-box">
+          <router-view v-slot="{ Component, route }">
+            <transition appear name="fade-slide" mode="out-in">
+              <keep-alive :include="keepAliveList">
+                <component :is="Component" :key="route.fullPath"></component>
+              </keep-alive>
+            </transition>
+          </router-view>
+        </section>
+      </el-main>
+      <el-footer>
+        <Footer></Footer>
+      </el-footer>
+    </el-container>
+  </el-container>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +52,6 @@ const getUserInfo = async () => {
 getUserInfo()
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 @import "./index.scss";
 </style>

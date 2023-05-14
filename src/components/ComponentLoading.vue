@@ -1,11 +1,6 @@
 <template>
-  <div
-      class="loading"
-      v-loading="true"
-      element-loading-text="拼命加载中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255, 255, 255, 0.5)"
-  >
+  <div class="loading" v-loading="true" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(255, 255, 255, 0.5)">
   </div>
 </template>
 
@@ -15,8 +10,8 @@ name: "ComponentLoading"
 }
 </script>
 
-<style lang="scss">
-.loading{
+<style lang="less">
+.loading {
   width: 100%;
   height: 600px;
   margin-bottom: 20px;

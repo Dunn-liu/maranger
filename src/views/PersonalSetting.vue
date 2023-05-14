@@ -3,8 +3,7 @@
     <el-tabs tab-position="top" style="width: 100%">
       <el-tab-pane label="基本信息">
         <div class="base_setting">
-          <el-form ref="form" :model="userInfo" label-width="80px" label-position="top" style="width: 440px"
-            size="small">
+          <el-form ref="form" :model="userInfo" label-width="80px" label-position="top" style="width: 440px" size="small">
             <el-form-item label="角色类型">
               <el-input v-model="AUTH_MAP[userInfo.user_type]" disabled></el-input>
             </el-form-item>
@@ -249,7 +248,7 @@ const resetPass = () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 .personal_data {
   justify-content: left;
 

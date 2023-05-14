@@ -56,8 +56,8 @@
     </el-table>
     <div class="page_nation">
       <el-pagination background layout="prev, pager, next ,sizes,total " :page-sizes="[5, 10, 20]"
-        :page-size="query.limit" :current-page="query.currentPage" :total="totalNum"
-        @current-change="handleCurrentChange" @size-change="handleSizeChange" :hide-on-single-page="true">
+        :page-size="query.limit" :current-page="query.currentPage" :total="totalNum" @current-change="handleCurrentChange"
+        @size-change="handleSizeChange" :hide-on-single-page="true">
       </el-pagination>
     </div>
   </div>
@@ -161,7 +161,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .img_data {
   flex-direction: column;
 

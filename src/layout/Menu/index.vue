@@ -1,17 +1,17 @@
 <template>
-	<div class="menu" :style="{ width: isCollapse ? '65px' : '220px' }">
-		<Logo :isCollapse="isCollapse"></Logo>
-		<el-scrollbar>
-			<el-menu :default-active="activeMenu" :router="true" :collapse="isCollapse" :collapse-transition="false"
-				:unique-opened="true" background-color="#001529" text-color="#bdbdc0" active-text-color="#fff">
-				<el-menu-item index="/home">
-					<svg-icon name="calendar" />&nbsp;&nbsp;
-					<template #title>日历</template>
-				</el-menu-item>
-				<SubItem :menuList="menuList"></SubItem>
-			</el-menu>
-		</el-scrollbar>
-	</div>
+  <div class="menu" :style="{ width: isCollapse ? '65px' : '220px' }">
+    <Logo :isCollapse="isCollapse"></Logo>
+    <el-scrollbar>
+      <el-menu :default-active="activeMenu" :router="true" :collapse="isCollapse" :collapse-transition="false"
+        :unique-opened="true" background-color="#001529" text-color="#bdbdc0" active-text-color="#fff">
+        <el-menu-item index="/home">
+          <svg-icon name="calendar" />&nbsp;&nbsp;
+          <template #title>日历</template>
+        </el-menu-item>
+        <SubItem :menuList="menuList"></SubItem>
+      </el-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -47,6 +47,6 @@ const listeningWindow = () => {
 listeningWindow();
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 @import "./index.scss";
 </style>

@@ -34,7 +34,7 @@ import "codemirror/addon/scroll/simplescrollbars.css";
 // style
 import "codemirror/lib/codemirror.css";
 import hljs from "highlight.js";
-import "@/styles/index.scss";
+import "@/styles/index.less";
 import "virtual:windi-base.css";
 import "virtual:windi-components.css";
 import "virtual:windi-utilities.css";

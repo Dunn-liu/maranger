@@ -301,7 +301,7 @@ const setVisible = () => {
     </div>
     <el-drawer title="编辑文章" v-model="showDrawer" direction="rtl" size="60%" destroy-on-close>
       <!-- <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
-        @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
+          @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
       <ArticleForm v-if="showDrawer" v-model:imgSrc="editData.article_cover" v-model:editorType="editData.editorType"
         v-model:content="editData.article_content" :articleData="editData" ref="articleFormRef" />
       <div class="sub_bths">
@@ -322,7 +322,7 @@ const setVisible = () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .all_article {
   flex-direction: column;
 
@@ -350,7 +350,7 @@ const setVisible = () => {
   }
 }
 </style>
-<style lang="scss">
+<style lang="less">
 .el-table_body tr,
 .el-table_body td {
   height: 36px;

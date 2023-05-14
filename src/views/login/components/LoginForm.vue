@@ -137,5 +137,4 @@ const changeCaptcha = () => {
   codeSrc.value = `${src}?${Date.now()}`;
 };
 </script>
-<style lang="scss">
-</style>
+<style lang="less"></style>

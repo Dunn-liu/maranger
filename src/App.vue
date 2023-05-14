@@ -11,7 +11,7 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
 </script>
 
-<style lang="scss">
+<style lang="less">
 .el-table--border th.gutter:last-of-type {
   display: block !important;
 }

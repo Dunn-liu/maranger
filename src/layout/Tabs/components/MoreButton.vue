@@ -1,16 +1,16 @@
 <template>
-	<el-dropdown trigger="click">
-		<el-button size="small" type="primary">
-			<span>更多</span>
-		</el-button>
-		<template #dropdown>
-			<el-dropdown-menu>
-				<el-dropdown-item @click="closeCurrentTab">关闭当前页</el-dropdown-item>
-				<el-dropdown-item @click="closeOtherTab">关闭其他页</el-dropdown-item>
-				<el-dropdown-item @click="closeAllTab">关闭所有</el-dropdown-item>
-			</el-dropdown-menu>
-		</template>
-	</el-dropdown>
+  <el-dropdown trigger="click">
+    <el-button size="small" type="primary">
+      <span>更多</span>
+    </el-button>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item @click="closeCurrentTab">关闭当前页</el-dropdown-item>
+        <el-dropdown-item @click="closeOtherTab">关闭其他页</el-dropdown-item>
+        <el-dropdown-item @click="closeAllTab">关闭所有</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
 <script setup lang="ts">
@@ -36,6 +36,6 @@ const closeAllTab = () => {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 @import "../index.scss";
 </style>

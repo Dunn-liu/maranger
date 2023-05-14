@@ -59,7 +59,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .calendar {
   .inner {
     width: 80%;
