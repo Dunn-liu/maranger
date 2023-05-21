@@ -4,20 +4,18 @@
       <Menu></Menu>
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header style="height: 100px;">
         <Header></Header>
         <Tabs></Tabs>
       </el-header>
       <el-main>
-        <section class="main-box">
-          <router-view v-slot="{ Component, route }">
-            <transition appear name="fade-slide" mode="out-in">
-              <keep-alive :include="keepAliveList">
-                <component :is="Component" :key="route.fullPath"></component>
-              </keep-alive>
-            </transition>
-          </router-view>
-        </section>
+        <router-view v-slot="{ Component, route }">
+          <transition appear name="fade-slide" mode="out-in">
+            <keep-alive :include="keepAliveList">
+              <component :is="Component" :key="route.fullPath"></component>
+            </keep-alive>
+          </transition>
+        </router-view>
       </el-main>
       <el-footer>
         <Footer></Footer>

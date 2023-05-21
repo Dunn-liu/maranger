@@ -7,6 +7,7 @@ import windiCSS from "vite-plugin-windicss";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import VueSetupExtend from "vite-plugin-vue-setup-extend";
 import { createHtmlPlugin } from "vite-plugin-html";
+import VueJsx from "@vitejs/plugin-vue-jsx";
 const path = require("path");
 import viteCompression from "vite-plugin-compression";
 import dayjs from "dayjs";
@@ -14,6 +15,7 @@ import dayjs from "dayjs";
 export default defineConfig({
   plugins: [
     vue(),
+    VueJsx(),
     windiCSS(),
     VueSetupExtend(),
     AutoImport({

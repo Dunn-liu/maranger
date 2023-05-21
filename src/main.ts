@@ -1,6 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/css/commont.css";
+import "element-plus/dist/index.css";
+import "@/styles/element.less";
 import router from "./router/index";
 // import store from './store/index'
 import { createPinia } from "pinia";
