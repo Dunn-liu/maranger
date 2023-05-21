@@ -1,26 +1,20 @@
 <template>
-	<div class="tabs-box">
-		<div class="tabs-menu">
-			<el-tabs v-model="tabsMenuValue" type="card" @tab-click="tabClick" @tab-remove="removeTab">
-				<el-tab-pane
-					v-for="item in tabsMenuList"
-					:key="item.path"
-					:path="item.path"
-					:label="item.title"
-					:name="item.path"
-					:closable="item.close"
-				>
-					<template #label>
-						<el-icon class="tabs-icon" v-if="item.icon">
-							<component :is="item.icon"></component>
-						</el-icon>
-						{{ item.title }}
-					</template>
-				</el-tab-pane>
-			</el-tabs>
-			<MoreButton></MoreButton>
-		</div>
-	</div>
+  <div class="tabs-box">
+    <div class="tabs-menu">
+      <el-tabs v-model="tabsMenuValue" type="card" @tab-click="tabClick" @tab-remove="removeTab">
+        <el-tab-pane v-for="item in tabsMenuList" :key="item.path" :path="item.path" :label="item.title" :name="item.path"
+          :closable="item.close">
+          <template #label>
+            <el-icon class="tabs-icon" v-if="item.icon">
+              <component :is="item.icon"></component>
+            </el-icon>
+            {{ item.title }}
+          </template>
+        </el-tab-pane>
+      </el-tabs>
+      <MoreButton></MoreButton>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -71,6 +65,6 @@ const removeTab = (activeTabPath: string) => {
 };
 </script>
 
-<style scoped lang="scss">
-@import "./index.scss";
+<style scoped lang="less">
+@import "./index.less";
 </style>

@@ -6,12 +6,16 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import windiCSS from "vite-plugin-windicss";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import VueSetupExtend from "vite-plugin-vue-setup-extend";
+import { createHtmlPlugin } from "vite-plugin-html";
+import VueJsx from "@vitejs/plugin-vue-jsx";
 const path = require("path");
 import viteCompression from "vite-plugin-compression";
+import dayjs from "dayjs";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    VueJsx(),
     windiCSS(),
     VueSetupExtend(),
     AutoImport({
@@ -33,6 +37,14 @@ export default defineConfig({
       threshold: 10240,
       algorithm: "gzip",
       ext: ".gz",
+    }),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          buildTime: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          env: "production",
+        },
+      },
     }),
   ],
   base: "/",

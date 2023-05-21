@@ -1,16 +1,16 @@
 <template>
-	<el-dropdown trigger="click">
-		<el-button size="small" type="primary">
-			<span>更多</span>
-		</el-button>
-		<template #dropdown>
-			<el-dropdown-menu>
-				<el-dropdown-item @click="closeCurrentTab">关闭当前页</el-dropdown-item>
-				<el-dropdown-item @click="closeOtherTab">关闭其他页</el-dropdown-item>
-				<el-dropdown-item @click="closeAllTab">关闭所有</el-dropdown-item>
-			</el-dropdown-menu>
-		</template>
-	</el-dropdown>
+  <el-dropdown trigger="click">
+    <el-button size="small" type="primary">
+      <span>更多</span>
+    </el-button>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item @click="closeCurrentTab">关闭当前页</el-dropdown-item>
+        <el-dropdown-item @click="closeOtherTab">关闭其他页</el-dropdown-item>
+        <el-dropdown-item @click="closeAllTab">关闭所有</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
 <script setup lang="ts">
@@ -20,22 +20,22 @@ const tabStore = TabsStore();
 
 // Close Current
 const closeCurrentTab = () => {
-	if (tabStore.tabsMenuValue === HOME_URL) return;
-	tabStore.removeTabs(tabStore.tabsMenuValue);
+  if (tabStore.tabsMenuValue === HOME_URL) return;
+  tabStore.removeTabs(tabStore.tabsMenuValue);
 };
 
 // Close Other
 const closeOtherTab = () => {
-	tabStore.closeMultipleTab(tabStore.tabsMenuValue);
+  tabStore.closeMultipleTab(tabStore.tabsMenuValue);
 };
 
 // Close All
 const closeAllTab = () => {
-	tabStore.closeMultipleTab();
-	tabStore.goHome();
+  tabStore.closeMultipleTab();
+  tabStore.goHome();
 };
 </script>
 
-<style scoped lang="scss">
-@import "../index.scss";
+<style scoped lang="less">
+@import "../index.less";
 </style>

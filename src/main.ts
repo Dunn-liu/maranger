@@ -1,6 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/css/commont.css";
+import "element-plus/dist/index.css";
+import "@/styles/element.less";
 import router from "./router/index";
 // import store from './store/index'
 import { createPinia } from "pinia";
@@ -34,7 +36,7 @@ import "codemirror/addon/scroll/simplescrollbars.css";
 // style
 import "codemirror/lib/codemirror.css";
 import hljs from "highlight.js";
-import "@/styles/index.scss";
+import "@/styles/index.less";
 import "virtual:windi-base.css";
 import "virtual:windi-components.css";
 import "virtual:windi-utilities.css";

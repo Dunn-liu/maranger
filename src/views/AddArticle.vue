@@ -84,7 +84,7 @@ const submitHandle = async (type?: string) => {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .add_article {
   flex-direction: column;
   align-items: center;

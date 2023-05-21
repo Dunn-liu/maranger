@@ -58,7 +58,7 @@ const updataVisible = (type: 'login' | 'register' | 'qr') => {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .contentBox {
   width: 100%;
   height: 100vh;

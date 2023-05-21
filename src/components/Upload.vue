@@ -4,8 +4,8 @@
     <div class="dialog_content">
       <div class="upload_com">
         <el-upload ref="uploadRef" class="avatar-uploader" action="" :on-change="fileChange" :drag="true"
-          :multiple="false" :file-list="fileList" :show-file-list="false" :auto-upload="false"
-          :http-request="httpRequest" :data="imgDesc">
+          :multiple="false" :file-list="fileList" :show-file-list="false" :auto-upload="false" :http-request="httpRequest"
+          :data="imgDesc">
           <img v-if="localSrc" :src="localSrc" class="avatar" />
           <template v-else>
             <svg-icon name="upload-picture" size="25" />
@@ -102,7 +102,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang='scss' scoped>
+<style lang='less' scoped>
 .upload_com {
   display: flex;
   flex-direction: column;

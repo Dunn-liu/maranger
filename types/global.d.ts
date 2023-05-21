@@ -47,3 +47,5 @@ interface ImageType {
   type: number;
   update_time: string;
 }
+
+declare type ComponentRef<T> = InstanceType<T>;

@@ -1,45 +1,44 @@
 <template>
-    <div class="register" v-if="props.visible">
-        <div class="mb-3 px-4 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
-            注册
-        </div>
-        <el-form :model="registerForms" :rules="registerRules" ref="formRef">
-            <el-form-item class="enter-x" prop="email">
-                <el-input type="email" placeholder="邮箱" v-model="registerForms.email" autocomplete="new-password">
-                </el-input>
-            </el-form-item>
-            <el-form-item class="enter-x" prop="code">
-                <el-row class="w-full">
-                    <el-col :span="17">
-                        <el-input type="text" placeholder="验证码" v-model="registerForms.code"
-                            autocomplete="new-password">
-                        </el-input>
-                    </el-col>
-                    <el-col :span="7" style="height:40px">
-                        <el-button type="primary" class="w-full" @click="sendCode" :disabled="isActive">{{
-                                isActive ? `${countdown}s后重新发送` : '发送验证码'
-                        }}</el-button>
-                    </el-col>
-                </el-row>
-            </el-form-item>
-            <!-- <el-form-item class="enter-x" prop="user_nickname">
+  <div class="register" v-if="props.visible">
+    <div class="mb-3 px-4 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
+      注册
+    </div>
+    <el-form :model="registerForms" :rules="registerRules" ref="formRef">
+      <el-form-item class="enter-x" prop="email">
+        <el-input type="email" placeholder="邮箱" v-model="registerForms.email" autocomplete="new-password">
+        </el-input>
+      </el-form-item>
+      <el-form-item class="enter-x" prop="code">
+        <el-row class="w-full">
+          <el-col :span="17">
+            <el-input type="text" placeholder="验证码" v-model="registerForms.code" autocomplete="new-password">
+            </el-input>
+          </el-col>
+          <el-col :span="7" style="height:40px">
+            <el-button type="primary" class="w-full" @click="sendCode" :disabled="isActive">{{
+              isActive ? `${countdown}s后重新发送` : '发送验证码'
+            }}</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <!-- <el-form-item class="enter-x" prop="user_nickname">
                 <el-input type="text" placeholder="用户名" v-model="registerForms.user_nickname"></el-input>
             </el-form-item> -->
-            <el-form-item class="enter-x" prop="passWord">
-                <el-input placeholder="密码" type="password" show-password v-model="registerForms.passWord"
-                    autocomplete="new-password"></el-input>
-                <password-strength v-if="registerForms.passWord.trim()" :password="registerForms.passWord" />
-            </el-form-item>
-            <el-form-item class="enter-x" prop="checkPassWord">
-                <el-input placeholder="确认密码" type="password" show-password v-model="registerForms.checkPassWord"
-                    autocomplete="new-password"></el-input>
-            </el-form-item>
-        </el-form>
-        <div>
-            <el-button type="primary" :loading="loading" @click="register" class="w-full mb-4">注册</el-button>
-        </div>
-        <el-button :loading="loading" @click="updateVisible('login')" class="w-full">返回</el-button>
+      <el-form-item class="enter-x" prop="passWord">
+        <el-input placeholder="密码" type="password" show-password v-model="registerForms.passWord"
+          autocomplete="new-password"></el-input>
+        <password-strength v-if="registerForms.passWord.trim()" :password="registerForms.passWord" />
+      </el-form-item>
+      <el-form-item class="enter-x" prop="checkPassWord">
+        <el-input placeholder="确认密码" type="password" show-password v-model="registerForms.checkPassWord"
+          autocomplete="new-password"></el-input>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-button type="primary" :loading="loading" @click="register" class="w-full mb-4">注册</el-button>
     </div>
+    <el-button :loading="loading" @click="updateVisible('login')" class="w-full">返回</el-button>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, watch, unref } from "vue";
@@ -201,5 +200,4 @@ const sendCode = () => {
     })
 };
 </script>
-<style lang="scss">
-</style>
+<style lang="less"></style>
