@@ -1,8 +1,5 @@
 <template>
   <div class="my_card">
-    <div class="upload">
-      <Upload @uploadSuc="uploadSuc" />
-    </div>
     <Search ref="searchRef" @search="handleSearch" @reset="handleReset" :schema="schema" labe-width="70px" layout="inline"
       buttom-position="left" />
     <Table :columns="columns" border @sortChange="handlerSort" :data="imgData" :loading="loading" @init="initGetlist"
@@ -26,9 +23,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="ImgData">
 import { ref, reactive, onMounted } from "vue";
-import Upload from "@/components/Upload.vue";
 import { apiGetImages, apiDelImage } from "@/api/image";
 import dayjs from "dayjs";
 import type { FormSchema } from '@/types/form'
@@ -133,10 +129,6 @@ const handlerSort = async ({ prop, order }) => {
     query.orderSort[prop] = order === "ascending" ? "asc" : "desc";
     await initGetlist()
   }
-};
-// 分页功能方法
-const uploadSuc = async () => {
-  await initGetlist()
 };
 const delImage = async (id) => {
   const res = await apiDelImage(id);

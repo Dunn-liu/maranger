@@ -15,7 +15,7 @@
           </div>
         </div>
         <el-calendar v-model="date">
-          <template #dateCell="{ data }">
+          <template #date-cell="{ data }">
             <p :class="data.isSelected ? 'is-selected' : ''" @click=handle(data)>
               {{ data.day.split('-').slice(1).join('-') }}<br>
             </p>
