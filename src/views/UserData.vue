@@ -15,30 +15,23 @@
         <el-button link type="primary" @click="handleShowDrawer(row)">权限</el-button>
         <el-button link type="primary" @click="changeStatus(row)">{{ row.user_status === 1 ? "禁用" : "启用" }}
         </el-button>
-        <el-button v-if="state.isSuperAdmin" link type="danger" @click="deleteUser(row.id)">删除
+        <el-button v-if="isSuperAdmin" link type="danger" @click="deleteUser(row.id)">删除
         </el-button>
       </template>
     </Table>
-  </div>
-  <Dialog v-model="state.showDrawer" title="用户权限" destroy-on-close>
-    <el-tree ref="treeRef" :data="routerData" show-checkbox node-key="id" :props="defaultProps"
-      :default-checked-keys="state.checkKeys" />
+    <Dialog v-model="showDrawer" title="用户权限" destroy-on-close>
+      <el-tree ref="treeRef" :data="routerData" show-checkbox node-key="id" :props="defaultProps"
+        :default-checked-keys="checkKeys" />
 
-    <template #footer>
-      <el-button type="primary" @click="confirmEdit">确认修改</el-button>
-    </template>
-  </Dialog>
-  <!-- <el-dialog v-model="state.showDrawer" title="用户权限" destroy-on-close>
-    <el-tree ref="treeRef" :data="routerData" show-checkbox node-key="id" :props="defaultProps"
-      :default-checked-keys="state.checkKeys" />
-    <div style="display: flex; justify-content: center; margin-top: 200px">
-      <el-button type="primary" @click="confirmEdit">确认修改</el-button>
-    </div>
-  </el-dialog> -->
+      <template #footer>
+        <el-button type="primary" @click="confirmEdit">确认修改</el-button>
+      </template>
+    </Dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="UserData">
-import { ref, reactive, onMounted } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 import {
   apiGetRouterAll,
   apiGetUserList,
@@ -54,11 +47,13 @@ import { useUserStore } from "@/store/modules/user";
 import { FormSchema } from "@/types/form";
 import { TableColumn } from "@/types/table";
 import { omit } from "lodash";
+const isSuperAdmin = computed(() => {
+  return userStore.getUserInfo.user_type === 1
+})
 onMounted(async () => {
   const res = await apiGetRouterAll()
   routerData.value = formatRouterTree(res?.data)
   await initGetlist()
-  state.isSuperAdmin = userStore.getUserInfo.user_type === 1
 });
 const routerData = ref([])
 const userStore = useUserStore()
@@ -161,14 +156,6 @@ const initGetlist = async () => {
   const model = await searchRef?.value?.getModel?.()
   await getDataSource(model);
 }
-const state = reactive({
-  dataSource: [],
-  loading: false,
-  showDrawer: false,
-  checkKeys: [],
-  currentId: null,
-  isSuperAdmin: false,
-});
 const defaultProps = reactive({
   children: "children",
   label: "title",
@@ -195,7 +182,7 @@ const changeStatus = async (row: any) => {
   const status = user_status === 1 ? 0 : 1
   const res = await apiChangeStatus({ id, status })
   if (res.code === 200) {
-    state.dataSource.forEach((item: UserInfo) => {
+    dataSource.value.forEach((item: UserInfo) => {
       if (item.id === id) {
         if (item.user_status === 1) {
           item.user_status = 0;
@@ -232,17 +219,19 @@ const resetPassWord = async (id) => {
     });
   }
 }
+const checkKeys = ref<string[]>([])
+const showDrawer = ref(false)
+const currentId = ref('')
 const handleShowDrawer = (row: any) => {
-  console.log("roew", row)
-  state.checkKeys = row.auth.split(",")
-  state.showDrawer = true
-  state.currentId = row.id
+  checkKeys.value = row.auth.split(",")
+  showDrawer.value = true
+  currentId.value = row.id
 };
 const confirmEdit = async () => {
   const auth = treeRef.value.getCheckedKeys().join(",")
-  const res = await apiUpdateRouter({ id: state.currentId, auth })
+  const res = await apiUpdateRouter({ id: currentId.value, auth })
   if (res.code === 200) {
-    state.showDrawer = false
+    showDrawer.value = false
     // @ts-ignore
     ElMessage({
       type: "success",
@@ -270,7 +259,7 @@ const deleteUser = (id) => {
           duration: 1500,
           message: "删除操作成功！",
         });
-        state.dataSource = state.dataSource.filter(
+        dataSource.value = dataSource.value.filter(
           (item: UserInfo) => item.id !== id
         )
       }
