@@ -8,7 +8,7 @@ import {
   apiChangeStatus
 } from "../api/article";
 import dayjs from "dayjs";
-import type { ElTable, FormInstance } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import ComponentLoading from "@/components/ComponentLoading.vue";
 import type { TableColumn } from "@/types/table";
 import { FormSchema } from "@/types/form";
@@ -25,37 +25,44 @@ const columns: TableColumn[] = [
   {
     field: 'id',
     label: 'ID',
+    width: '80',
     sortable: true
   },
   {
     field: 'article_title',
-    label: '标题'
+    label: '标题',
   },
   {
     field: 'classifyId',
-    label: '分类'
+    label: '分类',
+    width: '120'
   },
   {
     field: 'author_nickname',
-    label: '作者'
+    label: '作者',
+    width: '120'
   },
   {
     field: 'post_date',
     label: '发布时间',
-    sortable: true
+    sortable: true,
+    width: '200'
   },
   {
     field: 'edit_date',
     label: '更新时间',
-    sortable: true
+    sortable: true,
+    width: '200'
   },
   {
     field: 'article_status',
     label: '状态',
+    width: '140'
   },
   {
     field: 'action',
-    label: '操作'
+    label: '操作',
+    width: '220'
   }
 ]
 const classify = ref<ClassifyType[]>([])
@@ -300,7 +307,7 @@ const setVisible = () => {
       </el-button>
     </div>
     <Table ref="tableRef" :columns="columns" border @sortChange="handlerSort" :data="articleData" :loading="queryLoading"
-      @init="getArticle" :default-sort="{ prop: 'id', order: 'descending' }" :pagination="{
+      @init="initGetlist" :default-sort="{ prop: 'id', order: 'descending' }" :pagination="{
         total: totalNum
       }" v-model:currentPage="pageInfo.page" v-model:pageSize="pageInfo.limit">
       <template #classifyId="{ row }">
@@ -320,7 +327,7 @@ const setVisible = () => {
     </Table>
     <el-drawer title="编辑文章" v-model="showDrawer" direction="rtl" size="60%" destroy-on-close>
       <!-- <ArticleForm v-if="showDrawer" :articleData="editData" @get-url="getUrl" @get-content="getContent"
-                                                                                          @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
+                                                                                                                    @getEditorType="getEditorType" @get-valid="getFormValid" ref="articleFormRef" /> -->
       <ArticleForm v-if="showDrawer" v-model:imgSrc="editData.article_cover" v-model:editorType="editData.editorType"
         v-model:content="editData.article_content" :articleData="editData" ref="articleFormRef" />
       <div class="sub_bths">
@@ -328,16 +335,12 @@ const setVisible = () => {
         <el-button type="info" @click="cancelEdit">取消</el-button>
       </div>
     </el-drawer>
-    <el-dialog title="预览" v-model="previewVisible" :destroy-on-close="true" width="80%" center>
-      <el-scrollbar class="dialog-center ">
-        <v-md-preview :text="previewContent"></v-md-preview>
-      </el-scrollbar>
+    <Dialog title="预览" top="80px" maxHeight="500px" v-model="previewVisible" :destroy-on-close="true" width="60%">
+      <v-md-preview :text="previewContent"></v-md-preview>
       <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="setVisible">取 消</el-button>
-        </span>
+        <el-button @click="setVisible">关 闭</el-button>
       </template>
-    </el-dialog>
+    </Dialog>
   </div>
 </template>
 

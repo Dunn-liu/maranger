@@ -1,6 +1,6 @@
 <template>
   <el-button type="primary" plain @click="openUpload">上传</el-button>
-  <el-dialog title="上传图片" v-model="dialogVisible" width="30%">
+  <Dialog title="上传图片" v-model="dialogVisible" width="30%">
     <div class="dialog_content">
       <div class="upload_com">
         <el-upload ref="uploadRef" class="avatar-uploader" action="" :on-change="fileChange" :drag="true"
@@ -22,7 +22,7 @@
         <el-button @click="dialogVisible = false">取消</el-button>
       </span>
     </template>
-  </el-dialog>
+  </Dialog>
 </template>
 <script>
 import { defineComponent, watch, ref, reactive, toRefs } from "vue";

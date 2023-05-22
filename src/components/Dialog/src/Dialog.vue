@@ -85,6 +85,11 @@ const dialogStyle = computed(() => {
 .el-dialog__header {
   margin-right: 0 !important;
   border-bottom: 1px solid #eee;
+
+  .el-dialog__headerbtn {
+    top: 4px;
+    height: 46px;
+  }
 }
 
 .el-dialog__footer {
