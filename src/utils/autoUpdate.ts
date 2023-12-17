@@ -8,7 +8,7 @@ async function getLatestVersion(): Promise<string> {
   return json.version;
 }
 let timerId;
-const DURATION = 2000;
+const DURATION = 10000;
 // 检查版本号并提示用户更新的函数
 async function checkUpdate() {
   const latestVersion = await getLatestVersion();
