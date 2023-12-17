@@ -43,6 +43,7 @@ import "virtual:windi-utilities.css";
 import "virtual:svg-icons-register";
 
 import directives from "@/directives/index";
+import "@/utils/autoUpdate";
 VMdEditor.Codemirror = Codemirror;
 VMdEditor.use(githubTheme, {})
   .use(vuepressTheme, {
